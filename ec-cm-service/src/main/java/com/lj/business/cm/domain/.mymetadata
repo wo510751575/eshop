@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="TestWeb"
+  id="myeclipse.1317268338811"
+  context-root="/TestWeb"
+  j2ee-spec="5.0"
+  archive="TestWeb.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IPmAbandonDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.PmAbandon" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="RESEAN" property="resean" jdbcType="VARCHAR" />
+    <result column="FOLLOW_DATE" property="followDate" jdbcType="TIMESTAMP" />
+    <result column="CHECK_DATE" property="checkDate" jdbcType="TIMESTAMP" />
+    <result column="MEMBER_NO_CHECK" property="memberNoCheck" jdbcType="VARCHAR" />
+    <result column="CHECKER" property="checker" jdbcType="VARCHAR" />
+    <result column="CHECK_DES" property="checkDes" jdbcType="VARCHAR" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="CHECK_RESULT" property="checkResult" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findPmAbandonPageReultMap" type="com.lj.business.cf.dto.pmAbandon.FindPmAbandonPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="RESEAN" property="resean" jdbcType="VARCHAR" />
+    <result column="CHECK_DATE" property="checkDate" jdbcType="TIMESTAMP" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+  </resultMap>
+     
+   
+    <resultMap id="findPmAbandonListReultMap" type="com.lj.business.cf.dto.pmAbandon.FindPmAbandonListReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="RESEAN" property="resean" jdbcType="VARCHAR" />
+    <result column="FOLLOW_DATE" property="followDate" jdbcType="TIMESTAMP" />
+    <result column="CHECK_DATE" property="checkDate" jdbcType="TIMESTAMP" />
+    <result column="MEMBER_NO_CHECK" property="memberNoCheck" jdbcType="VARCHAR" />
+    <result column="CHECKER" property="checker" jdbcType="VARCHAR" />
+    <result column="CHECK_DES" property="checkDes" jdbcType="VARCHAR" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="CHECK_RESULT" property="checkResult" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="FOLLOW_NUM" property="followNum" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO_GM,MEMBER_NO,MEMBER_NAME, MEMBER_NAME_GM, RESEAN, FOLLOW_DATE, CHECK_DATE, 
+    MEMBER_NO_CHECK, CHECKER, CHECK_DES,CF_NO, CHECK_RESULT, REMARK, CREATE_ID, CREATE_DATE, 
+    UPDATE_ID, UPDATE_DATE, REMARK4, REMARK3, REMARK2,BOM_CODE,BOM_NAME
+  </sql>
+  <sql id="findPmAbandonPage_condition" >
+  	 <where>
+  	 <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO= #{merchantNo,jdbcType=DECIMAL}
+      </if>
+      <if test="memberNoGm != null and memberNoGm != ''" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=DECIMAL}
+      </if>
+       <if test="memberNo != null and memberNo != ''" >
+        and  MEMBER_NO= #{memberNo,jdbcType=DECIMAL}
+      </if>
+      </where>
+  </sql>
+  
+   <!-- 分页查询 -->
+   <select id="findPmAbandonPage" resultMap="findPmAbandonPageReultMap" parameterType="com.lj.business.cf.dto.pmAbandon.FindPmAbandonPage" >
+  SELECT    CODE, MEMBER_NO_GM,MEMBER_NO,MEMBER_NAME, MEMBER_NAME_GM, RESEAN,  CHECK_DATE, 
+   CF_NO, BOM_CODE,BOM_NAME
+  FROM pm_abandon
+ 	 <include refid="findPmAbandonPage_condition" />
+   order by CODE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+    <!-- OMS专用查询暂停记录 -->
+   <select id="findPmAbandonList" resultMap="findPmAbandonListReultMap" parameterType="com.lj.business.cf.dto.pmAbandon.FindPmAbandonList" >
+   SELECT pa.*,(SELECT FOLLOW_NUM FROM client_follow_summary cfs WHERE cfs.CF_NO=pa.CF_NO) 
+   FROM pm_abandon pa
+   <include refid="findPmAbandonPage_condition" />
+   order by pa.CREATE_DATE desc
+   </select>
+  
+    <select id="findPmAbandonPageCount" resultType="int" parameterType="com.lj.business.cf.dto.pmAbandon.FindPmAbandonPage" >
+    select  count(*)
+     FROM pm_abandon
+     <include refid="findPmAbandonPage_condition" />
+  </select>
+   <!--  add by rain at 2017-07-5  start -->
+  <!-- 查询客户跟踪记录 -->
+  <select id="abandonHistory" resultMap="BaseResultMap" parameterType="map" >
+    select * FROM pm_abandon
+	<where> 1= 1
+     <if test="memberNo != null and memberNo != ''" >
+        and  MEMBER_NO = #{memberNo}
+      </if>
+       <if test="memberGMCode != null and memberGMCode != ''" >
+        and  MEMBER_NO_GM = #{memberGMCode}
+      </if>
+      </where>
+   	order by UPDATE_DATE desc
+  </select>
+    <!-- rain at 2017-07-4 end -->
+    
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_abandon
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pm_abandon
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.PmAbandon" >
+    insert into pm_abandon (CODE, 
+    						MERCHANT_NO, 
+    						MEMBER_NO_GM, 
+    						MEMBER_NO,
+    						MEMBER_NAME,
+      MEMBER_NAME_GM, RESEAN, FOLLOW_DATE, 
+      CHECK_DATE, MEMBER_NO_CHECK, CHECKER, 
+      CHECK_DES,CF_NO, CHECK_RESULT, REMARK, 
+      CREATE_ID, CREATE_DATE, UPDATE_ID, 
+      UPDATE_DATE, REMARK4, REMARK3, 
+      REMARK2,BOM_CODE,BOM_NAME)
+    values (#{code,jdbcType=VARCHAR}, 
+    		#{merchantNo,jdbcType=VARCHAR}, 
+    		#{memberNoGm,jdbcType=VARCHAR}, 
+    		#{memberNo,jdbcType=VARCHAR},
+    		#{memberName,jdbcType=VARCHAR},
+            #{memberNameGm,jdbcType=VARCHAR},
+      		#{resean,jdbcType=VARCHAR}, #{followDate,jdbcType=TIMESTAMP}, 
+      		#{checkDate,jdbcType=TIMESTAMP}, #{memberNoCheck,jdbcType=VARCHAR}, #{checker,jdbcType=VARCHAR}, 
+      		#{checkDes,jdbcType=VARCHAR},#{cfNo,jdbcType=VARCHAR}, #{checkResult,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      		#{createId,jdbcType=VARCHAR}, NOW(), #{updateId,jdbcType=VARCHAR}, 
+      		#{updateDate,jdbcType=TIMESTAMP}, #{remark4,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      		#{remark2,jdbcType=VARCHAR},#{bomCode,jdbcType=VARCHAR},#{bomName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.PmAbandon" >
+    insert into pm_abandon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="resean != null" >
+        RESEAN,
+      </if>
+      <if test="followDate != null" >
+        FOLLOW_DATE,
+      </if>
+      <if test="checkDate != null" >
+        CHECK_DATE,
+      </if>
+      <if test="memberNoCheck != null" >
+        MEMBER_NO_CHECK,
+      </if>
+      <if test="checker != null" >
+        CHECKER,
+      </if>
+      <if test="checkDes != null" >
+        CHECK_DES,
+      </if>
+      <if test="cfNo != null" >
+        CF_NO,
+      </if>
+      <if test="checkResult != null" >
+        CHECK_RESULT,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="updateId != null" >
+        UPDATE_ID,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE,
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="resean != null" >
+        #{resean,jdbcType=VARCHAR},
+      </if>
+      <if test="followDate != null" >
+        #{followDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDate != null" >
+        #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberNoCheck != null" >
+        #{memberNoCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null" >
+        #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="checkDes != null" >
+        #{checkDes,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="updateId != null" >
+        #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        #{bomName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.PmAbandon" >
+    update pm_abandon
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="resean != null" >
+        RESEAN = #{resean,jdbcType=VARCHAR},
+      </if>
+      <if test="followDate != null" >
+        FOLLOW_DATE = #{followDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkDate != null" >
+        CHECK_DATE = #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberNoCheck != null" >
+        MEMBER_NO_CHECK = #{memberNoCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null" >
+        CHECKER = #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="checkDes != null" >
+        CHECK_DES = #{checkDes,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        CF_NO = #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        CHECK_RESULT = #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+       <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.PmAbandon" >
+    update pm_abandon
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      RESEAN = #{resean,jdbcType=VARCHAR},
+      FOLLOW_DATE = #{followDate,jdbcType=TIMESTAMP},
+      CHECK_DATE = #{checkDate,jdbcType=TIMESTAMP},
+      MEMBER_NO_CHECK = #{memberNoCheck,jdbcType=VARCHAR},
+      CHECKER = #{checker,jdbcType=VARCHAR},
+      CHECK_DES = #{checkDes,jdbcType=VARCHAR},
+      CF_NO = #{cfNo,jdbcType=VARCHAR},
+      CHECK_RESULT = #{checkResult,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      BOM_NAME = #{bomName,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 修改未审批的放弃记录为拒绝  冯辉 CreateDate: 2017年7月14日 -->
+  <update id="updateNoCheckByCfNo" parameterType="java.util.Map" >
+    UPDATE pm_abandon
+    SET CHECK_RESULT = #{checkResult,jdbcType=VARCHAR} ,CHECK_DES = #{checkDes,jdbcType=VARCHAR},
+        UPDATE_DATE = now(),UPDATE_ID = 'SYSTEM'
+     WHERE CF_NO = #{cfNo,jdbcType=VARCHAR} 
+     	   AND MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+     	   AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+     	   AND CHECK_RESULT = #{oldCheckResult,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 查找未审批的放弃记录 冯辉 CreateDate: 2017年7月14日 -->
+  <select id="findNoCheckByCfNo" parameterType="java.util.Map" resultMap="findPmAbandonListReultMap">
+  		SELECT 
+  		<include refid="Base_Column_List" />
+    	FROM pm_abandon
+  		WHERE CF_NO = #{cfNo,jdbcType=VARCHAR} 
+     	   AND MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+     	   AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+     	   AND CHECK_RESULT = #{checkResult,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

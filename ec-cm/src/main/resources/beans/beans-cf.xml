@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd          
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+      
+    
+    
+    <!-- 客户沟通任务服务 -->
+    <bean id="comTaskService" parent="systemHessianFactoryBean">   
+		<property name="systemAliasName" value="ec-cf" />
+		<property name="serviceName" value="comTaskService" />
+		<property name="serviceInterface" value="com.lj.business.cf.service.IComTaskService" />   
+    </bean> 
+    <!--     客户跟踪总表服务 -->
+    <bean id="clientFollowSummaryService" parent="systemHessianFactoryBean">   
+		<property name="systemAliasName" value="ec-cf" />
+		<property name="serviceName" value="clientFollowSummaryService" />
+		<property name="serviceInterface" value="com.lj.business.cf.service.IClientFollowSummaryService" />   
+    </bean> 
+    <!-- 客户沟通任务表-->
+	<bean id="comTaskListService" parent="systemHessianFactoryBean">   
+		<property name="systemAliasName" value="ec-cf" />
+		<property name="serviceName" value="comTaskListService" />
+		<property name="serviceInterface" value="com.lj.business.cf.service.IComTaskListService" />   
+    </bean>  
+</beans>

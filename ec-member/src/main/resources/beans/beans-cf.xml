@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="          
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd          
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd          
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd          
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	
+	<!-- 跟进总表服务 -->
+	<bean id="clientFollowSummaryService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>clientFollowSummaryService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IClientFollowSummaryService</value>
+		</property>
+	</bean>
+	
+	<bean id="clientFollowService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>clientFollowService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IClientFollowService</value>
+		</property>
+	</bean>
+	
+	<bean id="comTaskService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>comTaskService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IComTaskService</value>
+		</property>
+	</bean>
+	
+	<bean id="taskSetShopService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>taskSetShopService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.ITaskSetShopService</value>
+		</property>
+	</bean>
+	
+	<bean id="taskSetShopDetailService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>taskSetShopDetailService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.ITaskSetShopDetailService</value>
+		</property>
+	</bean>
+	
+	<bean id="workTaskListService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>workTaskListService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IWorkTaskListService</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="unfinishTaskSummaryService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>unfinishTaskSummaryService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IUnfinishTaskSummaryService</value>
+		</property>
+	</bean>
+	
+	<bean id="comTaskListService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>comTaskListService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IComTaskListService</value>
+		</property>
+	</bean>
+
+	<bean id="workTaskService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>workTaskService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IWorkTaskService</value>
+		</property>
+	</bean>
+	<bean id="comTaskChooseService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>comTaskChooseService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IComTaskChooseService</value>
+		</property>
+	</bean>
+	<bean id="workTaskChooseService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName">
+			<value>ec-cf</value>
+		</property>
+		<property name="serviceName">
+			<value>workTaskChooseService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.cf.service.IWorkTaskChooseService</value>
+		</property>
+	</bean>
+	
+
+</beans> 
+

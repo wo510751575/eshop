@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 工作事项 -->
+	<bean name="/workTaskListService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="workTaskListServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IWorkTaskListService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 工作任务表信息 -->
+	<bean name="/workTaskService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="workTaskServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IWorkTaskService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 跟进异常情况 -->
+	<bean name="/cfErrorInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="cfErrorInfoServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ICfErrorInfoService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户跟踪表信息 -->
+	<bean name="/clientFollowService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientFollowServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientFollowService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户维护记录表信息 -->
+	<bean name="/clientKeepService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientKeepServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientKeepService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户沟通任务选择表 -->
+	<bean name="/comTaskChooseService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="comTaskChooseServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IComTaskChooseService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户沟通任务事项 -->
+	<bean name="/comTaskListService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="comTaskListServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IComTaskListService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户沟通任务信息 -->
+	<bean name="/comTaskService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="comTaskServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IComTaskService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户沟通任务流程 -->
+	<bean name="/comTaskWorkflowService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="comTaskWorkflowServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IComTaskWorkflowService
+			</value>
+		</property>
+	</bean>
+	<!-- 客户放弃表信息 -->
+	<bean name="/pmAbandonService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="pmAbandonServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IPmAbandonService
+			</value>
+		</property>
+	</bean>
+	<!-- 工作事项选择 -->
+	<bean name="/socialTaskService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="socialTaskServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ISocialTaskService
+			</value>
+		</property>
+	</bean>
+	<!-- 店长待办事项表信息 -->
+	<bean name="/taskSchSpService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="taskSchSpServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ITaskSchSpService
+			</value>
+		</property>
+	</bean>
+	<!-- 店长待办事项类型信息 -->
+	<bean name="/taskSchSpTypeService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="taskSchSpTypeServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ITaskSchSpTypeService
+			</value>
+		</property>
+	</bean>
+	<!-- 工作事项选择表 -->
+	<bean name="/workTaskChooseService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="workTaskChooseServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IWorkTaskChooseService
+			</value>
+		</property>
+	</bean>
+	<!-- 工作事项分组表信息 -->
+	<bean name="/workTaskGroupService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="workTaskGroupServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IWorkTaskGroupService
+			</value>
+		</property>
+	</bean>
+	<!-- 未完成工作任务表信息 -->
+	<bean name="/workTaskUnfinishService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="workTaskUnfinishServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IWorkTaskUnfinishService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 跟进总表信息 -->
+	<bean name="/clientFollowSummaryService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientFollowSummaryServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientFollowSummaryService
+			</value>
+		</property>
+	</bean>
+	
+	
+	<!-- 维护总表信息 -->
+	<bean name="/clientKeepSummaryService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientKeepSummaryServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientKeepSummaryService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 店长任务设置信息 -->
+	<bean name="/taskSetShopService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="taskSetShopServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ITaskSetShopService
+			</value>
+		</property>
+	</bean>
+	
+	<bean name="/taskSetShopDetailService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="taskSetShopDetailServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.ITaskSetShopDetailService
+			</value>
+		</property>
+	</bean>
+	
+
+		<!-- 客户到店体验 -->
+	<bean name="/clientExpService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientExpServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientExpService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 其他任务完成情况表信息 -->
+	<bean name="/otherTaskFinishInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="otherTaskFinishInfoServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IOtherTaskFinishInfoService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 未完成工作统计表信息 -->
+	<bean name="/unfinishTaskSummaryService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="unfinishTaskSummaryServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IUnfinishTaskSummaryService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 客户邀约 -->
+	<bean name="/clientInviteService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientInviteServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientInviteService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 客户引导-->
+	<bean name="/clientGuidInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="clientGuidInfoServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.cf.service.IClientGuidInfoService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 提醒任务调度任务信息 -->
+	<bean name="/remindJobService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job" ref="remindJobServiceImpl"/>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 工作任务统计 调度任务信息 -->
+	<bean name="/wokTaskJobService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job" ref="wokTaskJobServiceImpl"/>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 其他任务完成情况 调度任务信息 -->
+	<bean name="/otherTaskFinishJobService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job" ref="otherTaskFinishJobServiceImpl"/>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+</beans> 

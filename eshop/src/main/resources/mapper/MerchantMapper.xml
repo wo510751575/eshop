@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IMerchantDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Merchant">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="merchant_phone" jdbcType="VARCHAR" property="merchantPhone" />
+    <result column="merchant_addr" jdbcType="VARCHAR" property="merchantAddr" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="office_id" jdbcType="VARCHAR" property="officeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, merchant_name, merchant_phone, merchant_addr, create_time, office_id
+  </sql>
+   <resultMap id="FindResultMap" type="com.lj.eshop.dto.MerchantDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.officeId != null and param.officeId !='' ">
+					<![CDATA[and office_id =#{param.officeId}]]>
+				</if>
+				<if test="param.merchantName != null and param.merchantName !='' ">
+					<![CDATA[and merchant_name like CONCAT('%',#{param.merchantName},'%' )]]>
+				</if>
+				<if test="param.merchantPhone != null and param.merchantPhone !='' ">
+					<![CDATA[and merchant_phone =#{param.merchantPhone}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMerchants" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMerchantPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_merchant
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMerchantPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMerchantPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_merchant
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMerchantPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMerchantPage">
+		select count(*)
+		FROM t_merchant
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Merchant">
+    insert into t_merchant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="merchantName != null">
+        merchant_name,
+      </if>
+      <if test="merchantPhone != null">
+        merchant_phone,
+      </if>
+      <if test="merchantAddr != null">
+        merchant_addr,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="officeId != null">
+        office_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantPhone != null">
+        #{merchantPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantAddr != null">
+        #{merchantAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="officeId != null">
+        #{officeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Merchant">
+    update t_merchant
+    <set>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantPhone != null">
+        merchant_phone = #{merchantPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantAddr != null">
+        merchant_addr = #{merchantAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="officeId != null">
+        office_id = #{officeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

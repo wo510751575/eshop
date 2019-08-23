@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="          
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd          
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd          
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd          
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+      
+      <bean id="systemParamsService" parent="systemHessianFactoryBean" >   
+		<property name="systemAliasName">
+			<value>cc</value>
+		</property>
+		<property name="serviceName">
+			<value>systemParamsService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.cc.service.ISystemParamsService</value>  
+		</property>
+    </bean> 
+      
+     <bean id="ccSystemInfoService" class="com.lj.base.mvc.remote.hession.spring.HessianTimeoutProxyFactoryBean">   
+		<!-- 请求代理Servlet路径 -->           
+		<property name="serviceUrl">  
+			<value>${cc_url}/systemInfoService</value>   
+		</property>
+		<!-- 接口定义 -->   
+		<property name="serviceInterface">   
+			<value>com.lj.cc.service.ISystemInfoService</value>  
+		</property>
+		<!-- 读超时时间设置为10秒 -->
+		<property name="readTimeout" value="60000"/> 
+		<!-- 连接超时时间设置为10秒 -->
+		<property name="connectTimeout" value="60000"/>   
+	</bean> 
+	
+	<bean id="systemHessianFactoryBean" class="com.lj.cc.clientintf.SystemHessianFactoryBean" abstract="true">
+		<property name="overloadEnabled" value="true"/>
+		<!-- 读超时时间设置为10秒 -->
+		<property name="readTimeout" value="60000"/> 
+		<!-- 连接超时时间设置为10秒 -->
+		<property name="connectTimeout" value="60000"/>
+		<!-- 必须定义配置中心服务 -->
+		<property name="systemInfo" ref="ccSystemInfoService"/>
+	</bean>
+	
+	<!--  系统参数本地缓存 -->
+    <bean id="localCacheSystemParams" class="com.lj.cc.clientintf.LocalCacheSystemParamsFromCC">
+		<property name="systemAliasName">
+			<value>all</value>
+		</property>
+		<property name="defaultSystemAliasName">
+			<!-- 默认查询会员系统参数 -->
+			<value>ec-ms</value>
+		</property>
+		<property name="cacheMilliseconds">
+			<!-- 每小时更新 -->
+			<value>3600000</value>
+		</property>
+		<property name="systemParamsService" ref="systemParamsService" />
+	</bean>
+</beans> 
+

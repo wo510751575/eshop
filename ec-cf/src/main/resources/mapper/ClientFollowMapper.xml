@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IClientFollowDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ClientFollow">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+	    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+	    <result column="FOLLOW_NUM" property="followNum" jdbcType="INTEGER" />
+	    <result column="FOLLOW_TIME" property="followTime" jdbcType="TIMESTAMP" />
+	    <result column="FOLLOW_TYPE" property="followType" jdbcType="VARCHAR" />
+	    <result column="FOLLOW_INFO" property="followInfo" jdbcType="VARCHAR" />
+	    <result column="NOT_DEAL_REASON" property="notDealReason" jdbcType="VARCHAR" />
+	    <result column="DEAL" property="deal" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+	    <result column="ORDER_AMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+	    <result column="NEXT_DATE" property="nextDate" jdbcType="TIMESTAMP" />
+	    <result column="TASK_CODE" property="taskCode" jdbcType="VARCHAR" />
+	    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+	    <result column="COM_TASK_TYPE" property="comTaskType" jdbcType="VARCHAR" />
+	    <result column="CLIENT_EXP_NUM" property="clientExpNum" jdbcType="INTEGER" />
+	    <result column="CLIENT_INVITE_NUM" property="clientInviteNum" jdbcType="INTEGER" />
+	    <result column="CLIENT_GUID_NUM" property="clientGuidNum" jdbcType="INTEGER" />
+	    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+	    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+	    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+	    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+	    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+	    <result column="PA_CODE" property="paCode" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap type="com.lj.business.cf.dto.clientFollow.FindClientFollowReturn"
+		id="findClientFollowPageResultMap">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+		<result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+		<result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+		<result column="MEMBER_NAME_GM" property="memberNameGm"
+			jdbcType="VARCHAR" />
+		<result column="FOLLOW_TIME" property="followTime" jdbcType="TIMESTAMP" />
+		<result column="FOLLOW_NUM" property="followNum" jdbcType="INTEGER" />
+		<result column="FOLLOW_TYPE" property="followType" jdbcType="VARCHAR" />
+		<result column="FOLLOW_INFO" property="followInfo" jdbcType="VARCHAR" />
+		<result column="DEAL" property="deal" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="VARCHAR" />
+		<result column="ORDER_AMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+		<result column="NEXT_DATE" property="nextDate" jdbcType="TIMESTAMP" />
+		<result column="TASK_CODE" property="taskCode" jdbcType="VARCHAR" />
+		<result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+		<result column="NOT_DEAL_REASON" property="notDealReason"
+			jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+		<result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+		<result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+		<result column="COM_TASK_TYPE" property="comTaskType" jdbcType="VARCHAR" />
+		<result column="CLIENT_EXP_NUM" property="clientExpNum" jdbcType="INTEGER" />
+	    <result column="CLIENT_INVITE_NUM" property="clientInviteNum" jdbcType="INTEGER" />
+	    <result column="CLIENT_GUID_NUM" property="clientGuidNum" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, CF_NO, FOLLOW_NUM, 
+    FOLLOW_TIME, FOLLOW_TYPE, FOLLOW_INFO, NOT_DEAL_REASON, DEAL, STATUS, ORDER_AMOUNT, 
+    NEXT_DATE, TASK_CODE, TASK_NAME, COM_TASK_TYPE, CLIENT_EXP_NUM, CLIENT_INVITE_NUM, 
+    CLIENT_GUID_NUM, REMARK, CREATE_ID, CREATE_DATE, REMARK4, REMARK3, REMARK2, PA_CODE
+	</sql>
+
+	<sql id="findClientFollowPage_condition">
+		<where>
+			<if test="memberNo != null">
+				and MEMBER_NO = #{memberNo,jdbcType=DECIMAL}
+			</if>
+			<if test="memberName != null and memberName != ''">
+				and MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%'
+				)
+			</if>
+			<if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="findByMemberNo">
+		<where>
+		<if test="memberNo != null and memberNo !=''">
+			and MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+		</if>
+		<if test="merchantNo != null and merchantNo !=''">
+			and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		</if>
+		<if test="memberNoGm != null and memberNoGm !=''">
+			and MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		</if>
+		</where>	
+	</sql>
+			
+	<sql id="findClientFollowMap">
+		<where>
+		<if test="merchantNo != null and merchantNo !=''">
+			and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		</if>
+		<if test="memberNoGm != null and memberNoGm !=''">
+			and MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		</if>
+		<if test="followNumFrom != null and followNumFrom !='' ">
+			 <![CDATA[and FOLLOW_NUM >= #{followNumFrom}]]>
+			</if>
+			<if test="followNumTo != null and followNumTo !='' ">
+			 <![CDATA[and FOLLOW_NUM <= #{followNumTo}]]>
+			</if>
+		</where>	
+	</sql>		
+   
+   <!-- 根据维度统计跟踪次数 -->
+    <select id="findClientFollowCount" resultType="int" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap" >
+     select  count(*)
+     FROM client_follow 
+     <include refid="findClientFollowMap" />
+      and  COM_TASK_TYPE !='SYSTEM'
+  </select>			
+	
+	
+  <select id="findClientFollowByGmAndMember" resultMap="findClientFollowPageResultMap" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap" >
+     select  <include refid="Base_Column_List" />
+     FROM client_follow 
+     <include refid="findByMemberNo" />
+      and  COM_TASK_TYPE !='SYSTEM'
+      ORDER BY FOLLOW_TIME desc
+	  limit 0,1
+  </select>	
+  
+	<!-- 统计跟踪总数排除系统生成次数 -->		
+  <select id="findClientFollowSum" resultType="int" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap" >
+     select count(FOLLOW_NUM)
+     FROM client_follow 
+     where 1=1
+      <if test="merchantNo != null and merchantNo !=''">
+		and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNoGm != null and memberNoGm !=''">
+		and MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>  
+     and COM_TASK_TYPE !='SYSTEM'
+  </select>
+  
+  	<!-- 统计客户总数 -->		
+  <select id="findClientFollowSumMemberNo" resultType="int" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap" >
+     SELECT COUNT(DISTINCT MEMBER_NO)
+     FROM client_follow 
+    <include refid="findClientFollowMap" />     
+  </select>
+  	
+  <!-- 统计每天客户数 -->
+  <select id="findLClientFollowCountMemberNo" resultType="int" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap">
+   SELECT COUNT(DISTINCT MEMBER_NO)FROM client_follow
+   <include refid="findClientFollowMap" /> 
+   AND DATE_FORMAT(CREATE_DATE, '%Y-%m-%d') = #{createDate,jdbcType=DATE}
+  </select>
+  
+  <!-- 统计每天成单数 -->
+  <select id="findLClientFollowCountDeal" resultType="int" parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowMap">
+   SELECT COUNT(DEAL)FROM client_follow
+   <include refid="findClientFollowMap" /> 
+   AND DATE_FORMAT(CREATE_DATE, '%Y-%m-%d') = #{createDate,jdbcType=DATE}
+   AND DEAL='Y'
+  </select>
+  
+  	
+	<!-- 分页查询 -->
+	<select id="findClientFollowPage" resultMap="findClientFollowPageResultMap"
+		parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowPage">
+		SELECT CODE,CF_NO, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM,
+		MEMBER_NAME_GM, FOLLOW_TIME,FOLLOW_NUM,
+		FOLLOW_TYPE, FOLLOW_INFO, DEAL, STATUS, ORDER_AMOUNT, NEXT_DATE, TASK_CODE,
+		TASK_NAME, NOT_DEAL_REASON,
+		REMARK, CREATE_ID, CREATE_DATE,  REMARK4, REMARK3, REMARK2
+		FROM client_follow
+		<include refid="findClientFollowPage_condition" />
+		order by CODE ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+      
+      
+	<select id="findClientFollowPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollowPage">
+		select count(*)
+		FROM client_follow
+		<include refid="findClientFollowPage_condition" />
+	</select>
+
+	<!-- add by rain at 2017-07-4 start -->
+	<!-- 查询客户跟踪记录 -->
+	<select id="cfHistory" resultMap="findClientFollowPageResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		FROM client_follow
+		<where>
+			1= 1
+			<if test="memberNo != null and memberNo != ''">
+				and MEMBER_NO = #{memberNo}
+			</if>
+			<if test="memberGMCode != null and memberGMCode != ''">
+				and MEMBER_NO_GM = #{memberGMCode}
+			</if>
+			<if test="cfNo != null and cfNo != ''">
+				and CF_NO = #{cfNo}
+			</if>
+		</where>
+		order by FOLLOW_TIME desc
+	</select>
+
+	<!-- 查询客户订单记录 -->
+	<select id="orderHistory" resultMap="BaseResultMap" parameterType="map">
+		select 
+		<include refid="Base_Column_List" /> 
+		FROM client_follow
+		<where>
+			ORDER_AMOUNT > 0
+			<if test="memberNo != null and memberNo != ''">
+				and MEMBER_NO = #{memberNo}
+			</if>
+			<if test="memberGMCode != null and memberGMCode != ''">
+				and MEMBER_NO_GM = #{memberGMCode}
+			</if>
+			<if test="cfNo != null and cfNo != ''">
+				and CF_NO = #{cfNo}
+			</if>
+		</where>
+		order by CREATE_DATE desc
+	</select>
+	<!-- rain at 2017-07-4 end -->
+
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from client_follow
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findTodayOrder" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.taskSetShop.FindTaskSetAndOrder">
+		select CODE, MEMBER_NO, MEMBER_NAME, ORDER_AMOUNT, CREATE_DATE
+ 		from client_follow where MERCHANT_NO = #{merchantNo} and MEMBER_NO_GM = #{memberNoGm} and DEAL = 'Y' and CREATE_DATE BETWEEN #{startDate} AND #{endDate}
+	</select>
+		
+	<select id="findMonthOrderMoney" resultType="Long" parameterType="com.lj.business.cf.dto.taskSetShop.FindTaskSetAndOrder">
+		select sum(ORDER_AMOUNT)
+ 		from client_follow where MERCHANT_NO = #{merchantNo} and MEMBER_NO_GM = #{memberNoGm} and DEAL = 'Y' and CREATE_DATE BETWEEN #{startDate} AND #{endDate}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from client_follow
+		where CODE = #{code,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.lj.business.cf.domain.ClientFollow" >
+    insert into client_follow (CODE, MERCHANT_NO, MEMBER_NO, 
+      MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, 
+      CF_NO, FOLLOW_NUM, FOLLOW_TIME, 
+      FOLLOW_TYPE, FOLLOW_INFO, NOT_DEAL_REASON, 
+      DEAL, STATUS, ORDER_AMOUNT, 
+      NEXT_DATE, TASK_CODE, TASK_NAME, 
+      COM_TASK_TYPE, CLIENT_EXP_NUM, CLIENT_INVITE_NUM, 
+      CLIENT_GUID_NUM, REMARK, CREATE_ID, 
+      CREATE_DATE, REMARK4, REMARK3, 
+      REMARK2, PA_CODE)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, #{memberNameGm,jdbcType=VARCHAR}, 
+      #{cfNo,jdbcType=VARCHAR}, #{followNum,jdbcType=INTEGER}, #{followTime,jdbcType=TIMESTAMP}, 
+      #{followType,jdbcType=VARCHAR}, #{followInfo,jdbcType=VARCHAR}, #{notDealReason,jdbcType=VARCHAR}, 
+      #{deal,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DECIMAL}, 
+      #{nextDate,jdbcType=TIMESTAMP}, #{taskCode,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, 
+      #{comTaskType,jdbcType=VARCHAR}, #{clientExpNum,jdbcType=INTEGER}, #{clientInviteNum,jdbcType=INTEGER}, 
+      #{clientGuidNum,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      NOW(), #{remark4,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      #{remark2,jdbcType=VARCHAR}, #{paCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.ClientFollow" >
+    insert into client_follow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="cfNo != null" >
+        CF_NO,
+      </if>
+      <if test="followNum != null" >
+        FOLLOW_NUM,
+      </if>
+      <if test="followTime != null" >
+        FOLLOW_TIME,
+      </if>
+      <if test="followType != null" >
+        FOLLOW_TYPE,
+      </if>
+      <if test="followInfo != null" >
+        FOLLOW_INFO,
+      </if>
+      <if test="notDealReason != null" >
+        NOT_DEAL_REASON,
+      </if>
+      <if test="deal != null" >
+        DEAL,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="orderAmount != null" >
+        ORDER_AMOUNT,
+      </if>
+      <if test="nextDate != null" >
+        NEXT_DATE,
+      </if>
+      <if test="taskCode != null" >
+        TASK_CODE,
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME,
+      </if>
+      <if test="comTaskType != null" >
+        COM_TASK_TYPE,
+      </if>
+      <if test="clientExpNum != null" >
+        CLIENT_EXP_NUM,
+      </if>
+      <if test="clientInviteNum != null" >
+        CLIENT_INVITE_NUM,
+      </if>
+      <if test="clientGuidNum != null" >
+        CLIENT_GUID_NUM,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="paCode != null" >
+        PA_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="followTime != null" >
+        #{followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followType != null" >
+        #{followType,jdbcType=VARCHAR},
+      </if>
+      <if test="followInfo != null" >
+        #{followInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="notDealReason != null" >
+        #{notDealReason,jdbcType=VARCHAR},
+      </if>
+      <if test="deal != null" >
+        #{deal,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="nextDate != null" >
+        #{nextDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskCode != null" >
+        #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="comTaskType != null" >
+        #{comTaskType,jdbcType=VARCHAR},
+      </if>
+      <if test="clientExpNum != null" >
+        #{clientExpNum,jdbcType=INTEGER},
+      </if>
+      <if test="clientInviteNum != null" >
+        #{clientInviteNum,jdbcType=INTEGER},
+      </if>
+      <if test="clientGuidNum != null" >
+        #{clientGuidNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="paCode != null" >
+        #{paCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ClientFollow" >
+    update client_follow
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        CF_NO = #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        FOLLOW_NUM = #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="followTime != null" >
+        FOLLOW_TIME = #{followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followType != null" >
+        FOLLOW_TYPE = #{followType,jdbcType=VARCHAR},
+      </if>
+      <if test="followInfo != null" >
+        FOLLOW_INFO = #{followInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="notDealReason != null" >
+        NOT_DEAL_REASON = #{notDealReason,jdbcType=VARCHAR},
+      </if>
+      <if test="deal != null" >
+        DEAL = #{deal,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        ORDER_AMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="nextDate != null" >
+        NEXT_DATE = #{nextDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskCode != null" >
+        TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="comTaskType != null" >
+        COM_TASK_TYPE = #{comTaskType,jdbcType=VARCHAR},
+      </if>
+      <if test="clientExpNum != null" >
+        CLIENT_EXP_NUM = #{clientExpNum,jdbcType=INTEGER},
+      </if>
+      <if test="clientInviteNum != null" >
+        CLIENT_INVITE_NUM = #{clientInviteNum,jdbcType=INTEGER},
+      </if>
+      <if test="clientGuidNum != null" >
+        CLIENT_GUID_NUM = #{clientGuidNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="paCode != null" >
+        PA_CODE = #{paCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.ClientFollow" >
+    update client_follow
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      CF_NO = #{cfNo,jdbcType=VARCHAR},
+      FOLLOW_NUM = #{followNum,jdbcType=INTEGER},
+      FOLLOW_TIME = #{followTime,jdbcType=TIMESTAMP},
+      FOLLOW_TYPE = #{followType,jdbcType=VARCHAR},
+      FOLLOW_INFO = #{followInfo,jdbcType=VARCHAR},
+      NOT_DEAL_REASON = #{notDealReason,jdbcType=VARCHAR},
+      DEAL = #{deal,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      ORDER_AMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      NEXT_DATE = #{nextDate,jdbcType=TIMESTAMP},
+      TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+      TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      COM_TASK_TYPE = #{comTaskType,jdbcType=VARCHAR},
+      CLIENT_EXP_NUM = #{clientExpNum,jdbcType=INTEGER},
+      CLIENT_INVITE_NUM = #{clientInviteNum,jdbcType=INTEGER},
+      CLIENT_GUID_NUM = #{clientGuidNum,jdbcType=INTEGER},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      PA_CODE = #{paCode,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+	
+	<select id="findLastClientFollow" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.FindCForCKLastDateDto">
+		select 
+		<include refid="Base_Column_List" />
+		FROM client_follow
+		where CF_NO = #{cfNo,jdbcType=VARCHAR}
+		ORDER BY FOLLOW_TIME DESC 
+		limit 1
+	</select>
+	
+	<update id="updateByCfNo" parameterType="com.lj.business.cf.dto.clientFollow.UpdateClientFollow">
+		update client_follow
+		set PA_CODE = #{paCode,jdbcType=VARCHAR}
+		where MEMBER_NO = #{memberNo,jdbcType=VARCHAR} 
+		      AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		      AND CF_NO = #{cfNo,jdbcType=VARCHAR}
+		      AND PA_CODE IS NULL
+	</update>
+	
+	<select id="cfCount" resultType="int"  parameterType="com.lj.business.cf.dto.clientFollow.FindClientFollow">
+		select count(*)
+		from client_follow
+		where CF_NO = #{cfNo,jdbcType=VARCHAR}
+			  AND COM_TASK_TYPE != 'SYSTEM'
+	</select>
+	
+</mapper>

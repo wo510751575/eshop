@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IMaterialCmDao">
+	<resultMap id="BaseResultMap" type="com.lj.eshop.domain.MaterialCm">
+		<id column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="cm_material_code" property="cmMaterialCode" jdbcType="VARCHAR" />
+	    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+	    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+	    <result column="type" property="type" jdbcType="CHAR" />
+	    <result column="choiceness_code" property="choicenessCode" jdbcType="VARCHAR" />
+	    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+	    <result column="merchant_code" property="merchantCode" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="material_type_code" property="materialTypeCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.MaterialCmDto"
+		extends="BaseResultMap">
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		code, cm_material_code, product_code, product_name, type, choiceness_code, shop_code, 
+    merchant_code, create_time, material_type_code
+	</sql>
+
+	<sql id="findPage_condition">
+		<where>
+			<if test="param != null">
+				<if test="param.cmMaterialCode != null and param.cmMaterialCode !='' ">
+					AND cmMaterial_code = #{param.cmMaterialCode}
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					AND product_code = #{param.productCode}
+				</if>
+				<if test="param.productName != null and param.productName !='' ">
+					AND product_name like CONCAT('%',#{param.productName,jdbcType=VARCHAR},'%')
+				</if>
+				<if test="param.type != null and param.type !='' ">
+					AND type = #{param.type}
+				</if>
+				<if test="param.choicenessCode != null and param.choicenessCode !='' ">
+					AND choiceness_code = #{param.choicenessCode}
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					AND shop_code = #{param.shopCode}
+				</if>
+				<if test="param.merchantCode != null and param.merchantCode !='' ">
+					AND merchant_code = #{param.merchantCode}
+				</if>
+				<if test="param.materialTypeCode != null and param.materialTypeCode !='' ">
+					AND material_type_code = #{param.materialTypeCode}
+				</if>
+			</if>
+			<if test="inCmMaterialCodes != null and inCmMaterialCodes.size > 0">
+				and cm_material_code IN 
+				<foreach item="item" index="index" collection="inCmMaterialCodes" open="(" separator="," close=")">  
+				  	#{item}  
+				 </foreach>  
+		  	</if>
+		</where>
+	</sql>
+
+	<select id="findMaterialCms" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMaterialCmPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_material_cm
+		<include refid="findPage_condition" />
+		ORDER BY create_time DESC
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMaterialCmPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMaterialCmPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_material_cm
+		<include refid="findPage_condition" />
+		ORDER BY create_time DESC
+		limit ${start} , ${limit}
+	</select>
+
+	<select id="findMaterialCmPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMaterialCmPage">
+		select count(*)
+		FROM t_material_cm
+		<include refid="findPage_condition" />
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_material_cm
+		where code = #{code,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_material_cm
+		where code = #{code,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.lj.eshop.domain.MaterialCm">
+		insert into t_material_cm (code, cm_material_code, product_code, 
+      product_name, type, choiceness_code, 
+      shop_code, merchant_code, create_time, 
+      material_type_code)
+    values (#{code,jdbcType=VARCHAR}, #{cmMaterialCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{choicenessCode,jdbcType=VARCHAR}, 
+      #{shopCode,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{materialTypeCode,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.lj.eshop.domain.MaterialCm">
+		 insert into t_material_cm
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="cmMaterialCode != null" >
+        cm_material_code,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="choicenessCode != null" >
+        choiceness_code,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="merchantCode != null" >
+        merchant_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="materialTypeCode != null" >
+        material_type_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="cmMaterialCode != null" >
+        #{cmMaterialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="choicenessCode != null" >
+        #{choicenessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null" >
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="materialTypeCode != null" >
+        #{materialTypeCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MaterialCm">
+    update t_material_cm
+    <set >
+      <if test="cmMaterialCode != null" >
+        cm_material_code = #{cmMaterialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="choicenessCode != null" >
+        choiceness_code = #{choicenessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null" >
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="materialTypeCode != null" >
+        material_type_code = #{materialTypeCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.lj.eshop.domain.MaterialCm">
+		 update t_material_cm
+    set cm_material_code = #{cmMaterialCode,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      choiceness_code = #{choicenessCode,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      material_type_code = #{materialTypeCode,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+	</update>
+</mapper>

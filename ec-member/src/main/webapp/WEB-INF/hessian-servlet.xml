@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 开户 -->
+	<!-- <bean name="/openMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="openMemberServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.business.member.service.IOpenMemberService
+			</value>
+		</property>
+	</bean> -->
+	
+	<!-- 登录 -->
+	<bean name="/memberLoginService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="memberLoginServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IMemberLoginService" />
+	</bean>
+	
+	<!-- 导购 -->
+	<bean name="/guidMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="guidMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IGuidMemberService" />
+	</bean>
+	
+	<!-- 会员 -->
+	<bean name="/personMemberBaseService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="personMemberBaseServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IPersonMemberBaseService" />
+	</bean>
+	
+	<!-- 商户 -->
+	<bean name="/merchantService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="merchantServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IMerchantService" />
+	</bean>
+	
+	<!-- 管理人员 -->
+	<bean name="/managerMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="managerMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IManagerMemberService" />
+	</bean>
+	
+	<!-- 分店 -->
+	<bean name="/shopService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="shopServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IShopService" />
+	</bean>
+	<!-- 客户分类 -->
+	<bean name="/pmTypeService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="pmTypeServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IPmTypeService" />
+	</bean>
+	<!-- 客户标签 -->
+	<bean name="/pmLabelService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="pmLabelServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IPmLabelService" />
+	</bean>
+	
+	<!-- 客户标签 -->
+	<bean name="/memLineService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="memLineServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IMemLineService" />
+	</bean>
+	
+	<!-- 客户兴趣指数服务-->
+	<bean name="/interestPmService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="interestPmServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IInterestPmService" />
+	</bean>
+	
+	<!-- 客户服务协议服务-->
+	<bean name="/agreementMerchantService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="agreementMerchantServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IAgreementMerchantService" />
+	</bean>
+	
+	
+	<!--客户动态详情表 -->
+	<bean name="/behaviorInfoPmService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="behaviorInfoPmServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IBehaviorInfoPmService" />
+	</bean>
+	<!-- 客户最近动态-->
+	<bean name="/behaviorPmService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="behaviorPmServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IBehaviorPmService" />
+	</bean>
+	<!-- 客户关注操作-->
+	<bean name="/custKeepService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="custKeepServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.ICustKeepService" />
+	</bean>
+	<!-- 设备信息 -->
+	<bean name="/phoneInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="phoneInfoServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IPhoneInfoService" />
+	</bean>
+	
+	<bean name="/guidMemberIntegralService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="guidMemberIntegralServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IGuidMemberIntegralService" />
+	</bean>
+	
+	<bean name="/guidMemberIntegralDayService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="guidMemberIntegralDayServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IGuidMemberIntegralDayService" />
+	</bean>
+	
+	<bean name="/personMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="personMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IPersonMemberService" />
+	</bean>
+	
+	<!-- 导购行为行为 -->
+	<bean name="/guidmemberActionInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="guidmemberActionInfoServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IGuidmemberActionInfoService" />
+	</bean>
+	
+	<!-- 获取每个导购未分组的人数 -->
+	<bean name="/findPersonUngroupServiceImpl"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job" ref="findPersonUngroupServiceImpl"/>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+</beans> 

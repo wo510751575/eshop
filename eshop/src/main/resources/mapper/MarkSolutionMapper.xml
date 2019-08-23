@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IMarkSolutionDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.MarkSolution">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="amt" jdbcType="VARCHAR" property="amt" />
+    <result column="my_power" jdbcType="VARCHAR" property="myPower" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, amt, my_power, detail, status, create_time
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.MarkSolutionDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMarkSolutions" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMarkSolutionPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_mark_solution
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMarkSolutionPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMarkSolutionPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_mark_solution
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMarkSolutionPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMarkSolutionPage">
+		select count(*)
+		FROM t_mark_solution
+		<include refid="findPage_condition" />
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mark_solution
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.MarkSolution">
+    insert into t_mark_solution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="myPower != null">
+        my_power,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=VARCHAR},
+      </if>
+      <if test="myPower != null">
+        #{myPower,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MarkSolution">
+    update t_mark_solution
+    <set>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=VARCHAR},
+      </if>
+      <if test="myPower != null">
+        my_power = #{myPower,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

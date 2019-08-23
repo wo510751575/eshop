@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IMemLineDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.MemLine" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findMemLinePageResultMap" type="com.lj.business.member.dto.MemLineDto" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, NAME, REMARK
+  </sql>
+  
+  <sql id="findPmLabelPage_condition">
+  <where>
+     <if test="name!= null and name!='' " >
+       and  NAME like CONCAT('%',#{name,jdbcType=VARCHAR},'%' )
+      </if>
+  </where>
+  </sql>
+  
+    <sql id="findPmLabel">
+  <where>
+     <if test="name!= null and name!=''" >
+       and  NAME =#{name}
+      </if>
+  </where>
+  </sql>
+  
+     <!-- 分页查询 -->
+   <select id="findMemLinePage" resultMap="findMemLinePageResultMap" parameterType="com.lj.business.member.dto.MemLineDto" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM mem_line 
+  <include refid="findPmLabelPage_condition" />
+  limit ${start} , ${limit}
+  </select>
+  
+  <select id="findMemLinePageCount" resultType="int" parameterType="com.lj.business.member.dto.MemLineDto" >
+    select  count(*)
+     FROM mem_line 
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from mem_line
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="selectByName" resultMap="findMemLinePageResultMap" parameterType="com.lj.business.member.dto.MemLineDto" >
+    select 
+     <include refid="Base_Column_List" />
+    from mem_line
+   <include refid="findPmLabel" />
+  </select>
+  
+   <!--获取所有客户分组信息  by rain at 2017-07-03-->
+  <select id="inqueryMemberJobInfo" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from mem_line
+  </select>
+  <!-- end -->
+  
+  <insert id="insert" parameterType="com.lj.business.member.domain.MemLine" >
+    insert into mem_line (CODE, NAME, REMARK)
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.MemLine" >
+    update mem_line
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

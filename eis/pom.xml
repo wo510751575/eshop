@@ -1,0 +1,336 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.lj.eshop</groupId>
+	<artifactId>eis</artifactId>
+	<packaging>war</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>eis Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
+		<junit.version>4.12</junit.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<servlet.version>2.5</servlet.version>
+		<jstl.version>1.2</jstl.version>
+		<logback.version>1.0.13</logback.version>
+		<logback-core.version>1.0.13</logback-core.version>
+		<mybatis.version>3.4.2</mybatis.version>
+		<mybatis-spring.version>1.3.0</mybatis-spring.version>
+		<aspectj.version>1.7.4</aspectj.version>
+		<ehcache.version>1.4.1</ehcache.version>
+		<druid.version>1.0.11</druid.version>
+		<cglib.version>3.1</cglib.version>
+		<jackson.version>2.8.6</jackson.version>
+		<fileupload.version>1.3.1</fileupload.version>
+		<hessian.version>4.0.38.01</hessian.version>
+		<fastjson.version>1.1.40</fastjson.version>
+		<qccode.version>3.0</qccode.version>
+	</properties>
+	<dependencies>
+		<!-- xStream需要引入3个jar包。1，xmlpull-1.1.3.1.jar2，xsream-1.4.7.jar3，xpp3_min-1.1.4c.jar -->
+		<!-- https://mvnrepository.com/artifact/xmlpull/xmlpull -->
+		<dependency>
+			<groupId>xmlpull</groupId>
+			<artifactId>xmlpull</artifactId>
+			<version>1.1.3.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/xpp3/xpp3_min -->
+		<dependency>
+			<groupId>xpp3</groupId>
+			<artifactId>xpp3_min</artifactId>
+			<version>1.1.4c</version>
+		</dependency>
+		<!-- xStream END -->
+		<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.lj</groupId>
+			<artifactId>eoms-core</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+
+
+		<!-- 二维码 -->
+		<dependency>
+			<groupId>QRCode</groupId>
+			<artifactId>QRCode</artifactId>
+			<version>${qccode.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>QRCode</groupId>
+			<artifactId>Qrcode_swetake</artifactId>
+			<version>${qccode.version}</version>
+		</dependency>
+		<!-- 二维码 end -->
+
+		<!-- LOGGING begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- common-logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- java.util.logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- LOGGING end -->
+
+		<!-- hessian eshop api -->
+		<dependency>
+			<groupId>com.lj.eshop</groupId>
+			<artifactId>eshop-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- service END -->
+		<!-- spring mvc 相关配置 -->
+		<!-- servlet 3 -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<!--spring context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!--spring webmvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- -->
+		<!-- aop -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>${cglib.version}</version>
+		</dependency>
+		<!-- aop end -->
+
+		<!--jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.caucho</groupId>
+			<artifactId>hessian</artifactId>
+			<version>${hessian.version}</version>
+		</dependency>
+
+		<!-- fastjson json -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.lj.business</groupId>
+			<artifactId>ec-cm-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.lj.business</groupId>
+			<artifactId>ec-member-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jul-to-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.lj</groupId>
+			<artifactId>cc-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jul-to-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+	</dependencies>
+
+
+	<build>
+		<defaultGoal>compile</defaultGoal>
+		<finalName>eis</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<encoding>UTF-8</encoding>
+					<!-- <compilerArguments> <verbose /> <bootclasspath>${java.home}/lib/rt.jar,${java.home}/lib/jce.jar,${java.home}/lib/jsse.jar</bootclasspath> 
+						</compilerArguments> -->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+					</webResources>
+				</configuration>
+				<version>2.4</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+		</plugins>
+<!-- 		<resources> -->
+<!-- 			<resource> -->
+<!-- 				<directory>${project.basedir}/src/main/resources</directory> -->
+<!-- 				<filtering>true</filtering> -->
+<!-- 			</resource> -->
+			<!-- <resource> -->
+			<!-- <directory>${project.basedir}/src/main/filters</directory> -->
+			<!-- <includes> -->
+			<!-- <include>**/*</include> -->
+			<!-- </includes> -->
+			<!-- <filtering>true</filtering> -->
+			<!-- </resource> -->
+<!-- 		</resources> -->
+	</build>
+
+	<!-- 项目在不同阶段,解决配置差异 -->
+	<!-- <profiles>
+		开发阶段
+		<profile>
+			<id>dev</id>
+			<properties>
+				<uploadUrl>http://cc_url/</uploadUrl>
+				<dev_test>true</dev_test>
+				<redis.host>192.168.6.63</redis.host>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		测试环境
+		<profile>
+			<id>test</id>
+			<properties>
+				<uploadUrl>http://cc_url/</uploadUrl>
+				<dev_test>true</dev_test>
+				<redis.host>192.168.6.63</redis.host>
+			</properties>
+		</profile>
+		生产环境
+		<profile>
+			<id>product</id>
+			<properties>
+				<uploadUrl>http://112.74.55.63/</uploadUrl>
+				<dev_test>true</dev_test>
+				<redis.host>cc_url</redis.host>
+			</properties>
+		</profile>
+	</profiles> -->
+	<!-- ./项目在不同阶段,解决配置差异 -->
+</project>

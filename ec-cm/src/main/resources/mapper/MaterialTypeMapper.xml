@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cm.dao.IMaterialTypeDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cm.domain.MaterialType" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <resultMap id="findMaterialTypePageResultMap" type="com.lj.business.cm.dto.FindMaterialTypePageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="TYPE_COUNT" property="typeCount" jdbcType="INTEGER" />
+    <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
+    <result column="CUSTOMER_ATTENTION_RATE" property="customerAttentionRate" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, REMARK,CREATE_DATE,TYPE_COUNT,IMG_ADDR,CUSTOMER_ATTENTION_RATE
+  </sql>
+   
+   
+   <sql id="findMaterialTypePage_condition" >
+  	 <where>
+      <if test="memberNoGm != null" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+       <if test="memberNameGm != null and memberNameGm != ''" >
+        and  MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
+      </if>
+	 <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+      </where>
+  </sql>
+  
+     <!-- 分页查询 -->
+   <select id="findMaterialTypePage" resultMap="findMaterialTypePageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+   SELECT  
+    <include refid="Base_Column_List" />
+   FROM material_type 
+   <include refid="findMaterialTypePage_condition" />
+   order by code ${sortDir}
+   limit ${start},${limit}
+   </select>
+  
+  <select id="findMaterialTypePageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+    select  count(*)
+     FROM material_type 
+     <include refid="findMaterialTypePage_condition" />
+  </select>
+
+    <sql id="findMaterialTypeForMemberPage_condition" >
+        WHERE (MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR} AND MERCHANT_NO = #{merchantNo}) or
+        (MERCHANT_NO = #{merchantNo} AND (MEMBER_NO_GM is NULL or MEMBER_NO_GM = ''))
+    </sql>
+
+    <select id="findMaterialTypeForMemberPage" resultMap="findMaterialTypePageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM material_type
+        <include refid="findMaterialTypeForMemberPage_condition" />
+        order by CREATE_DATE DESC
+        limit ${start},${limit}
+    </select>
+
+    <select id="findMaterialTypeForMemberPageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+        select  count(*)
+        FROM material_type
+        <include refid="findMaterialTypeForMemberPage_condition" />
+    </select>
+  
+  <select id="findMaterialTypesApp" resultType="com.lj.business.cm.dto.FindMaterialTypesAppReturn" parameterType="com.lj.business.cm.dto.FindMaterialTypesApp" >
+    SELECT mt.CODE code, mt.TYPE_NAME typeName, sum(IF(u.MATERIAL_TYPE_CODE IS NULL,0,1)) numMaterial
+  FROM material_type mt left join 
+       (SELECT MATERIAL_TYPE_CODE
+          FROM MATERIAL_COMMEN mc
+        UNION ALL
+        SELECT MATERIAL_TYPE_CODE
+          FROM MATERIAL m) u
+ on u.MATERIAL_TYPE_CODE = mt.CODE
+ and mt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+GROUP BY mt.CODE, mt.TYPE_NAME
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from material_type
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from material_type
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cm.domain.MaterialType" >
+    insert into material_type (CODE, MERCHANT_NO, MEMBER_NO_GM, 
+      MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, 
+      CREATE_DATE)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, 
+      #{memberNameGm,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cm.domain.MaterialType" >
+    insert into material_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        <if test="remark != null" >
+        REMARK,
+      </if>
+        CREATE_DATE,
+      <if test="typeCount != null" >
+        TYPE_COUNT,
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR,
+      </if>
+      <if test="customerAttentionRate != null" >
+        CUSTOMER_ATTENTION_RATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="typeCount != null" >
+       #{typeCount,jdbcType=INTEGER},
+      </if>
+      <if test="imgAddr != null" >
+       #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAttentionRate != null" >
+        #{customerAttentionRate,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.MaterialType" >
+    update material_type
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeCount != null" >
+       TYPE_COUNT = #{typeCount,jdbcType=INTEGER},
+      </if>
+      <if test="imgAddr != null" >
+       IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAttentionRate != null" >
+        CUSTOMER_ATTENTION_RATE = #{customerAttentionRate,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cm.domain.MaterialType" >
+    update material_type
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}，
+      TYPE_COUNT = #{typeCount,jdbcType=INTEGER},
+      IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      CUSTOMER_ATTENTION_RATE = #{customerAttentionRate,jdbcType=DOUBLE}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+   <update id="incrementTypeCountByPrimaryKey">
+    update material_type
+    set TYPE_COUNT = TYPE_COUNT + #{increment}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+   <update id="decrementTypeCountByPrimaryKey">
+    update material_type
+    set TYPE_COUNT = TYPE_COUNT - #{decrement}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.ITaskSchSpDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.TaskSchSp" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="DATE" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="TSST_CODE" property="tsstCode" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="INTEGER" />
+    <result column="SEQ" property="seq" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+ <resultMap type="com.lj.business.cf.dto.FindTaskSchSpPageReturn" id="findTaskSchSpPageResultMap">
+      <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="DATE" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="TSST_CODE" property="tsstCode" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="INTEGER" />
+    <result column="SEQ" property="seq" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap> 
+   <resultMap type="com.lj.business.cf.dto.FindTaskSchSpListReturn" id="findTaskSchSpListResultMap">
+      <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="TSST_CODE" property="tsstCode" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="INTEGER" />
+  </resultMap> 
+  
+  <sql id="Base_Column_List" >
+   CODE, MERCHANT_NO, WORK_DATE, MEMBER_NO, MEMBER_NAME, TSST_CODE, TASK_NAME, NUM, 
+    SEQ, CREATE_ID, CREATE_DATE
+  </sql>
+  
+    <sql id="findTaskSchSpPage_condition" >
+  	 <where>
+      <if test="memberNo != null" >
+        and  MEMBER_NO = #{memberNo,jdbcType=DECIMAL}
+      </if>
+       <if test="memberName != null and memberName != ''" >
+        and  MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+	 </if>
+      </where>
+  </sql>
+  
+   <sql id="findTaskSchSpList_condition" >
+  	 <where>
+      <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=DECIMAL}
+      </if>
+      <if test="memberNo != null" >
+        and  MEMBER_NO = #{memberNo,jdbcType=DECIMAL}
+      </if>
+      <if test="memberName != null and memberName != ''" >
+        and  MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="workDate != null">
+		<![CDATA[and WORK_DATE = #{workDate}]]>
+	 </if>
+      </where>
+  </sql>
+  
+   <select id="findTaskSchSpList" resultMap="findTaskSchSpListResultMap" parameterType="com.lj.business.cf.dto.FindTaskSchSpListReturn" >
+  SELECT   CODE, TSST_CODE, TASK_NAME, NUM
+  FROM task_sch_sp
+ 	 <include refid="findTaskSchSpList_condition" />
+  </select>
+  
+     <!-- 分页查询 -->
+   <select id="findTaskSchSpPage" resultMap="findTaskSchSpPageResultMap" parameterType="com.lj.business.cf.dto.FindTaskSchSpPageReturn" >
+  SELECT   CODE, MERCHANT_NO, WORK_DATE, MEMBER_NO, MEMBER_NAME, TSST_CODE, TASK_NAME, NUM, 
+    SEQ, CREATE_ID, CREATE_DATE
+  FROM task_sch_sp
+ 	 <include refid="findTaskSchSpPage_condition" />
+   order by CODE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findTaskSchSpPageCount" resultType="int" parameterType="com.lj.business.cf.dto.FindTaskSchSpPage" >
+    select  count(*)
+     FROM task_sch_sp
+     <include refid="findTaskSchSpPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from task_sch_sp
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from task_sch_sp
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.TaskSchSp" >
+     insert into task_sch_sp (CODE, MERCHANT_NO, WORK_DATE, 
+      MEMBER_NO, MEMBER_NAME, TSST_CODE, 
+      TASK_NAME, NUM, SEQ, 
+      CREATE_ID, CREATE_DATE)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{workDate,jdbcType=DATE}, 
+      #{memberNo,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, #{tsstCode,jdbcType=VARCHAR}, 
+      #{taskName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER}, 
+      #{createId,jdbcType=VARCHAR}, NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.TaskSchSp" >
+    insert into task_sch_sp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="tsstCode != null" >
+        TSST_CODE,
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME,
+      </if>
+      <if test="num != null" >
+        NUM,
+      </if>
+      <if test="seq != null" >
+        SEQ,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=DATE},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="tsstCode != null" >
+        #{tsstCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.TaskSchSp" >
+    update task_sch_sp
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE = #{workDate,jdbcType=DATE},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="tsstCode != null" >
+        TSST_CODE = #{tsstCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        NUM = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        SEQ = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.TaskSchSp" >
+       update task_sch_sp
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      WORK_DATE = #{workDate,jdbcType=DATE},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      TSST_CODE = #{tsstCode,jdbcType=VARCHAR},
+      TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      NUM = #{num,jdbcType=INTEGER},
+      SEQ = #{seq,jdbcType=INTEGER},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

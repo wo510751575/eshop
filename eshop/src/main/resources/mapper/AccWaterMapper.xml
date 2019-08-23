@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IAccWaterDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.AccWater">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="acc_water_no" jdbcType="VARCHAR" property="accWaterNo" />
+    <result column="acc_date" jdbcType="TIMESTAMP" property="accDate" />
+    <result column="acc_source" jdbcType="CHAR" property="accSource" />
+    <result column="acc_type" jdbcType="CHAR" property="accType" />
+    <result column="tran_order_no" jdbcType="VARCHAR" property="tranOrderNo" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="acc_no" jdbcType="VARCHAR" property="accNo" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="pay_type" jdbcType="CHAR" property="payType" />
+    <result column="before_amt" jdbcType="DECIMAL" property="beforeAmt" />
+    <result column="after_amt" jdbcType="DECIMAL" property="afterAmt" />
+    <result column="biz_type" jdbcType="CHAR" property="bizType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="op_code" jdbcType="VARCHAR" property="opCode" />
+    <result column="water_type" jdbcType="VARCHAR" property="waterType" />
+    <result column="acc_code" jdbcType="VARCHAR" property="accCode" />
+  </resultMap>
+    <resultMap id="FindResultMap" type="com.lj.eshop.dto.AccWaterDto" extends="BaseResultMap">
+  	 	<result column="gap_price" jdbcType="DECIMAL" property="gapPrice" />
+  	 	<result column="product_name" jdbcType="VARCHAR" property="productName" />
+  	</resultMap>
+  <sql id="Base_Column_List">
+    code, acc_water_no, acc_date, acc_source, acc_type, tran_order_no, amt, acc_no, status, 
+    pay_type, before_amt, after_amt, biz_type, update_time, op_code, water_type,acc_code
+  </sql>
+
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				
+				<if test="param.accSource != null and param.accSource !='' ">
+					<![CDATA[and acc_source =#{param.accSource}]]>
+				</if>
+				<if test="param.accType != null and param.accType !='' ">
+					<![CDATA[and acc_type =#{param.accType}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.payType != null and param.payType !='' ">
+					<![CDATA[and pay_type =#{param.payType}]]>
+				</if>
+				<if test="param.bizType != null and param.bizType !='' ">
+					<![CDATA[and biz_type =#{param.bizType}]]>
+				</if>
+				<if test="param.waterType != null and param.waterType !='' ">
+					<![CDATA[and water_type =#{param.waterType}]]>
+				</if>
+				<if test="param.accCode != null and param.accCode !='' ">
+					<![CDATA[and acc_code =#{param.accCode}]]>
+				</if>
+				<if test="param.opCode != null and param.opCode !='' ">
+					<![CDATA[and op_code =#{param.opCode}]]>
+				</if>
+			</if>
+			<if test="startTime != null">
+					<![CDATA[and acc_date >= #{startTime}]]>
+			</if>
+			<if test="endTime != null"> 
+				<![CDATA[and acc_date <= #{endTime}]]>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findAccWaters" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_acc_water
+		<include refid="findPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY update_time ${sortDir}
+		</if>
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findAccWaterPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_acc_water
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY update_time desc
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, update_time  desc
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findAccWaterPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+		select count(*)
+		FROM t_acc_water
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_acc_water
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+ 
+
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.AccWater">
+    insert into t_acc_water
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="accWaterNo != null">
+        acc_water_no,
+      </if>
+      <if test="accDate != null">
+        acc_date,
+      </if>
+      <if test="accSource != null">
+        acc_source,
+      </if>
+      <if test="accType != null">
+        acc_type,
+      </if>
+      <if test="tranOrderNo != null">
+        tran_order_no,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="accNo != null">
+        acc_no,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="beforeAmt != null">
+        before_amt,
+      </if>
+      <if test="afterAmt != null">
+        after_amt,
+      </if>
+      <if test="bizType != null">
+        biz_type,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opCode != null">
+        op_code,
+      </if>
+      <if test="waterType != null">
+        water_type,
+      </if>
+      <if test="accCode != null">
+        acc_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="accWaterNo != null">
+        #{accWaterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accDate != null">
+        #{accDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accSource != null">
+        #{accSource,jdbcType=CHAR},
+      </if>
+      <if test="accType != null">
+        #{accType,jdbcType=CHAR},
+      </if>
+      <if test="tranOrderNo != null">
+        #{tranOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="accNo != null">
+        #{accNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="beforeAmt != null">
+        #{beforeAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="afterAmt != null">
+        #{afterAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="bizType != null">
+        #{bizType,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opCode != null">
+        #{opCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waterType != null">
+        #{waterType,jdbcType=VARCHAR},
+      </if>
+       <if test="accCode != null">
+         #{accCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.AccWater">
+    update t_acc_water
+    <set>
+      <if test="accWaterNo != null">
+        acc_water_no = #{accWaterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accDate != null">
+        acc_date = #{accDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accSource != null">
+        acc_source = #{accSource,jdbcType=CHAR},
+      </if>
+      <if test="accType != null">
+        acc_type = #{accType,jdbcType=CHAR},
+      </if>
+      <if test="tranOrderNo != null">
+        tran_order_no = #{tranOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="accNo != null">
+        acc_no = #{accNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="beforeAmt != null">
+        before_amt = #{beforeAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="afterAmt != null">
+        after_amt = #{afterAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="bizType != null">
+        biz_type = #{bizType,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opCode != null">
+        op_code = #{opCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waterType != null">
+        water_type = #{waterType,jdbcType=VARCHAR},
+      </if>
+       <if test="accCode != null">
+        acc_code=#{accCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  	<!-- 查询总收益 -->
+	<select id="findIncomeAmt" resultType="java.math.BigDecimal"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+		select sum(amt)
+		FROM t_acc_water
+		<include refid="findPage_condition" />
+	</select>
+ 	
+ 	<!-- 查资金流水的查询条件 -->
+ 	<sql id="findAcctWaterDetailPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and t.code =#{param.code}]]>
+				</if>
+				
+				<if test="param.accSource != null and param.accSource !='' ">
+					<![CDATA[and t.acc_source =#{param.accSource}]]>
+				</if>
+				<if test="param.accType != null and param.accType !='' ">
+					<![CDATA[and t.acc_type =#{param.accType}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and t.status =#{param.status}]]>
+				</if>
+				<if test="param.payType != null and param.payType !='' ">
+					<![CDATA[and t.pay_type =#{param.payType}]]>
+				</if>
+				<if test="param.bizType != null and param.bizType !='' ">
+					<![CDATA[and t.biz_type =#{param.bizType}]]>
+				</if>
+				<if test="param.waterType != null and param.waterType !='' ">
+					<![CDATA[and t.water_type =#{param.waterType}]]>
+				</if>
+				<if test="param.accCode != null and param.accCode !='' ">
+					<![CDATA[and t.acc_code =#{param.accCode}]]>
+				</if>
+				
+			</if>
+			<if test="startTime != null">
+					<![CDATA[and t.acc_date >= #{startTime}]]>
+			</if>
+			<if test="endTime != null"> 
+				<![CDATA[and t.acc_date <= #{endTime}]]>
+			</if>
+		</where>
+	</sql>
+	<!-- 查收支明细 ，金额 如果是商品提成则查详细里的提成金额， 如果非商品则查 流水中的金额 -->
+ 	<select id="findAllAcctWaterDetailPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+ 		SELECT t.code,t.tran_order_no,t.biz_type,t.acc_source,t.water_type,t.acc_date,o.product_name,CASE WHEN o.`code`is not null THEN (o.cnt*o.gap_price) ELSE t.amt END amt from t_acc_water t
+		left JOIN t_order_detail o on t.tran_order_no=o.order_no and t.water_type=2 and t.biz_type=3 
+		<include refid="findAcctWaterDetailPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY t.acc_date ${sortDir}
+		</if>
+		limit ${start} , ${limit}
+ 	</select>
+ 	
+ 	<!-- 查收支明细 ，金额 如果是商品提成则查详细里的提成金额， 如果非商品则查 流水中的金额 -->
+ 	<select id="findAllAcctWaterDetailPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+ 		SELECT count(*) from t_acc_water t
+		left JOIN t_order_detail o on t.tran_order_no=o.order_no and t.water_type=2 and t.biz_type=3 
+		<include refid="findAcctWaterDetailPage_condition" />
+ 	</select>
+ 	
+ 	<!-- 查资金流水 ，金额 如果是商品提成则查详细里的提成金额， 如果非商品则查 流水中的金额 -->
+ 	<select id="findAcctWaterDetailPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+ 		SELECT t.code,t.tran_order_no,t.biz_type,t.acc_source,t.water_type,t.acc_date,o.product_name,CASE WHEN o.`code`is not null THEN ((o.cnt-o.return_cnt)*o.gap_price) ELSE t.amt END amt  from t_acc_water t
+		left JOIN t_order_detail o on t.tran_order_no=o.order_no and t.water_type=2 and t.biz_type=3 and ((o.cnt-o.return_cnt)*o.gap_price) >0
+		<include refid="findAcctWaterDetailPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY t.acc_date ${sortDir}
+		</if>
+		limit ${start} , ${limit}
+ 	</select>
+ 	<!-- 查资金流水总数 -->
+ 	<select id="findAcctWaterDetailPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindAccWaterPage">
+ 		SELECT count(*)
+	 	from t_acc_water t
+		left JOIN t_order_detail o on t.tran_order_no=o.order_no  and ((o.cnt-o.return_cnt)*o.gap_price) >0
+		<include refid="findAcctWaterDetailPage_condition" />
+ 	</select>
+</mapper>

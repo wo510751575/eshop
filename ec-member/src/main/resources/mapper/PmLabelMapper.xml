@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IPmLabelDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.PmLabel" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="LABEL_NAME" property="labelName" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+      <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="findPmLabelPageResultMap" type="com.lj.business.member.dto.FindPmLabelPageReturn" >
+ 	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="LABEL_NAME" property="labelName" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+     <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <resultMap id="findPmLabelReturnList" type="com.lj.business.member.dto.FindPmLabelReturnList" >
+ 	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="LABEL_NAME" property="labelName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+
+  
+  
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, LABEL_NAME, CREATE_ID, REMARK, CREATE_DATE
+  </sql>
+  
+   <sql id="findPmLabelPage_condition" >
+   <where>
+     <if test="labelName != null and labelName !=''" >
+        and  LABEL_NAME like CONCAT('%',#{labelName,jdbcType=VARCHAR},'%' )
+      </if>
+       <if test="merchantNo != null and merchantNo !=''" >
+       and MERCHANT_NO = #{merchantNo}
+      </if>
+   </where>
+  </sql>
+  
+   <sql id="findPmLabel" >
+   <where>
+       <if test="merchantNo != null and merchantNo !=''" >
+       and pm.MERCHANT_NO = #{merchantNo}
+      </if>
+        <if test="memberNoGm != null and memberNoGm !=''" >
+       and pm.MEMBER_NO_GM = #{memberNoGm}
+      </if>
+        <if test="shopNo != null and shopNo !=''" >
+       and pm.SHOP_NO = #{shopNo}
+      </if>
+       <if test="areaCode != null and areaCode !=''" >
+       and pmb.AREA_CODE = #{areaCode}
+      </if>
+   </where>
+   </sql>
+  
+  
+  <!-- 导购维度统计的客户咨询量 -->
+  <select id="findPmlabelGuidMember" resultMap="findPmLabelReturnList">
+  SELECT pl.CODE,pl.LABEL_NAME,pm.MERCHANT_NO,pm.MERCHANT_NAME,pmb.AREA_CODE,
+  pm.SHOP_NO,pm.SHOP_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,count(plp.MEMBER_NO) AS MEMBER_NO 
+  FROM pm_label pl 
+  LEFT JOIN pm_label_pm plp ON pl.code = plp.PM_LABEL_CODE
+  LEFT JOIN person_member pm ON plp.MEMBER_NO = pm.MEMBER_NO
+  LEFT JOIN person_member_base pmb ON plp.MEMBER_NO = pmb.MEMBER_NO 
+  GROUP BY pl.CODE,pm.MEMBER_NO_GM
+ </select>
+  
+  
+    <!-- 商户维度统计的客户咨询量 -->
+  <select id="findPmlabelMerchantNo" resultMap="findPmLabelReturnList">
+  SELECT pl.CODE,pl.LABEL_NAME,pm.MERCHANT_NO,pm.MERCHANT_NAME,pmb.AREA_CODE,
+  pm.SHOP_NO,pm.SHOP_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,count(plp.MEMBER_NO) AS MEMBER_NO 
+  FROM pm_label pl 
+  LEFT JOIN pm_label_pm plp ON pl.code = plp.PM_LABEL_CODE
+  LEFT JOIN person_member pm ON plp.MEMBER_NO = pm.MEMBER_NO
+  LEFT JOIN person_member_base pmb ON plp.MEMBER_NO = pmb.MEMBER_NO 
+  GROUP BY pl.CODE,pm.MERCHANT_NO
+ </select>
+ 
+     <!-- 门店维度统计的客户咨询量 -->
+  <select id="findPmlabelShop" resultMap="findPmLabelReturnList">
+  SELECT pl.CODE,pl.LABEL_NAME,pm.MERCHANT_NO,pm.MERCHANT_NAME,pmb.AREA_CODE,
+  pm.SHOP_NO,pm.SHOP_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,count(plp.MEMBER_NO) AS MEMBER_NO 
+  FROM pm_label pl 
+  LEFT JOIN pm_label_pm plp ON pl.code = plp.PM_LABEL_CODE
+  LEFT JOIN person_member pm ON plp.MEMBER_NO = pm.MEMBER_NO
+  LEFT JOIN person_member_base pmb ON plp.MEMBER_NO = pmb.MEMBER_NO 
+  GROUP BY pl.CODE,pm.SHOP_NO
+ </select>
+ 
+      <!-- 区域维度统计的客户咨询量 -->
+  <select id="findPmlabelAreaCode" resultMap="findPmLabelReturnList">
+  SELECT pl.CODE,pl.LABEL_NAME,pm.MERCHANT_NO,pm.MERCHANT_NAME,pmb.AREA_CODE,
+  pm.SHOP_NO,pm.SHOP_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,count(plp.MEMBER_NO) AS MEMBER_NO 
+  FROM pm_label pl 
+  LEFT JOIN pm_label_pm plp ON pl.code = plp.PM_LABEL_CODE
+  LEFT JOIN person_member pm ON plp.MEMBER_NO = pm.MEMBER_NO
+  LEFT JOIN person_member_base pmb ON plp.MEMBER_NO = pmb.MEMBER_NO 
+  GROUP BY pl.CODE,pm.MERCHANT_NO,pmb.AREA_CODE
+ </select>
+    
+     <!-- 分页查询 -->
+   <select id="findPmLabelPage" resultMap="findPmLabelPageResultMap" parameterType="com.lj.business.member.dto.FindPmLabelPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM pm_label 
+ 	 <include refid="findPmLabelPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findPmLabelPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindPmLabelPage" >
+    select  count(*)
+     FROM pm_label 
+     <include refid="findPmLabelPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_label
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pm_label
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.PmLabel" >
+    insert into pm_label (CODE, MERCHANT_NO, LABEL_NAME, 
+      CREATE_ID, REMARK, CREATE_DATE)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{labelName,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR},  #{remark,jdbcType=VARCHAR}, NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.PmLabel" >
+    insert into pm_label
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="labelName != null" >
+        LABEL_NAME,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        <if test="remark != null" >
+        REMARK,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="labelName != null" >
+        #{labelName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.PmLabel" >
+    update pm_label
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="labelName != null" >
+        LABEL_NAME = #{labelName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.PmLabel" >
+    update pm_label
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      LABEL_NAME = #{labelName,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

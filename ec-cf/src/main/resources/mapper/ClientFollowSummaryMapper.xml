@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IClientFollowSummaryDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ClientFollowSummary" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="FOLLOW_NUM" property="followNum" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="ORDER_AMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="findBuyRecordPageResultMap" type="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordPageReturn">
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="FOLLOW_NUM" property="followNum" jdbcType="INTEGER" />
+    <result column="ORDER_AMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <resultMap id="findBuyRecordCountResultMap" type="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordCountReturn">
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="TOTAL" property="total" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <resultMap id="findAbandonRecordCountResultMap" type="com.lj.business.cf.dto.clientFollowSummary.FindAbandonRecordCountReturn">
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="PA_CODE" property="paCode" jdbcType="VARCHAR" />
+    <result column="TOTAL" property="total" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, CF_NO, FOLLOW_NUM, 
+    STATUS, ORDER_AMOUNT, START_DATE, END_DATE, REMARK, CREATE_DATE, REMARK4, REMARK3, 
+    REMARK2
+  </sql>
+   <sql id="findBuyRecordPage_condition" >
+      <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNo != null" >
+        and  MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNoGm != null" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+  </sql>
+  
+   <sql id="findSuccessNum">
+     <if test="memberName != null" >
+        and  MEMBER_NAME = #{memberName,jdbcType=VARCHAR}
+      </if>
+       <if test="memberNoGm != null" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+   </sql>
+  
+    <!-- 查询购买次数 -->
+    <select id="findBuySuccessNum" resultType="int" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindSuccessNum" >
+     select  count(*)
+     FROM client_follow_summary
+     where STATUS='DEAL'
+     <include refid="findSuccessNum" />
+    </select>
+  
+   <!-- 分页查询 -->
+   <select id="findBuyRecordPage" resultMap="findBuyRecordPageResultMap" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordPage" >
+  SELECT   CODE, CF_NO, FOLLOW_NUM, 
+   ORDER_AMOUNT,  END_DATE
+  FROM client_follow_summary
+  where STATUS='DEAL'
+ 	 <include refid="findBuyRecordPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  
+  <select id="findBuyRecordCount" resultMap="findBuyRecordCountResultMap" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordPage" >
+	  SELECT   cfs.CF_NO,count(*) as TOTAL
+	  FROM client_follow_summary cfs LEFT JOIN client_follow cf ON cfs.CF_NO = cf.CF_NO
+	  where cfs.STATUS='DEAL' AND cf.COM_TASK_TYPE != 'SYSTEM'
+	 	  <if test="merchantNo != null" >
+	        AND  cfs.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	      </if>
+	      <if test="memberNo != null" >
+	        AND  cfs.MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+	      </if>
+	      <if test="memberNoGm != null" >
+	        AND  cfs.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	      </if>
+	   order by cfs.CREATE_DATE ${sortDir}
+	   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findAbandonRecordCount" resultMap="findAbandonRecordCountResultMap" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordPage" >
+	   SELECT po.code as PA_CODE,count(b.code) as TOTAL,po.CF_NO
+		FROM 
+		pm_abandon po  LEFT JOIN 
+		(
+		SELECT cf.*
+		FROM pm_abandon pa LEFT JOIN client_follow cf ON pa.code = cf.PA_CODE
+		WHERE cf.COM_TASK_TYPE != 'SYSTEM'  AND pa.member_no = #{memberNo,jdbcType=VARCHAR} AND pa.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		ORDER BY pa.create_date ASC
+		) b ON po.code = b.pa_code
+		WHERE po.member_no = #{memberNo,jdbcType=VARCHAR} AND po.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		GROUP BY po.code
+		ORDER BY po.create_date ASC
+	
+  </select>
+  
+   <select id="findBuyRecordPageCount" resultType="int" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindBuyRecordPage" >
+    select  count(*)
+     FROM client_follow_summary
+     where STATUS='DEAL'
+     <include refid="findBuyRecordPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_follow_summary
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据cfNo查询跟进总表记录  冯辉 2017-07-14 -->
+   <select id="selectByCfNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_follow_summary
+    where CF_NO = #{cfNo,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据门店所属导购 统计成单金额 OMS所需   	段志鹏	2017-07-25 	start-->
+  <select id="sumAmountByShop" resultType="long" >
+   SELECT SUM(ORDER_AMOUNT) from client_follow_summary
+	WHERE MEMBER_NO_GM in 
+	<foreach collection="list" item="memberNoGmList"  open="(" separator="," close=")">  
+        #{memberNoGmList}  
+     </foreach>  
+  </select>
+  <!-- 根据门店所属导购 统计成单金额 OMS所需   	段志鹏	2017-07-25 	end-->
+  
+   <!-- 根据商户 统计成单总金额    	段志鹏	2017-08-02 	start-->
+  <select id="sumAmountByMerchantNo" resultType="long" parameterType="map">
+   SELECT SUM(ORDER_AMOUNT) from client_follow_summary
+	WHERE 1=1
+	 <if test="merchantNo != null and merchantNo !=''" >
+        AND  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNoGm != null and memberNoGm !=''" >
+        AND  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+		<if test="startTime != null">
+			<![CDATA[and END_DATE >= #{startTime}]]>
+		</if>
+		<if test="endTime != null"> 
+			<![CDATA[and END_DATE <= #{endTime}]]>
+		</if>
+		AND STATUS = 'DEAL'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from client_follow_summary
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.ClientFollowSummary" >
+    insert into client_follow_summary (CODE, MERCHANT_NO, MEMBER_NO, 
+      MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, 
+      CF_NO, FOLLOW_NUM, STATUS, 
+      ORDER_AMOUNT, START_DATE, END_DATE, 
+      REMARK, CREATE_DATE, REMARK4, 
+      REMARK3, REMARK2)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, #{memberNameGm,jdbcType=VARCHAR}, 
+      #{cfNo,jdbcType=VARCHAR}, #{followNum,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{orderAmount,jdbcType=DECIMAL}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, now(), #{remark4,jdbcType=VARCHAR}, 
+      #{remark3,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.ClientFollowSummary" >
+    insert into client_follow_summary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="cfNo != null" >
+        CF_NO,
+      </if>
+      <if test="followNum != null" >
+        FOLLOW_NUM,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="orderAmount != null" >
+        ORDER_AMOUNT,
+      </if>
+      <if test="startDate != null" >
+        START_DATE,
+      </if>
+      <if test="endDate != null" >
+        END_DATE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        now(),
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ClientFollowSummary" >
+    update client_follow_summary
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        CF_NO = #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        FOLLOW_NUM = #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        ORDER_AMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByCfNoSelective" parameterType="com.lj.business.cf.domain.ClientFollowSummary" >
+    update client_follow_summary
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        FOLLOW_NUM = #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        ORDER_AMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CF_NO = #{cfNo,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.ClientFollowSummary" >
+    update client_follow_summary
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      CF_NO = #{cfNo,jdbcType=VARCHAR},
+      FOLLOW_NUM = #{followNum,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      ORDER_AMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  	<!-- 查询所有跟进总表(分页) -->
+	<select id="findClientFollowSummaryPage" resultMap="BaseResultMap"
+		parameterType="com.lj.business.cf.dto.clientFollowSummary.FindClientFollowSummaryPage">
+		SELECT 
+		<include refid="Base_Column_List"/>
+		FROM
+		client_follow_summary
+		<include refid="findClientFollowSummaryPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<!-- 查询跟进总表条数 -->
+	<select id="findClientFollowSummaryPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.clientFollowSummary.FindClientFollowSummaryPage">
+		select count(*)
+		FROM client_follow_summary
+		<include refid="findClientFollowSummaryPage_condition" />
+	</select>
+	
+	<sql id="findClientFollowSummaryPage_condition">
+		<where>
+			<if test="status != null and status != ''">
+				and STATUS like
+				CONCAT('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</sql>
+	
+  <select id="findClientFollowSummaryLast" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.clientFollowSummary.FindClientFollowSummary" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from client_follow_summary
+	    where MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR} 
+	    	  AND MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+	    	  AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	    	  AND END_DATE IS NULL
+	   limit 1
+  </select>
+	
+  <select id="findNumSaleByGm" resultType="long">
+  	SELECT SUM(IFNULL(ORDER_AMOUNT,0))
+  	FROM client_follow_summary
+  	WHERE MEMBER_NO_GM = #{memberNoGm} 
+	AND `STATUS` = 'DEAL'
+	<![CDATA[ AND END_DATE >= #{beginTime} AND END_DATE <= #{endTime} ]]>
+  </select>
+  
+  <select id="findCountOrderByGm" resultType="integer">
+  	SELECT count(1)
+  	FROM client_follow_summary
+  	WHERE MEMBER_NO_GM = #{memberNoGm} 
+	AND `STATUS` = 'DEAL'
+	<![CDATA[ AND END_DATE >= #{beginTime} AND END_DATE <= #{endTime} ]]>
+  </select>
+  
+  <select id="findCountPmCfByGm" resultType="long">
+  	SELECT count(1)
+  	FROM client_follow_summary
+  	WHERE MEMBER_NO_GM = #{memberNoGm}
+  </select>
+  
+</mapper>

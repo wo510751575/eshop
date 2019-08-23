@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IShopRetireDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ShopRetire">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="retire_no" jdbcType="VARCHAR" property="retireNo" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
+    <result column="retire_status" jdbcType="CHAR" property="retireStatus" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="express_status" jdbcType="CHAR" property="expressStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    r.code, r.retire_no, r.mbr_code, r.shop_code, r.audit_status, r.retire_status, r.express_no, r.express_status, 
+    r.create_time, r.update_time, r.auditor, r.remarks, r.express_name
+  </sql>
+  <sql id="memberJoinColumn">
+   		,m.name AS memberName
+  </sql>
+  <sql id="shopJoinColumn">
+    	,s.shop_name AS shopName
+  </sql>
+	<sql id="memberJoins">
+		LEFT JOIN t_member m ON m.code = r.mbr_code
+	</sql>
+	<sql id="shopJoins">
+		LEFT JOIN t_shop s ON s.code = r.shop_code
+	</sql>
+    
+    
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ShopRetireDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and r.code =#{param.code}]]>
+				</if>
+				<if test="param.retireNo != null and param.retireNo !='' ">
+					<![CDATA[and r.retire_no =#{param.retireNo}]]>
+				</if>
+				<if test="param.auditStatus != null and param.auditStatus !='' ">
+					<![CDATA[and r.audit_status =#{param.auditStatus}]]>
+				</if>
+				<if test="param.retireStatus != null and param.retireStatus !='' ">
+					<![CDATA[and r.retire_status =#{param.retireStatus}]]>
+				</if>
+				<if test="param.expressStatus != null and param.expressStatus !='' ">
+					<![CDATA[and r.express_status =#{param.expressStatus}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and r.mbr_code =#{param.mbrCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findShopRetires" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopRetirePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_retire r
+		<include refid="findPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY create_time ${sortDir}
+		</if>
+	</select>
+	<!-- 分页查询 -->
+	<select id="findShopRetirePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopRetirePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="memberJoinColumn" />
+		<include refid="shopJoinColumn" />
+		FROM t_shop_retire r
+		<include refid="memberJoins" />
+		<include refid="shopJoins" />
+		<include refid="findPage_condition" />
+		order by ${sortBy} ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findShopRetirePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindShopRetirePage">
+		select count(r.code)
+		FROM t_shop_retire r
+		<include refid="memberJoins" />
+		<include refid="shopJoins" />
+		<include refid="findPage_condition" />
+	</select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_shop_retire r
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ShopRetire">
+    insert into t_shop_retire
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="retireNo != null">
+        retire_no,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="retireStatus != null">
+        retire_status,
+      </if>
+      <if test="expressNo != null">
+        express_no,
+      </if>
+      <if test="expressStatus != null">
+        express_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="auditor != null">
+        auditor,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="expressName != null">
+        express_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="retireNo != null">
+        #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="retireStatus != null">
+        #{retireStatus,jdbcType=CHAR},
+      </if>
+      <if test="expressNo != null">
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressStatus != null">
+        #{expressStatus,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ShopRetire">
+    update t_shop_retire
+    <set>
+      <if test="retireNo != null">
+        retire_no = #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="retireStatus != null">
+        retire_status = #{retireStatus,jdbcType=CHAR},
+      </if>
+      <if test="expressNo != null">
+        express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressStatus != null">
+        express_status = #{expressStatus,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

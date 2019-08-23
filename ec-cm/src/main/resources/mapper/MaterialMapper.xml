@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cm.dao.IMaterialDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cm.domain.Material" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MATERIAL_TYPE_CODE" property="materialTypeCode" jdbcType="VARCHAR" />
+    <result column="MATERIAL_TYPE_NAME" property="materialTypeName" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="BRIEF" property="brief" jdbcType="VARCHAR" />
+    <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
+    <result column="RESPOND_NUM" property="respondNum" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="LINK_URL" property="linkUrl" jdbcType="VARCHAR" />
+  </resultMap>
+    <resultMap id="findMaterialPageResultMap" type="com.lj.business.cm.dto.FindMaterialPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="MATERIAL_TYPE_CODE" property="materialTypeCode" jdbcType="VARCHAR" />
+    <result column="MATERIAL_TYPE_NAME" property="materialTypeName" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="BRIEF" property="brief" jdbcType="VARCHAR" />
+    <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="LINK_URL" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="BRIEF" property="brief" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="findMaterialAppPageResultMap" type="com.lj.business.cm.dto.FindMaterialAppPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="brief" jdbcType="VARCHAR" />
+    <result column="BRIEF" property="brief" jdbcType="VARCHAR" />
+    <result column="IMG_ADDR" property="briefImg" jdbcType="VARCHAR" />
+    <result column="COMMEN_MATERIAL" property="commenMaterial" />
+    <result column="LINK_URL" property="linkUrl" />
+    <result column="CREATE_DATE" property="createDate" />
+  </resultMap>
+  
+  <resultMap id="generatorMaterialTotalReturn" type="com.lj.business.cm.dto.GeneratorMaterialTotalReturn" >
+    <result column="merchant_no" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="member_no_gm" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="member_name_gm" property="memberNameGm" />
+    <result column="respond_num" property="respondNum" />
+    <result column="material_type_code" property="materialTypeCode" />
+    <result column="material_type_name" property="materialTypeName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, MATERIAL_TYPE_CODE, MATERIAL_TYPE_NAME, 
+    TITLE, CONTENT,BRIEF, IMG_ADDR, RESPOND_NUM, CREATE_ID, CREATE_DATE, REMARK, REMARK2, REMARK3, 
+    REMARK4, LINK_URL
+  </sql>
+  
+   <sql id="findMaterialPage_condition" >
+  	 <where>
+  	 
+  	 	<if test="merchantNo != null and merchantNo !=''" >
+	        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	      </if>
+      <if test="memberNoGm != null and memberNoGm !=''" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+       <if test="memberNameGm != null and memberNameGm != ''" >
+        and  MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
+      </if>
+        <if test="materialTypeName != null and materialTypeName != ''" >
+        and  MATERIAL_TYPE_NAME like CONCAT('%',#{materialTypeName,jdbcType=VARCHAR},'%' )
+      </if>
+        <if test="title != null and title != ''" >
+        and  TITLE like CONCAT('%',#{title,jdbcType=VARCHAR},'%' )
+      </if>     
+      <if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+	 </if>
+	 <if test="createDate != null"> 
+		<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
+	 </if>
+      </where>
+  </sql>
+
+    <!-- 分页查询 -->
+   <select id="findMaterialAppPage" resultMap="findMaterialAppPageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialAppPage" >
+	select t.CODE, t.TITLE, t.CONTENT,t.BRIEF,t.IMG_ADDR,t.LINK_URL,t.CREATE_DATE, t.COMMEN_MATERIAL from (
+	SELECT CODE, TITLE, CONTENT,BRIEF,IMG_ADDR,LINK_URL,CREATE_DATE, 'SELF' as COMMEN_MATERIAL
+	  FROM material
+	 WHERE MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}  AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR} AND MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR}
+	 union all
+	 SELECT CODE, TITLE,CONTENT,BRIEF,IMG_ADDR,LINK_URL,CREATE_DATE, 'COMMEN' as COMMEN_MATERIAL
+	  FROM MATERIAL_COMMEN
+	 WHERE MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR} AND MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR}
+	 ) t order by t.CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+    
+  <select id="findMaterialAppPageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindMaterialAppPage" >
+   select count(*) from (
+	SELECT CODE
+	  FROM material
+	 WHERE MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}  AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR} AND MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR}
+	 union all
+	 SELECT CODE
+	  FROM MATERIAL_COMMEN
+	 WHERE MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR} AND MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR}
+	 ) t
+  </select>
+  
+    <!-- 分页查询 -->
+   <select id="findMaterialPage" resultMap="findMaterialPageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+  SELECT  <include refid="Base_Column_List" />   
+  FROM material 
+ 	 <include refid="findMaterialPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findMaterialPageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+    select count(*)
+     FROM material
+     <include refid="findMaterialPage_condition" />     
+  </select>
+  
+   <!-- 查询所有数据 -->
+    <select id="MaterialPageCount" resultMap="findMaterialPageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialTypePage" >
+    SELECT   CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, MATERIAL_TYPE_CODE, MATERIAL_TYPE_NAME, LINK_URL,
+    TITLE, CONTENT,BRIEF, IMG_ADDR, CREATE_ID, CREATE_DATE ,COUNT(title)
+    FROM material 
+    WHERE MATERIAL_TYPE_NAME=#{materialTypeName}
+ 	 <include refid="findMaterialPage_condition" />
+   order by code ${sortDir}
+   </select>
+   
+  <!-- 查询 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from material
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 新增 -->
+  <select id="selectByTypeName" resultMap="BaseResultMap" parameterType="com.lj.business.cm.domain.Material">
+     select title 
+     from material
+     where MATERIAL_TYPE_NAME=#{materialTypeName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findMaterialByCode" resultMap="findMaterialPageResultMap">
+     select
+     <include refid="Base_Column_List" /> 
+     from material
+     where CODE=#{CODE}
+  </select>
+  
+  <select id="countMaterialSelective" resultType="integer">
+     select
+     count(1)
+     from material
+     <where>
+      <if test="code" >
+        CODE = #{code}
+      </if>
+      <if test="merchantNo" >
+        AND MERCHANT_NO = #{merchantNo}
+      </if>
+      <if test="memberNoGm" >
+        AND MEMBER_NO_GM = #{memberNoGm}
+      </if>
+      <if test="memberNameGm" >
+        AND MEMBER_NAME_GM = #{memberNameGm}
+      </if>
+      <if test="materialTypeCode" >
+        AND MATERIAL_TYPE_CODE = #{materialTypeCode}
+      </if>
+      <if test="materialTypeName" >
+        AND MATERIAL_TYPE_NAME = #{materialTypeName}
+      </if>
+      <if test="title" >
+        AND TITLE = #{title}
+      </if>
+      <if test="content" >
+        AND CONTENT = #{content}
+      </if>
+      <if test="imgAddr" >
+        AND IMG_ADDR = #{imgAddr}
+      </if>
+      <if test="createId" >
+        AND CREATE_ID = #{createId}
+      </if>
+        <if test="linkUrl" >
+        AND LINK_URL = #{linkUrl}
+      </if>
+      <if test="createDate" >
+        AND CREATE_DATE = #{createDate}
+      </if>
+     </where>
+  </select>
+  
+  <select id="generatorMaterialTotal" resultMap="generatorMaterialTotalReturn">
+  	SELECT
+  		merchant_no,MEMBER_NO_GM,MEMBER_NAME_GM,SUM(IFNULL(respond_num,0)) respond_num,
+  		material_type_code,MATERIAL_TYPE_NAME
+  	FROM material
+  	where merchant_no = #{merchantNo}
+  	GROUP BY MEMBER_NO_GM,MATERIAL_TYPE_CODE
+  </select>
+  
+  <select id="getMaterialResponseTotal" resultType="long">
+  	select ifnull((select sum(ifnull(respond_num,0)) from material where MERCHANT_NO = #{merchantNo}),0)
+  </select>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from material
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cm.domain.Material" >
+    insert into material (CODE, MERCHANT_NO, MEMBER_NO_GM, 
+      MEMBER_NAME_GM, MATERIAL_TYPE_CODE, MATERIAL_TYPE_NAME, 
+      TITLE, CONTENT, BRIEF,IMG_ADDR, 
+      RESPOND_NUM, CREATE_ID, CREATE_DATE, 
+      REMARK, REMARK2, REMARK3, 
+      REMARK4, LINK_URL)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, 
+      #{memberNameGm,jdbcType=VARCHAR}, #{materialTypeCode,jdbcType=VARCHAR}, #{materialTypeName,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{imgAddr,jdbcType=VARCHAR}, 
+      #{respondNum,jdbcType=INTEGER}, #{createId,jdbcType=VARCHAR}, NOW(), 
+      #{remark,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      #{remark4,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cm.domain.Material" >
+    insert into material
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="materialTypeCode != null" >
+        MATERIAL_TYPE_CODE,
+      </if>
+      <if test="materialTypeName != null" >
+        MATERIAL_TYPE_NAME,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="brief != null" >
+        BRIEF,
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR,
+      </if>
+      <if test="respondNum != null" >
+        RESPOND_NUM,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="linkUrl != null" >
+        LINK_URL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeCode != null" >
+        #{materialTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeName != null" >
+        #{materialTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="respondNum != null" >
+        #{respondNum,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.Material" >
+    update material
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeCode != null" >
+        MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeName != null" >
+        MATERIAL_TYPE_NAME = #{materialTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        BRIEF = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="respondNum != null" >
+        RESPOND_NUM = #{respondNum,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cm.domain.Material" >
+    update material
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR},
+      MATERIAL_TYPE_NAME = #{materialTypeName,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      BRIEF = #{brief,jdbcType=VARCHAR},
+      IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      RESPOND_NUM = #{respondNum,jdbcType=INTEGER},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      LINK_URL = #{linkUrl,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

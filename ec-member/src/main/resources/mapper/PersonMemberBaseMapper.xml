@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IPersonMemberBaseDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.member.domain.PersonMemberBase">
+	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CERT_TYPE_CODE" property="certTypeCode" jdbcType="VARCHAR" />
+    <result column="CERT_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="NAME_AUTH_FLAG" property="nameAuthFlag" jdbcType="CHAR" />
+    <result column="PWD" property="pwd" jdbcType="VARCHAR" />
+    <result column="ENCRYPTION_CODE" property="encryptionCode" jdbcType="VARCHAR" />
+    <result column="MEMBER_SRC" property="memberSrc" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_GZH_WX" property="openIdGzhWx" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_XCX_WX" property="openIdXcxWx" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="CITY_WX" property="cityWx" jdbcType="VARCHAR" />
+    <result column="COUNTRY_WX" property="countryWx" jdbcType="VARCHAR" />
+    <result column="PROVINCE_WX" property="provinceWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="SUBSRIBE_TIME" property="subsribeTime" jdbcType="TIMESTAMP" />
+    <result column="FAMILY_CODE" property="familyCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_NAME" property="familyName" jdbcType="VARCHAR" />
+    <result column="INTEREST" property="interest" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+    <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <!-- 客户表 -->
+     <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+	</resultMap>
+   <resultMap id="BaseResultList" type="com.lj.business.member.dto.FindPersonMemberBaseReturnMap">
+	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CERT_TYPE_CODE" property="certTypeCode" jdbcType="VARCHAR" />
+    <result column="CERT_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="NAME_AUTH_FLAG" property="nameAuthFlag" jdbcType="CHAR" />
+    <result column="PWD" property="pwd" jdbcType="VARCHAR" />
+    <result column="ENCRYPTION_CODE" property="encryptionCode" jdbcType="VARCHAR" />
+    <result column="MEMBER_SRC" property="memberSrc" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_GZH_WX" property="openIdGzhWx" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_XCX_WX" property="openIdXcxWx" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="CITY_WX" property="cityWx" jdbcType="VARCHAR" />
+    <result column="COUNTRY_WX" property="countryWx" jdbcType="VARCHAR" />
+    <result column="PROVINCE_WX" property="provinceWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="SUBSRIBE_TIME" property="subsribeTime" jdbcType="TIMESTAMP" />
+    <result column="FAMILY_CODE" property="familyCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_NAME" property="familyName" jdbcType="VARCHAR" />
+    <result column="INTEREST" property="interest" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+    <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="findPersonMemberBasePageResultMap"
+		type="com.lj.business.member.dto.FindPersonMemberBasePageReturn">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+		<result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CERT_TYPE_CODE" property="certTypeCode" jdbcType="VARCHAR" />
+    <result column="CERT_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="NAME_AUTH_FLAG" property="nameAuthFlag" jdbcType="CHAR" />
+    <result column="PWD" property="pwd" jdbcType="VARCHAR" />
+    <result column="ENCRYPTION_CODE" property="encryptionCode" jdbcType="VARCHAR" />
+    <result column="MEMBER_SRC" property="memberSrc" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_GZH_WX" property="openIdGzhWx" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_XCX_WX" property="openIdXcxWx" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="CITY_WX" property="cityWx" jdbcType="VARCHAR" />
+    <result column="COUNTRY_WX" property="countryWx" jdbcType="VARCHAR" />
+    <result column="PROVINCE_WX" property="provinceWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="SUBSRIBE_TIME" property="subsribeTime" jdbcType="TIMESTAMP" />
+    <result column="FAMILY_CODE" property="familyCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_NAME" property="familyName" jdbcType="VARCHAR" />
+    <result column="INTEREST" property="interest" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="TIMESTAMP" />
+		
+		<!-- 		客户会员信息 -->
+		<result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+		<result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+		<result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+		<result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+		<result column="SPRUCE_UP" property="spruceUp" jdbcType="VARCHAR" />
+		<result column="HOUSES" property="houses" jdbcType="VARCHAR" />
+		<result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+		<result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+		
+		<!-- 		客户分类信息 -->
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+		<result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR" />
+		<result column="PM_TYPE_DIM" property="pmTypeDim" jdbcType="VARCHAR" />
+		<result column="pmTypeStatus" property="pmTypeStatus" jdbcType="VARCHAR" />
+		
+		<!-- 		客户分类信息 -->
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+		<result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR" />
+		<result column="PM_TYPE_DIM" property="pmTypeDim" jdbcType="VARCHAR" />
+		<result column="pmTypeStatus" property="pmTypeStatus" jdbcType="VARCHAR" />
+	</resultMap>
+	 
+	<resultMap id="findBaseResultList" type="com.lj.business.member.dto.FindPersonMemberBaseReturnList">
+	    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+	    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+	    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+	    <result column="CITY_WX" property="cityWx" jdbcType="VARCHAR" />
+	    <result column="COUNTRY_WX" property="countryWx" jdbcType="VARCHAR" />
+	    <result column="PROVINCE_WX" property="provinceWx" jdbcType="VARCHAR" />
+	    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="findPersonMemberNameResultMap" type="com.lj.business.member.dto.FindPersonMemberName">
+	    <result column="MEMBER_NO" property="memberNo" />
+	    <result column="MEMBER_NAME" property="memberName" />
+	    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" />
+	    <result column="NICK_NAME_WX" property="nickNameWx" />
+	    <result column="HEAD_ADDRESS" property="headAddress" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+	   CODE, MEMBER_NO, MEMBER_NAME, STATUS, CERT_TYPE_CODE, CERT_NO, MOBILE, IMEI, EMAIL, 
+    JOB, ADDRESS, AGE, SEX, NAME_AUTH_FLAG, PWD, ENCRYPTION_CODE, MEMBER_SRC, OPEN_ID_GZH_WX, 
+    OPEN_ID_XCX_WX, NO_WX, NICK_NAME_WX, CITY_WX, COUNTRY_WX, PROVINCE_WX, HEAD_ADDRESS, 
+    SUBSRIBE_TIME, FAMILY_CODE, FAMILY_NAME, INTEREST, AREA_CODE, AREA_NAME, PROVINCE_CODE, CITY_CODE, 
+    CITY_AREA_CODE,RATIO_CLIENT_INFO, CREATE_ID, CREATE_DATE, UPDATE_ID, UPDATE_DATE,BIRTHDAY
+	  </sql>
+	  
+	 <sql id="PersonBase_Column_List" >
+	pmb.CODE, pmb.MEMBER_NO, pmb.MEMBER_NAME, pmb.STATUS, pmb.CERT_TYPE_CODE, pmb.CERT_NO, pmb.MOBILE, pmb.IMEI, pmb.EMAIL, 
+    pmb.JOB, pmb.ADDRESS, pmb.AGE, pmb.SEX, pmb.NAME_AUTH_FLAG, pmb.PWD, pmb.ENCRYPTION_CODE, pmb.MEMBER_SRC, pmb.OPEN_ID_GZH_WX, 
+    pmb.OPEN_ID_XCX_WX, pmb.NO_WX, pmb.NICK_NAME_WX, pmb.CITY_WX, pmb.COUNTRY_WX, pmb.PROVINCE_WX, pmb.HEAD_ADDRESS, 
+    pmb.SUBSRIBE_TIME, pmb.FAMILY_CODE, pmb.FAMILY_NAME, pmb.INTEREST, pmb.AREA_CODE, pmb.AREA_NAME, pmb.PROVINCE_CODE, pmb.CITY_CODE, 
+    pmb.CITY_AREA_CODE,pmb.RATIO_CLIENT_INFO, pmb.CREATE_ID, pmb.CREATE_DATE, pmb.UPDATE_ID, pmb.UPDATE_DATE,pmb.BIRTHDAY,pm.NICK_NAME_REMARK_LOCAL
+	 </sql>
+	  
+	
+	  
+	  <sql id="join_Column_List" >
+	  	<!-- 		客户基础信息 -->
+	    pmb.CODE, pmb.MEMBER_NO, pmb.MEMBER_NAME, pmb.STATUS, pmb.CERT_TYPE_CODE, pmb.CERT_NO, pmb.MOBILE,
+		pmb.EMAIL, pmb.JOB,pmb.ADDRESS, pmb.AGE, pmb.SEX, pmb.NAME_AUTH_FLAG, pmb.PWD, pmb.ENCRYPTION_CODE, pmb.MEMBER_SRC,
+		pmb.OPEN_ID_GZH_WX,pmb.OPEN_ID_XCX_WX, pmb.NICK_NAME_WX, pmb.CITY_WX, pmb.COUNTRY_WX, pmb.PROVINCE_WX, pmb.HEAD_ADDRESS,
+		pmb.SUBSRIBE_TIME,pmb.CREATE_ID, pmb.CREATE_DATE, pmb.UPDATE_ID, pmb.UPDATE_DATE,pmb.AREA_CODE,pmb.BIRTHDAY
+		<!-- 		客户信息 -->
+		,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,pm.SHOP_NO,pm.SHOP_NAME,pm.MERCHANT_NO
+		,pm.MERCHANT_NAME,pm.SPRUCE_UP,pm.HOUSES,pm.BOM_CODE,pm.BOM_NAME
+		<!-- 		客户分类关联表 -->
+		,ptp.PM_TYPE_CODE,ptp.REP_FLAG,ptp.GROUP_FLAG
+		<!-- 		客户分类表 -->
+		,pt.TYPE_NAME,pt.PM_TYPE_TYPE,pt.PM_TYPE_DIM,pt.STATUS as pmTypeStatus
+	  </sql>
+
+	    <sql id="findPersonMemberBasePage_condition">
+		<where>
+			<if test="memberNo != null and memberNo !='' ">
+				and pmb.MEMBER_NO = #{memberNo}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- OMS专用查询 -->
+	  <sql id="Base_Column_list_Oms">
+	    CODE,MOBILE,SEX,NICK_NAME_WX,CITY_WX,COUNTRY_WX,PROVINCE_WX,HEAD_ADDRESS
+	  </sql>
+	
+	<!-- OMS专用查询 -->
+	 <sql id="findPersonMemberBaseList">
+	 <where>
+		<if test="memberNo != null and memberNo !='' ">
+		and MEMBER_NO = #{memberNo}
+		</if>
+		<if test="memberName != null and memberName !='' ">
+		and MEMBER_NAME = #{memberName}
+		</if>
+		 <if test="areaCode != null and areaCode !='' ">
+		and AREA_CODE = #{areaCode}
+		</if>
+		 <if test="provinceCode != null and provinceCode !='' ">
+		 and PROVINCE_CODE = #{provinceCode}
+		</if>
+		 <if test="mobile != null and mobile !='' ">
+		 and MOBILE = #{mobile}
+		</if>
+	</where>
+	</sql>
+	
+		 <sql id="findPersonMemberBaseLists">
+	 <where>
+	     <if test="mobile != null and mobile !='' ">
+		 and MOBILE = #{mobile}
+		</if>
+	</where>
+	</sql>
+	
+	<!-- OMS专用查询 -->
+	<select id="findPersonMemberBaseList" resultMap="findBaseResultList" parameterType="com.lj.business.member.dto.FindPersonMemberBaseList">
+		SELECT  
+		<include refid="Base_Column_list_Oms" />
+		FROM person_member_base 
+		<include refid="findPersonMemberBaseList" />
+	</select>
+	
+	<!-- 查询新增客户数 -->
+	<select id="findPersonMemberBaseNumAdd" resultType="int" parameterType="com.lj.business.member.dto.FindPersonMemberBaseList">
+		SELECT COUNT(pmb.MEMBER_NO)
+		FROM person_member_base pmb
+		LEFT JOIN person_member pm on pm.MEMBER_NO=pmb.MEMBER_NO
+		WHERE 1=1
+		<if test="createDate != null"> 
+		<![CDATA[and  DATE_FORMAT(pmb.CREATE_DATE, '%Y-%m-%d')= #{createDate}]]>
+		</if>
+		<if test="merchantNo != null and merchantNo!=''"> 
+		 and pm.MERCHANT_NO=#{merchantNo}
+		</if>
+		<if test="memberNoGm != null and memberNoGm!=''"> 
+		 and pm.MEMBER_NO_GM=#{memberNoGm}
+		</if>
+		<if test="shopNo != null and shopNo!=''"> 
+		 and pm.SHOP_NO=#{shopNo}
+		</if>
+		<if test="areaCode != null and areaCode !=''"> 
+		 and pmb.AREA_CODE=#{areaCode}
+		</if>
+	</select>
+	
+	<select id="findPersonMemberBaseMemberCount" resultType="com.lj.business.member.dto.FindPersonMemberBaseList" parameterType="com.lj.business.member.dto.FindPersonMemberBase"> 
+	 SELECT COUNT(pmb.MEMBER_NO)AS count,pmb.AREA_NAME areaName,pmb.AREA_CODE areaCode
+     FROM person_member_base pmb
+     LEFT JOIN person_member pm on pmb.MEMBER_NO=pm.MEMBER_NO
+     WHERE pm.MERCHANT_NO=#{merchantNo}
+     GROUP BY pmb.AREA_CODE  
+     ORDER BY COUNT(pmb.MEMBER_NO) DESC 
+     LIMIT 1
+	</select>
+	
+	
+	<!-- 查询 -->
+	<select id="findPersonMemberMax" resultType="com.lj.business.member.dto.FindPersonMemberBaseReturnList">
+	 SELECT  count(MEMBER_NO) AS memberNo ,sex
+     FROM  person_member_base 
+     GROUP BY SEX 
+     ORDER BY COUNT(MEMBER_NO) DESC  
+     LIMIT 1
+	</select>
+	
+	<select id="findPersonMemberBaseCounts" resultType="com.lj.business.member.dto.FindPersonMemberBaseReturnList" parameterType="com.lj.business.member.dto.FindPersonMemberBaseList">
+		SELECT COUNT(MEMBER_NO) AS memberNo ,AREA_NAME areaName
+		FROM person_member_base 
+		<include refid="findPersonMemberBaseList" />
+	</select>
+	
+	<select id="getByCode" resultMap="findPersonMemberBasePageResultMap" parameterType="java.lang.String">
+		select
+		<include refid="join_Column_List" />
+		from person_member_base  pmb
+		LEFT JOIN person_member pm ON pm.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type_pm ptp ON ptp.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 分页查询 -->
+	<select id="findPersonMemberBasePage" resultMap="findPersonMemberBasePageResultMap"
+		parameterType="com.lj.business.member.dto.FindPersonMemberBasePage">
+		SELECT
+		<include refid="join_Column_List" />
+		FROM person_member_base pmb
+		LEFT JOIN person_member pm ON pm.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type_pm ptp ON ptp.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+		<include refid="findPersonMemberBasePage_condition" />
+		order by pmb.CREATE_DATE ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<select id="findPersonMemberBasePageCount" resultType="int"
+		parameterType="com.lj.business.member.dto.FindPersonMemberBasePage">
+		select count(*)
+		FROM person_member_base pmb
+		LEFT JOIN person_member pm ON pm.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type_pm ptp ON ptp.MEMBER_NO = pmb.MEMBER_NO
+		LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+		<include refid="findPersonMemberBasePage_condition" />
+	</select>
+
+	<!-- 查询客户 add by rain at 2017-07-3  start -->
+	<select id="findByMobile" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPersonMemberBase">
+		select
+		<include refid="Base_Column_List" />
+		from person_member_base
+		<include refid="findPersonMemberBaseLists" />
+	</select>
+	
+	<select id="findByMobiles" resultMap="BaseResultList" parameterType="com.lj.business.member.dto.FindPersonMemberBase">
+		select
+		<include refid="Base_Column_List" />
+		from person_member_base
+		<include refid="findPersonMemberBaseLists" />
+	</select>
+	
+	 <!-- rain at 2017-07-3 end -->
+	  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPersonMemberBase" >
+    select 
+    <include refid="Base_Column_List" />
+    from person_member_base
+     <where>
+      <if test="code != null and code !=''">
+        and  CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNo != null and memberNo !=''" >
+        and  MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+      </if>
+       <if test="noWx != null and noWx !=''" >
+        and  NO_WX = #{noWx,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </select>
+  
+  	<select id="findPersonMemberBaseParams" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPersonMemberBase" >
+    select
+      <include refid="PersonBase_Column_List" />
+    from person_member_base pmb
+    LEFT JOIN person_member pm ON pmb.MEMBER_NO=pm.MEMBER_NO
+     <where>
+      <if test="memberNoGm != null and memberNoGm !=''">
+        and  pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+        <if test="memberNo != null and memberNo !=''">
+        and  pmb.MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+      </if>
+        <if test="noWx != null and noWx !=''" >
+        and  pmb.NO_WX = #{noWx,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </select>
+  
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from person_member_base
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findByCodeList" resultMap="findPersonMemberNameResultMap">
+    select pmb.MEMBER_NO, pmb.MEMBER_NAME, pmb.NICK_NAME_WX, pm.NICK_NAME_REMARK_WX, pmb.HEAD_ADDRESS
+ 	from person_member pm left join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+    where pm.MEMBER_NO in
+    <foreach collection="codeList" open="(" close=")" item="code" separator=",">
+    #{code}
+    </foreach>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from person_member_base
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.PersonMemberBase" >
+    insert into person_member_base (CODE, MEMBER_NO, MEMBER_NAME, 
+      STATUS, CERT_TYPE_CODE, CERT_NO, 
+      MOBILE, IMEI, EMAIL, 
+      JOB, ADDRESS, AGE, 
+      SEX, NAME_AUTH_FLAG, PWD, 
+      ENCRYPTION_CODE, MEMBER_SRC, OPEN_ID_GZH_WX, 
+      OPEN_ID_XCX_WX, NO_WX, NICK_NAME_WX, 
+      CITY_WX, COUNTRY_WX, PROVINCE_WX, 
+      HEAD_ADDRESS, SUBSRIBE_TIME, FAMILY_CODE, 
+      FAMILY_NAME, INTEREST, AREA_CODE, AREA_NAME,
+      PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, RATIO_CLIENT_INFO,
+      CREATE_ID, CREATE_DATE, UPDATE_ID, 
+      UPDATE_DATE,BIRTHDAY)
+    values (#{code,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{certTypeCode,jdbcType=VARCHAR}, #{certNo,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{imei,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{job,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{sex,jdbcType=VARCHAR}, #{nameAuthFlag,jdbcType=CHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{encryptionCode,jdbcType=VARCHAR}, #{memberSrc,jdbcType=VARCHAR}, #{openIdGzhWx,jdbcType=VARCHAR}, 
+      #{openIdXcxWx,jdbcType=VARCHAR}, #{noWx,jdbcType=VARCHAR}, #{nickNameWx,jdbcType=VARCHAR}, 
+      #{cityWx,jdbcType=VARCHAR}, #{countryWx,jdbcType=VARCHAR}, #{provinceWx,jdbcType=VARCHAR}, 
+      #{headAddress,jdbcType=VARCHAR}, #{subsribeTime,jdbcType=TIMESTAMP}, #{familyCode,jdbcType=VARCHAR}, 
+      #{familyName,jdbcType=VARCHAR}, #{interest,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      #{provinceCode,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{cityAreaCode,jdbcType=VARCHAR}, #{ratioClientInfo,jdbcType=DECIMAL},
+      #{createId,jdbcType=VARCHAR}, NOW(), #{updateId,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP},#{birthday,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.PersonMemberBase" >
+    insert into person_member_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="certTypeCode != null" >
+        CERT_TYPE_CODE,
+      </if>
+      <if test="certNo != null" >
+        CERT_NO,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="imei != null" >
+        IMEI,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="job != null" >
+        JOB,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="nameAuthFlag != null" >
+        NAME_AUTH_FLAG,
+      </if>
+      <if test="pwd != null" >
+        PWD,
+      </if>
+      <if test="encryptionCode != null" >
+        ENCRYPTION_CODE,
+      </if>
+      <if test="memberSrc != null" >
+        MEMBER_SRC,
+      </if>
+      <if test="openIdGzhWx != null" >
+        OPEN_ID_GZH_WX,
+      </if>
+      <if test="openIdXcxWx != null" >
+        OPEN_ID_XCX_WX,
+      </if>
+      <if test="noWx != null" >
+        NO_WX,
+      </if>
+      <if test="nickNameWx != null" >
+        NICK_NAME_WX,
+      </if>
+      <if test="cityWx != null" >
+        CITY_WX,
+      </if>
+      <if test="countryWx != null" >
+        COUNTRY_WX,
+      </if>
+      <if test="provinceWx != null" >
+        PROVINCE_WX,
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS,
+      </if>
+      <if test="subsribeTime != null" >
+        SUBSRIBE_TIME,
+      </if>
+      <if test="familyCode != null" >
+        FAMILY_CODE,
+      </if>
+      <if test="familyName != null" >
+        FAMILY_NAME,
+      </if>
+      <if test="interest != null" >
+        INTEREST,
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE,
+      </if>
+      <if test="areaName != null" >
+        AREA_NAME,
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE,
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE,
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE,
+      </if>
+       <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="ratioClientInfo != null" >
+        RATIO_CLIENT_INFO,
+      </if>
+        CREATE_DATE,
+      <if test="updateId != null" >
+        UPDATE_ID,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="certTypeCode != null" >
+        #{certTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certNo != null" >
+        #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null" >
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="nameAuthFlag != null" >
+        #{nameAuthFlag,jdbcType=CHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionCode != null" >
+        #{encryptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSrc != null" >
+        #{memberSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="openIdGzhWx != null" >
+        #{openIdGzhWx,jdbcType=VARCHAR},
+      </if>
+      <if test="openIdXcxWx != null" >
+        #{openIdXcxWx,jdbcType=VARCHAR},
+      </if>
+      <if test="noWx != null" >
+        #{noWx,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameWx != null" >
+        #{nickNameWx,jdbcType=VARCHAR},
+      </if>
+      <if test="cityWx != null" >
+        #{cityWx,jdbcType=VARCHAR},
+      </if>
+      <if test="countryWx != null" >
+        #{countryWx,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceWx != null" >
+        #{provinceWx,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="subsribeTime != null" >
+        #{subsribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="familyCode != null" >
+        #{familyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="familyName != null" >
+        #{familyName,jdbcType=VARCHAR},
+      </if>
+      <if test="interest != null" >
+        #{interest,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="ratioClientInfo != null" >
+        #{ratioClientInfo,jdbcType=DECIMAL},
+      </if>
+        NOW(),
+      <if test="updateId != null" >
+        #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.PersonMemberBase" >
+    update person_member_base
+    <set >
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="certTypeCode != null" >
+        CERT_TYPE_CODE = #{certTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certNo != null" >
+        CERT_NO = #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null" >
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        JOB = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        AGE = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="nameAuthFlag != null" >
+        NAME_AUTH_FLAG = #{nameAuthFlag,jdbcType=CHAR},
+      </if>
+      <if test="pwd != null" >
+        PWD = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionCode != null" >
+        ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSrc != null" >
+        MEMBER_SRC = #{memberSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="openIdGzhWx != null" >
+        OPEN_ID_GZH_WX = #{openIdGzhWx,jdbcType=VARCHAR},
+      </if>
+      <if test="openIdXcxWx != null" >
+        OPEN_ID_XCX_WX = #{openIdXcxWx,jdbcType=VARCHAR},
+      </if>
+      <if test="noWx != null" >
+        NO_WX = #{noWx,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameWx != null" >
+        NICK_NAME_WX = #{nickNameWx,jdbcType=VARCHAR},
+      </if>
+      <if test="cityWx != null" >
+        CITY_WX = #{cityWx,jdbcType=VARCHAR},
+      </if>
+      <if test="countryWx != null" >
+        COUNTRY_WX = #{countryWx,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceWx != null" >
+        PROVINCE_WX = #{provinceWx,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS = #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="subsribeTime != null" >
+        SUBSRIBE_TIME = #{subsribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="familyCode != null" >
+        FAMILY_CODE = #{familyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="familyName != null" >
+        FAMILY_NAME = #{familyName,jdbcType=VARCHAR},
+      </if>
+      <if test="interest != null" >
+        INTEREST = #{interest,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        AREA_NAME = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE = #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ratioClientInfo != null" >
+        RATIO_CLIENT_INFO = #{ratioClientInfo,jdbcType=DECIMAL},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+        UPDATE_DATE = NOW(),
+      <if test="birthday != null" >
+        BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.PersonMemberBase" >
+    update person_member_base
+    set MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CERT_TYPE_CODE = #{certTypeCode,jdbcType=VARCHAR},
+      CERT_NO = #{certNo,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      JOB = #{job,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=INTEGER},
+      SEX = #{sex,jdbcType=VARCHAR},
+      NAME_AUTH_FLAG = #{nameAuthFlag,jdbcType=CHAR},
+      PWD = #{pwd,jdbcType=VARCHAR},
+      ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR},
+      MEMBER_SRC = #{memberSrc,jdbcType=VARCHAR},
+      OPEN_ID_GZH_WX = #{openIdGzhWx,jdbcType=VARCHAR},
+      OPEN_ID_XCX_WX = #{openIdXcxWx,jdbcType=VARCHAR},
+      NO_WX = #{noWx,jdbcType=VARCHAR},
+      NICK_NAME_WX = #{nickNameWx,jdbcType=VARCHAR},
+      CITY_WX = #{cityWx,jdbcType=VARCHAR},
+      COUNTRY_WX = #{countryWx,jdbcType=VARCHAR},
+      PROVINCE_WX = #{provinceWx,jdbcType=VARCHAR},
+      HEAD_ADDRESS = #{headAddress,jdbcType=VARCHAR},
+      SUBSRIBE_TIME = #{subsribeTime,jdbcType=TIMESTAMP},
+      FAMILY_CODE = #{familyCode,jdbcType=VARCHAR},
+      FAMILY_NAME = #{familyName,jdbcType=VARCHAR},
+      INTEREST = #{interest,jdbcType=VARCHAR},
+      AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+      AREA_NAME = #{areaName,jdbcType=VARCHAR},
+      PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      CITY_AREA_CODE = #{cityAreaCode,jdbcType=VARCHAR},
+      RATIO_CLIENT_INFO = #{ratioClientInfo,jdbcType=DECIMAL},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      UPDATE_DATE = NOW(),
+      BIRTHDAY = #{birthday,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateRatioClientInfoByMemberNo" parameterType="com.lj.business.member.dto.UpdatePersonMemberBaseRatioClientInfoDto">
+  		update person_member_base
+  		set RATIO_CLIENT_INFO = #{ratioClientInfo,jdbcType=DECIMAL}
+  		where MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.ILoginCheckDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.LoginCheck" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_TYPE" property="memberType" jdbcType="VARCHAR" />
+    <result column="LOCK_STATUS" property="lockStatus" jdbcType="VARCHAR" />
+    <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP" />
+    <result column="CYCLE_LOGIN_FAIL_TIMES" property="cycleLoginFailTimes" jdbcType="INTEGER" />
+    <result column="LAST_LOGIN_ERROR_DATE" property="lastLoginErrorDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="findLoginCheckPageResultMap" type="com.lj.business.member.dto.FindLoginCheckPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_TYPE" property="memberType" jdbcType="VARCHAR" />
+    <result column="LOCK_STATUS" property="lockStatus" jdbcType="VARCHAR" />
+    <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP" />
+    <result column="CYCLE_LOGIN_FAIL_TIMES" property="cycleLoginFailTimes" jdbcType="INTEGER" />
+    <result column="LAST_LOGIN_ERROR_DATE" property="lastLoginErrorDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MEMBER_NO, MEMBER_TYPE, LOCK_STATUS, LAST_LOGIN_DATE, CYCLE_LOGIN_FAIL_TIMES, 
+    LAST_LOGIN_ERROR_DATE, UPDATE_ID, UPDATE_DATE
+  </sql>
+  
+  <sql id="findLoginCheckPage_condition" >
+  	 <where>
+      <if test="memberNo != null" >
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      </where>
+  </sql>
+  
+     <!-- 分页查询 -->
+   <select id="findLoginCheckPage" resultMap="findLoginCheckPageResultMap" parameterType="com.lj.business.member.dto.FindLoginCheckPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM login_check 
+ 	 <include refid="findLoginCheckPage_condition" />
+   order by UPDATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findLoginCheckPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindLoginCheckPage" >
+    select  count(*)
+     FROM login_check 
+     <include refid="findLoginCheckPage_condition" />
+  </select>
+  
+  <select id="findLoginCheck" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.LoginCheck" >
+  SELECT   <include refid="Base_Column_List" />
+  FROM login_check 
+ 	 <include refid="findLoginCheckPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from login_check
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from login_check
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.LoginCheck" >
+    insert into login_check (CODE, MEMBER_NO, MEMBER_TYPE, 
+      LOCK_STATUS, LAST_LOGIN_DATE, CYCLE_LOGIN_FAIL_TIMES, 
+      LAST_LOGIN_ERROR_DATE, UPDATE_ID, UPDATE_DATE
+      )
+    values (#{code,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, #{memberType,jdbcType=VARCHAR}, 
+      #{lockStatus,jdbcType=VARCHAR}, #{lastLoginDate,jdbcType=TIMESTAMP}, #{cycleLoginFailTimes,jdbcType=INTEGER}, 
+      #{lastLoginErrorDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.LoginCheck" >
+    insert into login_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberType != null" >
+        MEMBER_TYPE,
+      </if>
+      <if test="lockStatus != null" >
+        LOCK_STATUS,
+      </if>
+      <if test="lastLoginDate != null" >
+        LAST_LOGIN_DATE,
+      </if>
+      <if test="cycleLoginFailTimes != null" >
+        CYCLE_LOGIN_FAIL_TIMES,
+      </if>
+      <if test="lastLoginErrorDate != null" >
+        LAST_LOGIN_ERROR_DATE,
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberType != null" >
+        #{memberType,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStatus != null" >
+        #{lockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginDate != null" >
+        #{lastLoginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cycleLoginFailTimes != null" >
+        #{cycleLoginFailTimes,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginErrorDate != null" >
+        #{lastLoginErrorDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.LoginCheck" >
+    update login_check
+    <set >
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberType != null" >
+        MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStatus != null" >
+        LOCK_STATUS = #{lockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginDate != null" >
+        LAST_LOGIN_DATE = #{lastLoginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cycleLoginFailTimes != null" >
+        CYCLE_LOGIN_FAIL_TIMES = #{cycleLoginFailTimes,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginErrorDate != null" >
+        LAST_LOGIN_ERROR_DATE = #{lastLoginErrorDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.LoginCheck" >
+    update login_check
+    set MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
+      LOCK_STATUS = #{lockStatus,jdbcType=VARCHAR},
+      LAST_LOGIN_DATE = #{lastLoginDate,jdbcType=TIMESTAMP},
+      CYCLE_LOGIN_FAIL_TIMES = #{cycleLoginFailTimes,jdbcType=INTEGER},
+      LAST_LOGIN_ERROR_DATE = #{lastLoginErrorDate,jdbcType=TIMESTAMP},
+      UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

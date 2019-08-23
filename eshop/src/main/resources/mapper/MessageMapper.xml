@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IMessageDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Message">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="recevier" jdbcType="VARCHAR" property="recevier" />
+    <result column="is_read" jdbcType="CHAR" property="isRead" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sender_del" jdbcType="CHAR" property="senderDel" />
+    <result column="recevier_del" jdbcType="CHAR" property="recevierDel" />
+    <result column="biz_type" jdbcType="CHAR" property="bizType" />
+    <result column="biz_code" jdbcType="VARCHAR" property="bizCode" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lj.eshop.domain.Message">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, type, title, sender, recevier, is_read, update_time, create_time, sender_del, 
+    recevier_del, biz_type, biz_code, shop_code, content
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.MessageDto"
+		extends="ResultMapWithBLOBs"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.type != null and param.type !='' ">
+					<![CDATA[and type =#{param.type}]]>
+				</if>
+				<if test="param.recevier != null and param.recevier !='' ">
+					<![CDATA[and recevier =#{param.recevier}]]>
+				</if>
+				<if test="param.bizCode != null and param.bizCode !='' ">
+					<![CDATA[and biz_code =#{param.bizCode}]]>
+				</if>
+				<if test="param.isRead != null and param.isRead !='' ">
+					<![CDATA[and is_read =#{param.isRead}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMessages" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMessagePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_message
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMessagePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMessagePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_message
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY create_time desc
+		</if>
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY create_time ${sortDir}
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMessagePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMessagePage">
+		select count(*)
+		FROM t_message
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_message
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Message">
+    insert into t_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+      <if test="recevier != null">
+        recevier,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="senderDel != null">
+        sender_del,
+      </if>
+      <if test="recevierDel != null">
+        recevier_del,
+      </if>
+      <if test="bizType != null">
+        biz_type,
+      </if>
+      <if test="bizCode != null">
+        biz_code,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="recevier != null">
+        #{recevier,jdbcType=VARCHAR},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="senderDel != null">
+        #{senderDel,jdbcType=CHAR},
+      </if>
+      <if test="recevierDel != null">
+        #{recevierDel,jdbcType=CHAR},
+      </if>
+      <if test="bizType != null">
+        #{bizType,jdbcType=CHAR},
+      </if>
+      <if test="bizCode != null">
+        #{bizCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Message">
+    update t_message
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="recevier != null">
+        recevier = #{recevier,jdbcType=VARCHAR},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="senderDel != null">
+        sender_del = #{senderDel,jdbcType=CHAR},
+      </if>
+      <if test="recevierDel != null">
+        recevier_del = #{recevierDel,jdbcType=CHAR},
+      </if>
+      <if test="bizType != null">
+        biz_type = #{bizType,jdbcType=CHAR},
+      </if>
+      <if test="bizCode != null">
+        biz_code = #{bizCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

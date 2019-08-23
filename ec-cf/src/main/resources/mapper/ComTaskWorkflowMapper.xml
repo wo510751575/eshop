@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IComTaskWorkflowDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ComTaskWorkflow" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="CODE_LIST" property="codeList" jdbcType="VARCHAR" />
+    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+    <result column="NEXT_CODE_LIST" property="nextCodeList" jdbcType="VARCHAR" />
+    <result column="NEXT_NAME_LIST" property="nextNameList" jdbcType="VARCHAR" />
+     <result column="FIRST" property="first" jdbcType="CHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findComTaskWorkflowPageResultMap" type="com.lj.business.cf.dto.comTaskWorkflow.FindComTaskWorkflowPageReturn" >
+   <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="CODE_LIST" property="codeList" jdbcType="VARCHAR" />
+    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+    <result column="NEXT_CODE_LIST" property="nextCodeList" jdbcType="VARCHAR" />
+    <result column="NEXT_NAME_LIST" property="nextNameList" jdbcType="VARCHAR" />
+     <result column="FIRST" property="first" jdbcType="CHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, CODE_LIST, NAME_LIST, NEXT_CODE_LIST, NEXT_NAME_LIST, CREATE_ID,FIRST,
+    CREATE_DATE, REMARK
+  </sql>
+   <sql id="findComTaskWorkflowPage_condition" > 
+  	 <where>
+      <if test="merchantNo != null and  merchantNo != '' " >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=DECIMAL}
+      </if>
+      </where>
+  </sql>
+  
+   <!-- 分页查询 -->
+   <select id="findComTaskWorkflowPage" resultMap="findComTaskWorkflowPageResultMap" parameterType="com.lj.business.cf.dto.comTaskWorkflow.FindComTaskWorkflowPage" >
+  SELECT    CODE, MERCHANT_NO, CODE_LIST, NAME_LIST, NEXT_CODE_LIST, NEXT_NAME_LIST, CREATE_ID,FIRST, 
+    CREATE_DATE, REMARK
+  FROM com_task_workflow
+ 	 <include refid="findComTaskWorkflowPage_condition" />
+   order by CODE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+   <select id="findComTaskWorkflowPageCount" resultType="int" parameterType="com.lj.business.cf.dto.comTaskWorkflow.FindComTaskWorkflowPage" >
+    select  count(*)
+     FROM com_task_workflow
+     <include refid="findComTaskWorkflowPage_condition" />
+  </select>
+  
+   <!--  add by rain at 2017-07-4  start -->
+  <!-- 查询商户任务基本类型记录 -->
+  <select id="comTaskWorkFlowList" resultMap="BaseResultMap" parameterType="map" >
+    select * FROM com_task_workflow
+	<where> 1= 1
+       <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+      <if test="codeList != null and codeList != ''" >
+        and  CODE_LIST = #{codeList}
+      </if>
+      </where>
+   	order by CREATE_DATE desc
+  </select>
+  
+  <!-- rain at 2017-07-4 end -->
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from com_task_workflow
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from com_task_workflow
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.ComTaskWorkflow" >
+    insert into com_task_workflow (CODE, MERCHANT_NO, CODE_LIST, 
+      NAME_LIST, NEXT_CODE_LIST, NEXT_NAME_LIST, 
+      CREATE_ID, CREATE_DATE, REMARK,FIRST
+      )
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{codeList,jdbcType=VARCHAR}, 
+      #{nameList,jdbcType=VARCHAR}, #{nextCodeList,jdbcType=VARCHAR}, #{nextNameList,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR}, NOW(), #{remark,jdbcType=VARCHAR}, #{first,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.ComTaskWorkflow" >
+    insert into com_task_workflow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="codeList != null" >
+        CODE_LIST,
+      </if>
+      <if test="nameList != null" >
+        NAME_LIST,
+      </if>
+      <if test="nextCodeList != null" >
+        NEXT_CODE_LIST,
+      </if>
+      <if test="nextNameList != null" >
+        NEXT_NAME_LIST,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="codeList != null" >
+        #{codeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nameList != null" >
+        #{nameList,jdbcType=VARCHAR},
+      </if>
+      <if test="nextCodeList != null" >
+        #{nextCodeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nextNameList != null" >
+        #{nextNameList,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ComTaskWorkflow" >
+    update com_task_workflow
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="codeList != null" >
+        CODE_LIST = #{codeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nameList != null" >
+        NAME_LIST = #{nameList,jdbcType=VARCHAR},
+      </if>
+      <if test="nextCodeList != null" >
+        NEXT_CODE_LIST = #{nextCodeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nextNameList != null" >
+        NEXT_NAME_LIST = #{nextNameList,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.ComTaskWorkflow" >
+    update com_task_workflow
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      CODE_LIST = #{codeList,jdbcType=VARCHAR},
+      NAME_LIST = #{nameList,jdbcType=VARCHAR},
+      NEXT_CODE_LIST = #{nextCodeList,jdbcType=VARCHAR},
+      NEXT_NAME_LIST = #{nextNameList,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

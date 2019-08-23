@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IWorkTaskDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.WorkTask" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="CODE_LIST" property="codeList" jdbcType="VARCHAR" />
+    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="DATE" />
+    <result column="REQUIRE_NUM" property="requireNum" jdbcType="BIGINT" />
+    <result column="FINISH_NUM" property="finishNum" jdbcType="BIGINT" />
+    <result column="UNFINISH_NUM" property="unfinishNum" jdbcType="BIGINT" />
+    <result column="DEFEAT_NUM" property="defeatNum" jdbcType="BIGINT" />
+    <result column="FINISH" property="finish" jdbcType="VARCHAR" />
+    <result column="REASON" property="reason" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+    <result column="TASK_TYPE" property="taskType" />
+  </resultMap>
+  
+  <resultMap id="findWorkTaskPageResultMap" type="com.lj.business.cf.dto.FindWorkTaskPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="CODE_LIST" property="codeList" jdbcType="VARCHAR" />
+    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="DATE" />
+    <result column="REQUIRE_NUM" property="requireNum" jdbcType="BIGINT" />
+    <result column="FINISH_NUM" property="finishNum" jdbcType="BIGINT" />
+    <result column="UNFINISH_NUM" property="unfinishNum" jdbcType="BIGINT" />
+    <result column="DEFEAT_NUM" property="defeatNum" jdbcType="BIGINT" />
+    <result column="FINISH" property="finish" jdbcType="VARCHAR" />
+    <result column="REASON" property="reason" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="TASK_TYPE" property="taskType" />
+  </resultMap>
+  
+  <resultMap id="findWorkTaskMainListResultMap" type="com.lj.business.cf.dto.FindWorkTaskMainListReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CODE_LIST" property="codeList" jdbcType="VARCHAR" />
+    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+    <result column="REQUIRE_NUM" property="requireNum" jdbcType="BIGINT" />
+    <result column="FINISH_NUM" property="finishNum" jdbcType="BIGINT" />
+    <result column="UNFINISH_NUM" property="unfinishNum" jdbcType="BIGINT" />
+    <result column="DEFEAT_NUM" property="defeatNum" jdbcType="BIGINT" />
+    <result column="FINISH" property="finish" jdbcType="VARCHAR" />
+    <result column="TASK_TYPE" property="taskType" jdbcType="VARCHAR" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   CODE, MERCHANT_NO, SHOP_NO, SHOP_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, CODE_LIST, NAME_LIST, 
+    WORK_DATE, REQUIRE_NUM, FINISH_NUM, UNFINISH_NUM, DEFEAT_NUM, FINISH, REASON, CREATE_ID, 
+    CREATE_DATE, REMARK4, REMARK3, REMARK2, REMARK,TASK_UNIT,TASK_TYPE
+  </sql>
+  
+   <sql id="findWorkTaskListPage_condition" >
+  	 <where>
+      <if test="memberNoGm != null" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=DECIMAL}
+      </if>
+       <if test="memberNameGm != null and memberNameGm != ''" >
+        and  MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+	 </if>
+      </where>
+  </sql>
+   <sql id="findWorkTaskMainList_condition" >
+     <where>
+      <if test="memberNoGm != null" >
+        and  wt.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+      <if test="workDate != null">
+		and wt.WORK_DATE = #{workDate,jdbcType=DATE}
+	 </if>
+	 <if test="merchantNo != null" >
+        and  wtc.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+	 </where>
+  </sql>
+  
+   <!-- 查找主要/其他工作任务表信息_APP -->
+   <select id="findWorkTaskMainList" resultMap="findWorkTaskMainListResultMap" parameterType="com.lj.business.cf.dto.FindWorkTaskMainList" >
+  select wt.CODE,wt.NAME_LIST,wt.REQUIRE_NUM, wt.FINISH_NUM, wt.UNFINISH_NUM, wt.DEFEAT_NUM, wt.FINISH,wtl.TASK_TYPE,wtl.TASK_UNIT
+    FROM work_task_choose wtc 
+         LEFT JOIN WORK_TASK_LIST wtl ON wtc.CODE_LIST = wtl.CODE
+         LEFT JOIN work_task wt ON wtc.CODE_LIST = wt.CODE_LIST
+ 	 <include refid="findWorkTaskMainList_condition" />
+	 ORDER BY wtc.SEQ 
+  </select>
+  
+  
+   <!-- 分页查询 -->
+   <select id="findWorkTaskPage" resultMap="findWorkTaskPageResultMap" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPage" >
+  SELECT   CODE, MERCHANT_NO, SHOP_NO, SHOP_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, CODE_LIST, NAME_LIST, 
+    WORK_DATE, REQUIRE_NUM, FINISH_NUM, UNFINISH_NUM, DEFEAT_NUM, FINISH, REASON, CREATE_ID, 
+    CREATE_DATE, REMARK4, REMARK3, REMARK2, REMARK,TASK_TYPE
+  FROM work_task
+ 	 <include refid="findWorkTaskListPage_condition" />
+   order by CODE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+   <select id="findWorkTaskPageCount" resultType="int" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPage" >
+    select  count(*)
+     FROM work_task
+     <include refid="findWorkTaskListPage_condition" />
+  </select>
+  
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_task
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_task
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.WorkTask" >
+       insert into work_task (CODE, MERCHANT_NO, SHOP_NO, 
+      SHOP_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, 
+      CODE_LIST, NAME_LIST, WORK_DATE, 
+      REQUIRE_NUM, FINISH_NUM, UNFINISH_NUM, 
+      DEFEAT_NUM, FINISH, REASON, 
+      CREATE_ID, CREATE_DATE, REMARK4, 
+      REMARK3, REMARK2, REMARK,TASK_UNIT,TASK_TYPE
+      )
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, #{memberNameGm,jdbcType=VARCHAR}, 
+      #{codeList,jdbcType=VARCHAR}, #{nameList,jdbcType=VARCHAR}, #{workDate,jdbcType=DATE}, 
+      #{requireNum,jdbcType=BIGINT}, #{finishNum,jdbcType=BIGINT}, #{unfinishNum,jdbcType=BIGINT}, 
+      #{defeatNum,jdbcType=BIGINT}, #{finish,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR}, NOW(), #{remark4,jdbcType=VARCHAR}, 
+      #{remark3,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{taskUnit,jdbcType=VARCHAR}, #{taskType}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.WorkTask" >
+    insert into work_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="codeList != null" >
+        CODE_LIST,
+      </if>
+      <if test="nameList != null" >
+        NAME_LIST,
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE,
+      </if>
+      <if test="requireNum != null" >
+        REQUIRE_NUM,
+      </if>
+      <if test="finishNum != null" >
+        FINISH_NUM,
+      </if>
+      <if test="unfinishNum != null" >
+        UNFINISH_NUM,
+      </if>
+      <if test="defeatNum != null" >
+        DEFEAT_NUM,
+      </if>
+      <if test="finish != null" >
+        FINISH,
+      </if>
+      <if test="reason != null" >
+        REASON,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="taskUnit != null" >
+        TASK_UNIT,
+      </if>
+      <if test="taskType != null" >
+        TASK_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeList != null" >
+        #{codeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nameList != null" >
+        #{nameList,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=DATE},
+      </if>
+      <if test="requireNum != null" >
+        #{requireNum,jdbcType=BIGINT},
+      </if>
+      <if test="finishNum != null" >
+        #{finishNum,jdbcType=BIGINT},
+      </if>
+      <if test="unfinishNum != null" >
+        #{unfinishNum,jdbcType=BIGINT},
+      </if>
+      <if test="defeatNum != null" >
+        #{defeatNum,jdbcType=BIGINT},
+      </if>
+      <if test="finish != null" >
+        #{finish,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="taskUnit != null" >
+        #{taskUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        #{taskType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.WorkTask" >
+  update work_task
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="codeList != null" >
+        CODE_LIST = #{codeList,jdbcType=VARCHAR},
+      </if>
+      <if test="nameList != null" >
+        NAME_LIST = #{nameList,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE = #{workDate,jdbcType=DATE},
+      </if>
+      <if test="requireNum != null" >
+        REQUIRE_NUM = #{requireNum,jdbcType=BIGINT},
+      </if>
+      <if test="finishNum != null" >
+        FINISH_NUM = #{finishNum,jdbcType=BIGINT},
+      </if>
+      <if test="unfinishNum != null" >
+        UNFINISH_NUM = #{unfinishNum,jdbcType=BIGINT},
+      </if>
+      <if test="defeatNum != null" >
+        DEFEAT_NUM = #{defeatNum,jdbcType=BIGINT},
+      </if>
+      <if test="finish != null" >
+        FINISH = #{finish,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        REASON = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUnit != null" >
+        TASK_UNIT = #{taskUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.WorkTask" >
+    update work_task
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      CODE_LIST = #{codeList,jdbcType=VARCHAR},
+      NAME_LIST = #{nameList,jdbcType=VARCHAR},
+      WORK_DATE = #{workDate,jdbcType=DATE},
+      REQUIRE_NUM = #{requireNum,jdbcType=BIGINT},
+      FINISH_NUM = #{finishNum,jdbcType=BIGINT},
+      UNFINISH_NUM = #{unfinishNum,jdbcType=BIGINT},
+      DEFEAT_NUM = #{defeatNum,jdbcType=BIGINT},
+      FINISH = #{finish,jdbcType=VARCHAR},
+      REASON = #{reason,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      TASK_UNIT = #{taskUnit,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findWtsMain" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.FindWorkTask">
+  		select 
+  		<include refid="Base_Column_List" />
+    	from work_task
+    	where  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+               AND SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+               AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+               AND WORK_DATE = #{now}
+        ORDER BY CODE
+  </select>
+
+  <select id="findExistByMember" resultType="int" parameterType="com.lj.business.cf.dto.FindWorkTask">
+    select COUNT(*) from work_task
+    where  MERCHANT_NO = #{merchantNo}
+    AND SHOP_NO = #{shopNo} AND MEMBER_NO_GM = #{memberNoGm} AND WORK_DATE = #{now,jdbcType=DATE} AND CODE_LIST = #{codeList}
+  </select>
+
+  <update id="updateFinishNum" parameterType="com.lj.business.cf.dto.UpdateWorkTaskFinishNum">
+    update WORK_TASK 
+    <set>
+    <if test="finishNum != null" >
+      FINISH_NUM =  FINISH_NUM + #{finishNum},
+      UNFINISH_NUM = UNFINISH_NUM - #{finishNum},
+    </if>
+    <if test="requireNum != null" >
+      REQUIRE_NUM = REQUIRE_NUM + #{requireNum},
+    </if>
+    </set>
+    where MERCHANT_NO = #{merchantNo}
+    AND MEMBER_NO_GM = #{memberNoGm} 
+    AND WORK_DATE = #{workDate,jdbcType=DATE} 
+    AND CODE_LIST = #{codeList}
+</update>
+
+  <update id="updateRequireNumByGmTypeDay">
+  	update WORK_TASK
+  	set REQUIRE_NUM = REQUIRE_NUM + 1,
+  	    UNFINISH_NUM = UNFINISH_NUM + 1
+  	where MEMBER_NO_GM = #{memberNoGm} 
+    AND WORK_DATE = #{workDate,jdbcType=DATE} 
+    AND TASK_TYPE = #{taskType}
+  </update>
+
+</mapper>

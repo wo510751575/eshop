@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IWithdrawDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Withdraw" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="mbr_name" property="mbrName" jdbcType="VARCHAR" />
+    <result column="mbr_code" property="mbrCode" jdbcType="VARCHAR" />
+    <result column="amt" property="amt" jdbcType="DECIMAL" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_acc_no" property="bankAccNo" jdbcType="VARCHAR" />
+    <result column="branch_bank" property="branchBank" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="withdraw_no" property="withdrawNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    code, mbr_name, mbr_code, amt, bank_name, bank_acc_no, branch_bank, status, phone, 
+    fail_reason, create_time, update_time, withdraw_no
+  </sql>
+
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.WithdrawDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.mbrName != null and param.mbrName !='' ">
+					<![CDATA[and mbr_name like CONCAT('%',#{param.mbrName},'%' )]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and mbr_code =#{param.mbrCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findWithdraws" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindWithdrawPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_withdraw
+		<include refid="findPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY create_time ${sortDir}
+		</if>
+	</select>
+	<!-- 分页查询 -->
+	<select id="findWithdrawPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindWithdrawPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_withdraw
+		<include refid="findPage_condition" />
+		<if test="sortBy!=null and sortBy=='create_time'.toString() ">
+			 ORDER BY create_time ${sortDir}
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findWithdrawPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindWithdrawPage">
+		select count(*)
+		FROM t_withdraw
+		<include refid="findPage_condition" />
+	</select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_withdraw
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Withdraw" >
+    insert into t_withdraw
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="mbrName != null" >
+        mbr_name,
+      </if>
+      <if test="mbrCode != null" >
+        mbr_code,
+      </if>
+      <if test="amt != null" >
+        amt,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankAccNo != null" >
+        bank_acc_no,
+      </if>
+      <if test="branchBank != null" >
+        branch_bank,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="failReason != null" >
+        fail_reason,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="withdrawNo != null" >
+        withdraw_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrName != null" >
+        #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null" >
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null" >
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccNo != null" >
+        #{bankAccNo,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBank != null" >
+        #{branchBank,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="withdrawNo != null" >
+        #{withdrawNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Withdraw" >
+    update t_withdraw
+    <set >
+      <if test="mbrName != null" >
+        mbr_name = #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null" >
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null" >
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccNo != null" >
+        bank_acc_no = #{bankAccNo,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBank != null" >
+        branch_bank = #{branchBank,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        fail_reason = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="withdrawNo != null" >
+        withdraw_no = #{withdrawNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

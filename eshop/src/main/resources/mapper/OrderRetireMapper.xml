@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IOrderRetireDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.OrderRetire">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="img1" jdbcType="VARCHAR" property="img1" />
+    <result column="img2" jdbcType="VARCHAR" property="img2" />
+    <result column="img3" jdbcType="VARCHAR" property="img3" />
+    <result column="img4" jdbcType="VARCHAR" property="img4" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="retire_no" jdbcType="VARCHAR" property="retireNo" />
+    <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
+    <result column="auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="fail_reason" jdbcType="VARCHAR" property="failReason" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, order_no, express_no, express_name, remarks, img1, img2, img3, img4, type, 
+    create_time, update_time, retire_no,audit_status,auditor,fail_reason, amt
+  </sql>
+
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.OrderRetireDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.orderNo != null and param.orderNo !='' ">
+					<![CDATA[and order_no =#{param.orderNo}]]>
+				</if>
+				<if test="param.auditStatus != null and param.auditStatus !='' ">
+					<![CDATA[and audit_status =#{param.auditStatus}]]>
+				</if>
+				<if test="param.retireNo != null and param.retireNo !='' ">
+					<![CDATA[and retire_no =#{param.retireNo}]]>
+				</if>
+			</if>
+			<if test="inOrderNos != null and inOrderNos.size > 0">
+				and order_no IN 
+				<foreach item="item" index="index" collection="inOrderNos" open="(" separator="," close=")">  
+				  	#{item}  
+				 </foreach>  
+		  	</if>
+		  	
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findOrderRetires" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderRetirePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_order_retire
+		<include refid="findPage_condition" />
+		ORDER BY create_time DESC 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findOrderRetirePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderRetirePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_order_retire
+		<include refid="findPage_condition" />
+		ORDER BY create_time DESC 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findOrderRetirePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindOrderRetirePage">
+		select count(*)
+		FROM t_order_retire
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_retire
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.OrderRetire">
+    insert into t_order_retire
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="expressNo != null">
+        express_no,
+      </if>
+      <if test="expressName != null">
+        express_name,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="img1 != null">
+        img1,
+      </if>
+      <if test="img2 != null">
+        img2,
+      </if>
+      <if test="img3 != null">
+        img3,
+      </if>
+      <if test="img4 != null">
+        img4,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="retireNo != null">
+        retire_no,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="auditor != null">
+        auditor,
+      </if>
+      <if test="failReason != null">
+        fail_reason,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNo != null">
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null">
+        #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null">
+        #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retireNo != null">
+        #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null">
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.OrderRetire">
+    update t_order_retire
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNo != null">
+        express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null">
+        img1 = #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        img2 = #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        img3 = #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null">
+        img4 = #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retireNo != null">
+        retire_no = #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null">
+        fail_reason = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+         amt = #{amt, jdbcType=DECIMAL},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+  <!-- =====================b/c端的分页查询 start============================= -->
+  <sql id="findPage_condition_4BC">
+		<where>
+			t1.order_no = t2.order_no 
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.auditStatus != null and param.auditStatus !='' ">
+					<![CDATA[and audit_status =#{param.auditStatus}]]>
+				</if>
+			</if>
+			<if test="mbrCode != null and mbrCode!=''">
+				and t2.mbr_code = #{mbrCode}
+		  	</if>
+		  	<if test="merchantCode != null and merchantCode!=''">
+				and t2.merchant_code = #{merchantCode}
+		  	</if>
+		  	<if test="shopCode != null and shopCode!=''">
+				and t2.shop_code = #{shopCode}
+		  	</if>
+		</where>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="findOrderRetirePage4BC" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderRetirePage">
+		SELECT t1.* FROM t_order_retire t1, t_order t2 
+		<include refid="findPage_condition_4BC" />
+		ORDER BY t1.create_time DESC 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findOrderRetirePageCount4BC" resultType="int"
+		parameterType="com.lj.eshop.dto.FindOrderRetirePage">
+		SELECT count(1) FROM t_order_retire t1, t_order t2 
+		<include refid="findPage_condition_4BC" />
+	</select>
+	<!-- =====================b/c端的分页查询 end============================= -->
+</mapper>

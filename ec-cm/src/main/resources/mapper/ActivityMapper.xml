@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cm.dao.IActivityDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.cm.domain.Activity">
+		<id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="IMG_ADDR" jdbcType="VARCHAR" property="imgAddr" />
+    <result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="SHOW_IMG_ADDR" jdbcType="VARCHAR" property="showImgAddr" />
+    <result column="READ_COUNT" jdbcType="BIGINT" property="readCount" />
+    <result column="SHARE_COUNT" jdbcType="BIGINT" property="shareCount" />
+    <result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+    <result column="START_DATE" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+	</resultMap>
+
+	<resultMap id="findActivityPageResultMap" type="com.lj.business.cm.dto.activity.FindActivityPageReturn">
+		<id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="IMG_ADDR" jdbcType="VARCHAR" property="imgAddr" />
+    <result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="SHOW_IMG_ADDR" jdbcType="VARCHAR" property="showImgAddr" />
+    <result column="READ_COUNT" jdbcType="BIGINT" property="readCount" />
+    <result column="SHARE_COUNT" jdbcType="BIGINT" property="shareCount" />
+    <result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+    <result column="START_DATE" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, MERCHANT_NAME, TITLE, CONTENT, IMG_ADDR, LINK_URL, SHOW_IMG_ADDR, 
+    READ_COUNT, SHARE_COUNT, CREATE_ID, START_DATE, CREATE_DATE, REMARK, REMARK2, REMARK3, 
+    REMARK4
+	</sql>
+
+	<sql id="findActivityPage_condition">
+		<where>
+			<if test="code != null and code !=''">
+				and CODE = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="merchantNo != null and merchantNo != ''">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title !=''">
+				and  TITLE like CONCAT('%',#{title},'%' )
+			</if>
+			<if test="startDate != null">
+				and DATE_FORMAT(START_DATE, "%Y-%m-%d") = #{startDate}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找活动列表 -->
+	<select id="findActivitys" resultMap="findActivityPageResultMap" parameterType="com.lj.business.cm.dto.activity.FindActivityPage">
+		SELECT <include refid="Base_Column_List" />
+		FROM activity
+		<include refid="findActivityPage_condition" />
+	</select>
+	
+	<!-- 增加点击量 邹磊 -->
+	<update id="updateActivityForRead" parameterType="java.lang.String">
+		update activity SET READ_COUNT=READ_COUNT+1
+		WHERE LINK_URL = #{linkUrl,jdbcType=VARCHAR}
+	</update>
+	
+	
+	
+	<!-- 分页查询 -->
+	<select id="findActivityPage" resultMap="findActivityPageResultMap"
+		parameterType="com.lj.business.cm.dto.activity.FindActivityPage">
+		SELECT <include refid="Base_Column_List" />
+		FROM activity
+		<include refid="findActivityPage_condition" />
+		order by CREATE_DATE ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+	<!-- 分页查询条数 -->
+	<select id="findActivityPageCount" resultType="int"
+		parameterType="com.lj.business.cm.dto.activity.FindActivityPage">
+		select count(*)
+		FROM activity
+		<include refid="findActivityPage_condition" />
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from activity
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		activity
+		where CODE = #{code,jdbcType=VARCHAR}
+	</delete>
+
+
+	<insert id="insertSelective" parameterType="com.lj.business.cm.domain.Activity" >
+    insert into activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR,
+      </if>
+      <if test="linkUrl != null" >
+        LINK_URL,
+      </if>
+      <if test="showImgAddr != null" >
+        SHOW_IMG_ADDR,
+      </if>
+      <if test="readCount != null" >
+        READ_COUNT,
+      </if>
+      <if test="shareCount != null" >
+        SHARE_COUNT,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="startDate != null" >
+        START_DATE,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showImgAddr != null" >
+        #{showImgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        #{readCount,jdbcType=BIGINT},
+      </if>
+      <if test="shareCount != null" >
+        #{shareCount,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.Activity" >
+    update activity
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showImgAddr != null" >
+        SHOW_IMG_ADDR = #{showImgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        READ_COUNT = #{readCount,jdbcType=BIGINT},
+      </if>
+      <if test="shareCount != null" >
+        SHARE_COUNT = #{shareCount,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      					http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+      					http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	<!-- 每个Servlet有自己独立的Spring空间！ -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/*.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+
+	<!-- 扫描指定package下所有带有如@controller,@services,@resource,并把所注释的注册为Spring Beans -->
+	<context:component-scan base-package="com.lj.eshop.eis" />
+
+	<!-- 只能用于springMVC,用于配置springMVC的注解驱动 -->
+	<mvc:annotation-driven>
+		<!-- 自定义转换器，将带有注解@ResponseBody的controller方法返回值全部转为GeneralResponse类对应的json字符串 -->
+		<mvc:message-converters>
+			<ref bean="apiMappingJacksonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- Controller异常处理公共逻辑 -->
+	<bean id="handlerExceptionResolver"
+		class="com.lj.eshop.eis.spring.EisExceptionHandlerExceptionResolver">
+		<property name="defaultErrorView" value="/error/500" /><!-- 
+			错误页面 -->
+		<property name="messageConverters">
+			<list>
+				<!-- <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/> -->
+				<ref bean="apiMappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="apiMappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+
+		<property name="supportedMediaTypes"> <list> <value>text/plain;charset=utf-8</value> 
+			<value>text/html;charset=UTF-8</value> <value>text/json;charset=UTF-8</value> 
+			<value>application/json;charset=utf-8</value> </list> </property>
+		<property name="objectMapper">
+			<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+				<property name="dateFormat">
+					<bean class="java.text.SimpleDateFormat">
+						<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+					</bean>
+				</property>
+				<property value="NON_NULL" name="serializationInclusion"/>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 这里设置静态的资源 -->
+	<mvc:resources location="/images/" mapping="/images/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<!-- 拦截器 -->
+ 	<mvc:interceptors> 
+		 <mvc:interceptor>
+		 	<mvc:mapping path="/**"/> 
+			<!-- 不需要拦截的地址
+			 <mvc:exclude-mapping path="/static/**"/> 
+			  -->
+			 <!-- 鉴权拦截器 -->
+			 <bean class="com.lj.eshop.eis.interceptor.TokenHandlerInterceptor">
+			 	   	<!-- 不要登录校验的地址无需配置在permissions -->
+			 	   	<!-- 
+			 	   	权限配置说明：1：代表h5 B端可访问，2：代表H5 C端可访问 3：代表APP 小B可访问
+			 	   	如果接口允许多个角色访问，则以value=多个角色值，以英文逗号分割 ，如value="1,2,3"
+			 	   	-->
+			 	   	<property name="permissions">
+		             	<map>
+		             		<entry key="/wx/login/again" value="1,2" />
+		             		<entry key="/wx//openid/bind" value="1,2" />
+		             		<!-- BC可访问的 -->
+		                 	<entry key="/product/evl/like" value="1,2" />
+		                 	
+		                 	<!-- 订单相关 -->
+		                 	<entry key="/order/createByCar" value="1,2" />
+		                 	<entry key="/order/create" value="1,2" />
+		                 	<entry key="/order/complete" value="1,2" />
+		                 	<entry key="/order/cancel" value="1,2" />
+		                 	<entry key="/product/evl" value="1,2" />
+		                 	<entry key="/shopCar/myShopCar" value="1,2" />
+		                 	<entry key="/shopCar/add" value="1,2" />
+		                 	<entry key="/shopCar/editCnt" value="1,2" />
+		                 	<entry key="/shopCar/del" value="1,2" />
+		                 	<entry key="/shopCar/getByIds" value="1,2" />
+		                 	<entry key="/myAttention/attention" value="1,2" />
+		                 	<entry key="/shop/myAttentionList" value="1,2" />
+		                 	<entry key="/member/my_c" value="1,2" />
+		                 	<entry key="/shop/status" value="1,2" />
+		                 	<entry key="/shop/openShopOne" value="1,2" />
+		                 	<entry key="/shop/openShopTwo" value="1,2" />
+		                 	
+		                 	<!-- 退货相关 -->
+		                 	<entry key="/order/retire/list" value="1,2" />
+		                 	<entry key="/order/retire/view" value="1,2" />
+		                 	<entry key="/order/retire/add" value="1,2" />
+		                 	
+		                 	<!-- 地址相关 -->
+		                 	<entry key="/addrs/list" value="1,2" />
+		                 	<entry key="/addrs/view" value="1,2" />
+		                 	<entry key="/addrs/add" value="1,2" />
+		                 	<entry key="/addrs/upd" value="1,2" />
+		                 	<entry key="/addrs/del" value="1,2" />
+		                 	<entry key="/addrs/setDefault" value="1,2" />
+		                 	
+		                 	<!-- 我的消息 -->
+		                 	<entry key="/message/list" value="1,2,3" />
+		                 	<!-- 支付相关 -->
+		                 	<entry key="/pay/unifiedorder" value="1,2" />
+		                 	<!-- 提现相关 -->
+		                 	<entry key="/acct/index" value="1,2" />
+		                 	<entry key="/bankcard/list" value="1,2" />
+		                 	<entry key="/bankcard/save" value="1,2" />
+		                 	<entry key="/acct/withdraw/apply" value="1,2" />
+		                 	<entry key="/acct/withdraw/list" value="1,2" />
+		                 	<entry key="/acct/withdraw/detail" value="1,2" />
+		                 	<entry key="/acct/water/income/list" value="1,2" />
+		                 	<entry key="/acct/water/all/list" value="1,2" />
+		                 	<!-- 需要登录的，不限制BC端谁登录 END -->
+		                 	
+		                 	<!-- 需要B登录的 -->
+		                 	<entry key="/product/index" value="1" />
+		                 	<entry key="/product/list" value="1" />
+		                 	<entry key="/shop/myShop" value="1" />
+		                 	<entry key="/shop/editShop" value="1" />
+		                 	<entry key="/shop/productStatus" value="1" />
+		                 	<entry key="/shop/product/status/find" value="1" />
+		                 	<entry key="/mbr/sec/cnt/index" value="1" />
+		                 	<entry key="/mbr/sec/cnt/auth/code" value="1" />
+		                 	<entry key="/mbr/sec/cnt/auth/verify" value="1" />
+		                 	<entry key="/mbr/sec/cnt/phone/update" value="1" />
+		                 	<entry key="/mbr/sec/cnt/paypwd/update" value="1" />
+		                 	<entry key="/member/my_b" value="1" />
+		                 	<entry key="/order/list_b" value="1" />
+		                 	<entry key="/myColl/list" value="1" />
+		                 	<entry key="/myColl/del" value="1" />
+		                 	<entry key="/member/memberRankApply/list" value="1" />
+		                 	<entry key="/member/memberRankApply/view" value="1" />
+		                 	<entry key="/member/memberRankApply/apply" value="1" />
+		                 	<entry key="/shop/retire/view" value="1" />
+		                 	<entry key="/shop/retire/add" value="1" />
+		                 	<entry key="/custOrder/history" value="1" />
+		                 	<entry key="/custOrder/add" value="1" />
+		                 	<entry key="/custOrder/update" value="1" />
+		                 	<entry key="/summary/index" value="1" />
+		                 	<entry key="/summary/list" value="1" />
+		             		<!-- 需要B登录的END -->
+		             		
+		             		<!-- 需要C登录的 value=2 -->
+		             		<!-- <entry key="请求地址" value="2" /> --> 
+		                 	
+		             		<!-- 需要C登录的END -->
+		             		
+		             		<!-- 需要APP登录的 value=3 -->
+		             		<entry key="/mbr/seccnt/updpass" value="3" />
+		             		<entry key="/mbr/updpass/authcode" value="3" />
+		             		<entry key="/mbr/updpass" value="3" />
+		             		<entry key="/mbr/myinfo" value="3" />
+		             		<entry key="/mbr/myinfo/upd" value="3" />
+		             		<entry key="/message/unRead" value="3" />
+		             		<entry key="/message/newMsg" value="3" />
+		             		<!-- 需要APP登录的END  -->
+		             	</map>
+	        		</property>
+			 </bean>
+		 </mvc:interceptor> 
+	</mvc:interceptors>
+</beans>

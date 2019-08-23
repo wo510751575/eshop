@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 基础设置 -->
+	<settings>
+		<!-- changes from the defaults，全局启用或禁用延迟加载。当禁用时，所有关联对象都会即时加载。 -->
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+		 
+	<!-- 别名定义 -->
+	<typeAliases>
+		<typeAlias alias="string" type="java.lang.String" />
+	</typeAliases>
+	
+	<!-- 自定义类型转换器 -->
+	<!-- <typeHandlers>
+		<typeHandler javaType="Boolean" jdbcType="CHAR" handler="com.sfpay.product.dao.BooleanTypeHandler" />
+	</typeHandlers> -->
+		
+	<!-- SQL映射文件 -->
+	<mappers>		
+	    <!-- <mapper resource="mapper/GuidMemberMapper.xml" />
+	    <mapper resource="mapper/LoginCheckMapper.xml" />
+	    <mapper resource="mapper/ManagerMemberMapper.xml" />
+	    <mapper resource="mapper/MemberLoginInfoMapper.xml" />
+	    <mapper resource="mapper/MerchantMapper.xml" />
+	    <mapper resource="mapper/PersonMemberBaseMapper.xml" />
+	    <mapper resource="mapper/PersonMemberMapper.xml" />
+	    <mapper resource="mapper/PmLabelMapper.xml" />
+	    <mapper resource="mapper/PmTypeMapper.xml" />
+	    <mapper resource="mapper/ShopMapper.xml" />
+	    <mapper resource="mapper/MemLineMapper.xml" />
+	    <mapper resource="mapper/ExGuiderMapper.xml" />
+	    <mapper resource="mapper/AgreementMerchantMapper.xml" />
+	    <mapper resource="mapper/InterestPmMapper.xml" /> -->
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 基础设置 -->
+	<settings>
+		<!-- changes from the defaults，全局启用或禁用延迟加载。当禁用时，所有关联对象都会即时加载。 -->
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+		 
+	<!-- 别名定义 -->
+	<typeAliases>
+		<typeAlias alias="string" type="java.lang.String" />
+	</typeAliases>
+	
+	<!-- 自定义类型转换器 -->
+	<!-- <typeHandlers>
+		<typeHandler javaType="Boolean" jdbcType="CHAR" handler="com.sfpay.product.dao.BooleanTypeHandler" />
+	</typeHandlers> -->
+		
+	<!-- SQL映射文件 -->
+	<mappers>		
+	    <!-- <mapper resource="mapper/ClientKeepMapper.xml" />
+ 	    <mapper resource="mapper/ClientFollowMapper.xml" />
+	    <mapper resource="mapper/PmAbandonMapper.xml" />
+	    <mapper resource="mapper/WorkTaskListMapper.xml" />
+	    <mapper resource="mapper/WorkTaskMapper.xml" />
+	    <mapper resource="mapper/WorkTaskUnfinishMapper.xml" />
+	    <mapper resource="mapper/TaskSchSpMapper.xml" />
+	    <mapper resource="mapper/TaskSetMapper.xml" /> 
+	    <mapper resource="mapper/CfListMapper.xml" />
+	    <mapper resource="mapper/WorkTaskGroupMapper.xml"/>
+	    <mapper resource="mapper/TaskSchSpTypeMapper.xml"/> -->
+	    <!-- <mapper resource="mapper/ComTaskListMapper.xml"/>
+	    <mapper resource="mapper/ComTaskChooseMapper.xml"/> -->
+	</mappers>
+		
+</configuration>

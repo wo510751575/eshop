@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.lj</groupId>
+	<artifactId>eoms-web</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>eoms-web</name>
+    
+    <!-- 项目属�?-->
+	<properties> 
+		<!-- other setting -->
+		<jdk.version>1.8</jdk.version>
+		<jetty.version>7.6.10.v20130312</jetty.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<downloadSources>false</downloadSources>
+		<hessian.version>4.0.38.01</hessian.version>
+	</properties>
+	
+
+	<dependencies>
+	
+		<dependency>  
+	            <groupId>com.caucho</groupId>  
+	            <artifactId>hessian</artifactId>  
+	            <version>${hessian.version}</version>  
+	    </dependency>
+	    
+		
+		<dependency>
+			<groupId>com.lj.business</groupId>
+			<artifactId>ec-member-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+	   <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+	  	<dependency>
+	  		<groupId>com.lj</groupId>
+	  		<artifactId>eoms-core</artifactId>
+	  		<version>1.0.0-SNAPSHOT</version>
+	  		<type>jar</type>
+	  		<scope>compile</scope>
+	  	</dependency>
+
+	  	<dependency>
+	  		<groupId>com.lj.eshop</groupId>
+	  		<artifactId>eshop-service</artifactId>
+	  		<version>1.0.0-SNAPSHOT</version>
+	  		<type>jar</type>
+	  		<scope>compile</scope>
+	  	</dependency>
+	  	
+	  	<dependency>
+			<groupId>com.lj.base</groupId>
+			<artifactId>base-mvc</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	  	<dependency>
+	  		<groupId>com.lj</groupId>
+	  		<artifactId>msg-service</artifactId>
+	  		<version>1.0.0-SNAPSHOT</version>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>com.lj.business</groupId>
+	  		<artifactId>ec-cm-service</artifactId>
+	  		<version>1.0.0-SNAPSHOT</version>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>com.lj</groupId>
+	  		<artifactId>cc-service</artifactId>
+	  		<version>1.0.0-SNAPSHOT</version>
+	  	</dependency>
+	</dependencies> 
+  <build>
+		<finalName>eoms-web</finalName>
+	<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>  
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+                    <encoding>UTF-8</encoding>  
+                    <compilerArguments>  
+                        <verbose />  
+                        <bootclasspath>${java.home}/lib/rt.jar</bootclasspath>  
+                    </compilerArguments>  
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+					</webResources>
+				</configuration>
+				<version>2.4</version>
+			</plugin>
+			 <plugin>  
+		        <groupId>org.apache.maven.plugins</groupId>  
+		        <artifactId>maven-surefire-plugin</artifactId>  
+		        <version>2.18.1</version>  
+		        <configuration>  
+		          <skipTests>true</skipTests>  
+		        </configuration>  
+		    </plugin>  
+		</plugins> 
+	</build>
+ 
+</project>

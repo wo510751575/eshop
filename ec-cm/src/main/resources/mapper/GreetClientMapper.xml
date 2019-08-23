@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.business.cm.dao.IGreetClientDao">
+  <resultMap id="BaseResultMap" type="com.lj.business.cm.domain.GreetClient">
+    <id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="MEMBER_NO_GM" jdbcType="VARCHAR" property="memberNoGm" />
+    <result column="MEMBER_NAME_GM" jdbcType="VARCHAR" property="memberNameGm" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="SEND_TYPE" jdbcType="VARCHAR" property="sendType" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+  </resultMap>
+  <resultMap id="findGreetClientPageResultMap" type="com.lj.business.cm.dto.FindGreetClientPageReturn">
+    <id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="MEMBER_NO_GM" jdbcType="VARCHAR" property="memberNoGm" />
+    <result column="MEMBER_NAME_GM" jdbcType="VARCHAR" property="memberNameGm" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="SEND_TYPE" jdbcType="VARCHAR" property="sendType" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+  </resultMap>
+  <!-- 今日工作 邹磊-->
+  <resultMap id="GreetClientResult" type="com.lj.business.cm.dto.FindGreetClientReturnDto">
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="SEND_TYPE" jdbcType="VARCHAR" property="sendType" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, TITLE, CONTENT, SEND_TYPE, MEMBER_NO, 
+    CREATE_ID, CREATE_DATE,REMARK,REMARK2,REMARK3,REMARK4
+  </sql>
+  
+  <!-- 今日工作 邹磊 -->
+  <sql id="Base_Column">
+   TITLE, CONTENT, SEND_TYPE
+  </sql>
+  
+    <sql id="findGreetClientPage_condition" >
+  	 <where>
+      <if test="memberNoGm != null" >
+        and  MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+       <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+       <if test="memberNameGm != null and memberNameGm != ''" >
+        and  MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
+      </if>
+       <if test="title != null and title != ''" >
+        and  TITLE  like CONCAT('%',#{title,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="startTime != null">
+		<![CDATA[and CREATE_DATE >= #{startTime}]]>
+	 </if>
+	 <if test="endTime != null "> 
+		<![CDATA[and CREATE_DATE <= #{endTime}]]>
+	 </if>
+      </where>
+  </sql>
+  
+  	<!-- 查询当日问候信息(今日工作)  邹磊-->
+<select id="findGreetClientForDay" resultMap="GreetClientResult" parameterType="com.lj.business.cm.dto.FindGreetClientReturnDto" >
+	select 
+	<include refid="Base_Column" />
+	from greet_client 
+	where MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	<![CDATA[and CREATE_DATE >= #{createDate}]]>
+	<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
+	ORDER BY CREATE_DATE 
+	limit 0,1
+</select>
+  
+  
+    <!-- 分页查询 -->
+   <select id="findGreetClientPage" resultMap="findGreetClientPageResultMap" parameterType="com.lj.business.cm.dto.FindGreetClientPage" >
+  SELECT   CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, TITLE, CONTENT, SEND_TYPE, MEMBER_NO, 
+    CREATE_ID, CREATE_DATE
+  FROM greet_client 
+ 	 <include refid="findGreetClientPage_condition" />
+   order by code ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findGreetClientPageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindGreetClientPage" >
+    select  count(*)
+     FROM greet_client 
+     <include refid="findGreetClientPage_condition" />     
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from greet_client
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from greet_client
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cm.domain.GreetClient">
+    insert into greet_client (CODE, MERCHANT_NO, MEMBER_NO_GM, 
+      MEMBER_NAME_GM, TITLE, CONTENT, 
+      SEND_TYPE, MEMBER_NO, CREATE_ID, 
+      CREATE_DATE,REMARK,REMARK2,REMARK3,REMARK4)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, 
+      #{memberNameGm,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{sendType,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      NOW(), 
+      #{remark,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR},
+      #{remark3,jdbcType=VARCHAR}, #{remark4,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cm.domain.GreetClient">
+    insert into greet_client
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="merchantNo != null">
+        MERCHANT_NO,
+      </if>
+      <if test="memberNoGm != null">
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null">
+        MEMBER_NAME_GM,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="sendType != null">
+        SEND_TYPE,
+      </if>
+      <if test="memberNo != null">
+        MEMBER_NO,
+      </if>
+      <if test="createId != null">
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="remark2 != null">
+        REMARK2,
+      </if>
+      <if test="remark3 != null">
+        REMARK3,
+      </if>
+      <if test="remark4 != null">
+        REMARK4,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null">
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null">
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null">
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendType != null">
+        #{sendType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null">
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null">
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.GreetClient">
+    update greet_client
+    <set>
+      <if test="merchantNo != null">
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null">
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null">
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendType != null">
+        SEND_TYPE = #{sendType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null">
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null">
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cm.domain.GreetClient">
+    update greet_client
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      SEND_TYPE = #{sendType,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      
+      REMARK = #{remark,jdbcType=VARCHAR}
+      REMARK2 = #{remark2,jdbcType=VARCHAR}
+      REMARK3 = #{remark3,jdbcType=VARCHAR}
+      REMARK4 = #{remark4,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

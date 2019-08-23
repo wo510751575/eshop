@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IShopProductDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ShopProduct" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    code, shop_code, product_code, status, create_time
+  </sql>
+  
+  
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ShopProductDto" extends="BaseResultMap">
+		<collection property="product"  ofType="com.lj.eshop.dto.ProductDto"   resultMap="ProductBaseResultMap"/>
+		<collection property="sku"  ofType="com.lj.eshop.dto.ProductSkuDto"   resultMap="ProductSkuDtoResultMap"/>  
+	</resultMap>
+		
+	<resultMap id="ProductBaseResultMap" type="com.lj.eshop.dto.ProductDto">
+		<id column="product_code" jdbcType="VARCHAR" property="code" />
+	    <result column="product_name" jdbcType="VARCHAR" property="name" />
+	    <result column="product_icon" jdbcType="VARCHAR" property="productIcon" />
+	    <result column="product_spe_img" jdbcType="VARCHAR" property="speImg" />
+	    <result column="product_unit" jdbcType="VARCHAR" property="unit" />
+	    <result column="product_key" jdbcType="VARCHAR" property="productKey" />
+     	<result column="product_cnt" jdbcType="VARCHAR" property="cnt" />
+	</resultMap>
+	<resultMap id="ProductSkuDtoResultMap" type="com.lj.eshop.dto.ProductSkuDto">
+    	<id column="sku_code" jdbcType="VARCHAR" property="code" />
+    	<result column="sku_skuDesc" jdbcType="VARCHAR" property="skuDesc" />
+   	 	<result column="sku_sale_price" jdbcType="DECIMAL" property="salePrice" />
+	    <result column="sku_price" jdbcType="DECIMAL" property="price" />
+	    <result column="sku_gap_price" jdbcType="DECIMAL" property="gapPrice" />
+	    <result column="sku_cnt" jdbcType="INTEGER" property="cnt" />
+	</resultMap>
+		
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and shop_code =#{param.shopCode}]]>
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					<![CDATA[and product_code =#{param.productCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findShopProducts" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopProductPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_product
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findShopProductPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopProductPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_product
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findShopProductPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindShopProductPage">
+		select count(*)
+		FROM t_shop_product
+		<include refid="findPage_condition" />
+	</select>
+	
+	
+	
+	
+	<!-- B端店铺首页商品查询 -->
+	<sql id="findIndexPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and t.code =#{param.code}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and t.status =#{param.status} and p.status =#{param.status}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and t.shop_code =#{param.shopCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<select id="findIndexProductPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductPage">
+		<![CDATA[
+			SELECT t.code,t.status
+			,p.code product_code,p.name product_name,p.unit product_unit,p.product_icon product_icon,p.spe_img product_spe_img,p.product_key product_key
+			,p.cnt product_cnt
+			,s.sale_price sku_sale_price,s.price sku_price,
+			(((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) )
+			)  sku_gap_price
+			,s.`code` sku_code,s.sku_desc sku_skuDesc,s.cnt sku_cnt
+			from t_shop_product t
+			JOIN t_product p ON p.code = t.product_code
+			JOIN t_product_sku s on p.code=s.product_code and s.is_default='0' and s.del_flag='0'
+			JOIN t_supply y on p.supply_code=y.code   
+ 		]]>
+		 <include refid="findIndexPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY p.sale_cnt DESC,p.product_order ASC,p.view_cnt DESC,p.evl_cnt DESC,  p.create_time  desc,p.code
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, p.create_time  desc,p.code
+		</if>		
+		limit ${start} , ${limit}
+	</select>
+	 <!-- B端店铺首页商品总数 -->
+	<select id="findIndexProductPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindProductPage">
+		select count(*)
+		<![CDATA[
+			from t_shop_product t
+			JOIN t_product p ON p.code = t.product_code
+			JOIN t_product_sku s on p.code=s.product_code and s.is_default='0' and s.del_flag='0'
+			JOIN t_supply y on p.supply_code=y.code   
+ 		]]>
+ 		<include refid="findIndexPage_condition" />
+	</select>
+	
+	
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_shop_product
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ShopProduct" >
+    insert into t_shop_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ShopProduct" >
+    update t_shop_product
+    <set >
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

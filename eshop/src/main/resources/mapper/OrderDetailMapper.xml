@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IOrderDetailDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.OrderDetail">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" />
+    <result column="cnt" jdbcType="INTEGER" property="cnt" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="org_price" jdbcType="DECIMAL" property="orgPrice" />
+    <result column="gap_price" jdbcType="DECIMAL" property="gapPrice" />
+    <result column="return_cnt" jdbcType="VARCHAR" property="returnCnt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    	d.code, d.product_code, d.product_name, d.supply_code, d.supply_name, d.cnt, d.amt,d.sale_price, d.order_no, d.sku_code, d.org_price, d.gap_price,d.return_cnt
+  </sql>
+   <sql id="sku_Column_List">
+    	,s.sku_desc sku_skuDesc
+  </sql>
+  <sql id="product_Column_List">
+    	,p.product_icon  product_icon
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.OrderDetailDto" extends="BaseResultMap">
+		<collection property="sku"  ofType="com.lj.eshop.dto.ProductSkuDto"   resultMap="ProductSkuDtoResultMap"/>  
+		<collection property="product"  ofType="com.lj.eshop.dto.ProductDto"   resultMap="ProductDtoResultMap"/>
+	</resultMap>
+	<resultMap id="ProductSkuDtoResultMap" type="com.lj.eshop.dto.ProductSkuDto">
+	   	<result column="sku_skuDesc" jdbcType="VARCHAR" property="skuDesc" />
+	</resultMap>
+	<resultMap id="ProductDtoResultMap" type="com.lj.eshop.dto.ProductDto">
+	   	<result column="product_icon" jdbcType="VARCHAR" property="productIcon" />
+	</resultMap>
+
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and d.code =#{param.code}]]>
+				</if>
+				<if test="param.orderNo != null and param.orderNo !='' ">
+					<![CDATA[and d.order_no =#{param.orderNo}]]>
+				</if>
+			</if>
+			<if test="orderDetailCode != null and orderDetailCode.size > 0">
+				and d.code IN 
+				<foreach item="item" index="index" collection="orderDetailCode" open="(" separator="," close=")">  
+				  	#{item}  
+				 </foreach>  
+		  	</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findOrderDetails" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderDetailPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="sku_Column_List" />
+		<include refid="product_Column_List" />
+		FROM t_order_detail d 
+		JOIN t_product_sku s ON d.sku_code=s.code
+		JOIN t_product p ON p.code=d.product_code
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findOrderDetailPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderDetailPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="sku_Column_List" />
+		<include refid="product_Column_List" />
+		FROM t_order_detail d
+		JOIN t_product_sku s ON d.sku_code=s.code
+		JOIN t_product p ON p.code=d.product_code
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findOrderDetailPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindOrderDetailPage">
+		select count(d.code)
+		FROM t_order_detail d
+		JOIN t_product_sku s ON d.sku_code=s.code
+		JOIN t_product p ON p.code=d.product_code
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_detail d
+    where d.code = #{code,jdbcType=VARCHAR}
+  </select>
+   
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.OrderDetail">
+    insert into t_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="cnt != null">
+        cnt,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="salePrice != null">
+        sale_price,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="orgPrice != null">
+        org_price,
+      </if>
+      <if test="gapPrice != null">
+        gap_price,
+      </if>
+      <if test="returnCnt != null">
+        return_cnt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null">
+        #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgPrice != null">
+        #{orgPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gapPrice != null">
+        #{gapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="returnCnt != null">
+        #{returnCnt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.OrderDetail">
+    update t_order_detail
+    <set>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null">
+        cnt = #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgPrice != null">
+        org_price = #{orgPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gapPrice != null">
+        gap_price = #{gapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="returnCnt != null">
+        return_cnt = #{returnCnt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

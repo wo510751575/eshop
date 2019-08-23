@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.lj.eshop</groupId>
+	<artifactId>eshop-member</artifactId>
+	<packaging>war</packaging>
+	<name>eshop-member Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<hessian.version>4.0.38.01</hessian.version>
+	</properties>
+	<parent>
+		<groupId>com.lj.pom</groupId>
+		<artifactId>pom-server</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>com.caucho</groupId>
+			<artifactId>hessian</artifactId>
+			<version>${hessian.version}</version>
+		</dependency>
+		<!-- hessian eshop api -->
+		<dependency>
+			<groupId>com.lj.eshop</groupId>
+			<artifactId>eshop-member-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	 	<!-- 未抽出来暂时引用旧的服务包 -->
+		<dependency>
+			<groupId>com.lj.business</groupId>
+			<artifactId>member-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>	
+		<dependency>
+			<groupId>com.lj</groupId>
+			<artifactId>kms-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lj</groupId>
+			<artifactId>cc-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<!-- 未抽出来暂时引用旧的服务包 end -->
+		
+		
+		<dependency>
+			<groupId>com.lj.business</groupId>
+			<artifactId>business-utils</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lj.base</groupId>
+			<artifactId>base-core</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>jdk-1.8</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<jdk>1.8</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.source>1.8</maven.compiler.source>
+				<maven.compiler.target>1.8</maven.compiler.target>
+				<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+			</properties>
+		</profile>
+	</profiles>  
+	<build>
+		<finalName>eshop-cf</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<skip>true</skip>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

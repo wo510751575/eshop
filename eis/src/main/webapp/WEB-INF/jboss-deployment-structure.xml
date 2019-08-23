@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+    <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
+    <deployment>
+        <exclusions>
+           <!-- Exclude hibernate as we use the latest hibenate that we provide. 
+                see JSI/pom.xml -->
+            <!-- Exclude slf4j 1.6.1, we provide 1.7.2 -->
+            <module name="org.apache.commons.logging" />
+            <module name="org.slf4j" />
+            <module name="org.slf4j.ext" />
+            <!-- Exclude slf4j-jboss-logmanager -->
+            <module name="org.slf4j.impl" />
+            <module name="org.apache.log4j" />
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>

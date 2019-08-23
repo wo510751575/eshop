@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IClientInviteDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ClientInvite" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="REACH_TIME" property="reachTime" jdbcType="TIMESTAMP" />
+    <result column="FAIL_REASON" property="failReason" jdbcType="VARCHAR" />
+    <result column="INVITE_RESULT" property="inviteResult" jdbcType="VARCHAR" />
+    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+    <result column="CF_CODE" property="cfCode" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, SHOP_NO, 
+    SHOP_NAME, REACH_TIME, FAIL_REASON, INVITE_RESULT, CF_NO, CF_CODE, CREATE_ID, CREATE_DATE, 
+    REMARK, REMARK4, REMARK3, REMARK2
+  </sql>
+  
+  <sql id="map_Column_List" >
+    CODE code, MERCHANT_NO merchantNo, MEMBER_NO memberNo, MEMBER_NAME memberName, MEMBER_NO_GM memberNoGm, MEMBER_NAME_GM memberNameGm, SHOP_NO shopNo, 
+    SHOP_NAME shopName, REACH_TIME reachTime, FAIL_REASON failReason, INVITE_RESULT inviteResult, CF_NO cfNo, CF_CODE cfCode, CREATE_ID createId, 
+    CREATE_DATE createDate,REMARK remark, REMARK4 remark4, REMARK3 remark3, REMARK2 remark2
+  </sql>
+  
+  
+  <!-- 统计邀约到店人数	段志鹏	2017-08-09-->
+	<select id="findInviteResults" resultType="map" parameterType="map" >
+	    SELECT <include refid="map_Column_List" /> 
+	    FROM client_invite
+	    <where>
+	    	<if test="merchantNo != null and merchantNo !=''">
+				and MERCHANT_NO = #{merchantNo}
+			</if>
+	    	<if test="inviteResult != null and inviteResult !=''">
+				and INVITE_RESULT = #{inviteResult}
+			</if>
+			<if test="memberNoGm != null and memberNoGm !=''">
+				and MEMBER_NO_GM = #{memberNoGm}
+			</if>
+			<if test="shopNo != null and shopNo !=''">
+				and SHOP_NO = #{shopNo}
+			</if>
+			<!-- 店长看到下属客户 排除自己本身-->
+			<if test="isShopMemberNoGm != null and isShopMemberNoGm !=''">
+				and MEMBER_NO_GM != #{isShopMemberNoGm}
+			</if>
+			<if test="startTime !=null">
+				<![CDATA[AND DATE_FORMAT(REACH_TIME, "%Y-%m-%d") >=#{startTime}]]>
+			</if>
+			<if test="endTime !=null">
+				<![CDATA[ AND DATE_FORMAT(REACH_TIME, "%Y-%m-%d") <= #{endTime}]]>
+			</if>
+		</where>
+		GROUP BY MEMBER_NO
+	  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_invite
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from client_invite
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.ClientInvite" >
+    insert into client_invite
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="reachTime != null" >
+        REACH_TIME,
+      </if>
+      <if test="failReason != null" >
+        FAIL_REASON,
+      </if>
+      <if test="inviteResult != null" >
+        INVITE_RESULT,
+      </if>
+      <if test="cfNo != null" >
+        CF_NO,
+      </if>
+      <if test="cfCode != null" >
+        CF_CODE,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="reachTime != null" >
+        #{reachTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteResult != null" >
+        #{inviteResult,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cfCode != null" >
+        #{cfCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ClientInvite" >
+    update client_invite
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="reachTime != null" >
+        REACH_TIME = #{reachTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failReason != null" >
+        FAIL_REASON = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteResult != null" >
+        INVITE_RESULT = #{inviteResult,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        CF_NO = #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cfCode != null" >
+        CF_CODE = #{cfCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <select id="inviteRecordCount" resultType="int" parameterType="com.lj.business.cf.dto.FindAddInviteRecordDto">
+		select count(*)
+		FROM client_invite
+		where 
+		       CF_NO = #{cfNo,jdbcType=VARCHAR}
+		      AND INVITE_RESULT = 'Y'
+  </select>
+  
+  
+</mapper>

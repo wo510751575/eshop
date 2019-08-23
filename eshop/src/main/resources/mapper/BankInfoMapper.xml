@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IBankInfoDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.BankInfo">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_icon" jdbcType="VARCHAR" property="bankIcon" />
+    <result column="order_no" jdbcType="INTEGER" property="orderNo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="bg_icon" jdbcType="VARCHAR" property="bgIcon" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, bank_name, bank_icon, order_no, create_time, bg_icon
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.BankInfoDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<!-- 查询条件根据业务需求自由添加 -->
+			<if test="param">
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findBankInfos" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindBankInfoPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_bank_info
+		<include refid="findPage_condition" />
+		order by order_no 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findBankInfoPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindBankInfoPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_bank_info
+		<include refid="findPage_condition" />
+		order by order_no 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findBankInfoPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindBankInfoPage">
+		select count(*)
+		FROM t_bank_info
+		<include refid="findPage_condition" />
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_bank_info
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_bank_info
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.BankInfo">
+    insert into t_bank_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="bankIcon != null">
+        bank_icon,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+       <if test="bgIcon != null">
+        bg_icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankIcon != null">
+        #{bankIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="bgIcon != null">
+        #{bgIcon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.BankInfo">
+    update t_bank_info
+    <set>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankIcon != null">
+        bank_icon = #{bankIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="bgIcon != null">
+        bg_icon = #{bgIcon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

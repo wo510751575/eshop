@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cm.dao.IMerchantBomDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cm.domain.MerchantBom" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+   <resultMap id="findMerchantBomPageResultMap" type="com.lj.business.cm.dto.FindMerchantBomPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MERCHANT_NAME, BOM_CODE, BOM_NAME, IMG_ADDR, CREATE_ID, CREATE_DATE
+  </sql>
+     <sql id="findMerchantBomPage_condition" >
+  	 <where>
+      <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+       <if test="merchantName != null and merchantName != ''" >
+        and  MERCHANT_NAME like CONCAT('%',#{merchantName,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+	 </if>
+	 <if test="createDate != null"> 
+		<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
+	 </if>
+      </where>
+  </sql>
+     <!-- 分页查询 -->
+   <select id="findMerchantBomPage" resultMap="findMerchantBomPageResultMap" parameterType="com.lj.business.cm.dto.FindMerchantBomPage" >
+  SELECT   CODE, MERCHANT_NO, MERCHANT_NAME, BOM_CODE, BOM_NAME, IMG_ADDR, CREATE_ID, CREATE_DATE
+  FROM merchant_bom 
+ 	 <include refid="findMerchantBomPage_condition" />
+   order by code ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findMerchantBomPageCount" resultType="int" parameterType="com.lj.business.cm.dto.FindMerchantBomPage" >
+    select  count(*)
+     FROM merchant_bom 
+     <include refid="findMerchantBomPage_condition" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_bom
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from merchant_bom
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cm.domain.MerchantBom" >
+    insert into merchant_bom (CODE, MERCHANT_NO, MERCHANT_NAME, 
+      BOM_CODE, BOM_NAME, IMG_ADDR, 
+      CREATE_ID, CREATE_DATE)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{bomCode,jdbcType=VARCHAR}, #{bomName,jdbcType=VARCHAR}, #{imgAddr,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR}, NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cm.domain.MerchantBom" >
+    insert into merchant_bom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE,
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME,
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.MerchantBom" >
+    update merchant_bom
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgAddr != null" >
+        IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cm.domain.MerchantBom" >
+    update merchant_bom
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

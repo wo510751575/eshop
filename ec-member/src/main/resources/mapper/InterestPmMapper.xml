@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IInterestPmDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.member.domain.InterestPm">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="findInterestPmPageResultMap"
+		type="com.lj.business.member.dto.FindInterestPmPageDto">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, NAME, REMARK, CREATE_DATE
+	</sql>
+
+	<sql id="findInterestPmPage_condition">
+		<where>
+			<if test="merchantNo != null">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and NAME like
+				CONCAT('%',#{name,jdbcType=VARCHAR},'%' )
+			</if>
+			<if test="remark != null and remark != ''">
+				and REMARK like
+				CONCAT('%',#{remark,jdbcType=VARCHAR},'%'
+				)
+			</if>
+			<if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+			</if>
+			<if test="createDate != null"> 
+		<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
+			</if>
+		</where>
+	</sql>
+	<!-- 添加客户兴趣指数表 -->
+	<insert id="addInterestPm" parameterType="com.lj.business.member.dto.AddInterestPmDto">
+		insert into interest_pm
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="merchantNo != null">
+				MERCHANT_NO,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+				CREATE_DATE,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="merchantNo != null">
+				#{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+				NOW(),
+		</trim>
+	</insert>
+
+	<!--编辑客户兴趣指数表 -->
+	<update id="editInterestPm" parameterType="com.lj.business.member.dto.EditInterestPmDto">
+		update interest_pm
+		<set>
+			<if test="merchantNo != null">
+				MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where CODE = #{code,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 根据主键查询客户兴趣指数表 -->
+	<select id="selectByCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from interest_pm
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查询所有客户兴趣指数表(不分页) -->
+	<select id="findInterestPms" resultMap="findInterestPmPageResultMap"
+		parameterType="com.lj.business.member.dto.FindInterestPmPageDto">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM interest_pm
+		<include refid="findInterestPmPage_condition" />
+	</select>
+
+	<!-- 查询所有客户兴趣指数表(分页) -->
+	<select id="findInterestPmPage" resultMap="findInterestPmPageResultMap"
+		parameterType="com.lj.business.member.dto.FindInterestPmPageDto">
+		SELECT CODE, MERCHANT_NO, NAME, REMARK, CREATE_DATE
+		FROM interest_pm
+		<include refid="findInterestPmPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<!-- 查询产品条数 -->
+	<select id="findInterestPmPageCount" resultType="int"
+		parameterType="com.lj.business.member.dto.FindInterestPmPageDto">
+		select count(*)
+		FROM interest_pm
+		<include refid="findInterestPmPage_condition" />
+	</select>
+</mapper>

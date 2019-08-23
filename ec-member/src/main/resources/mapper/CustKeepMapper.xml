@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.ICustKeepDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.CustKeep" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="findCustKeepPageResultMap" type="com.lj.business.member.dto.custKeep.FindCustKeepPageReturn" >
+  	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO, CREATE_DATE, STATUS
+  </sql>
+  
+  <sql id="findCustKeepPage_condition" >
+  	 <where>
+      <if test="memberNo != null and memberNo !='' " >
+        and  MEMBERNO = #{memberNo}
+      </if>
+      </where>
+  </sql>
+  
+     <!-- 分页查询 -->
+   <select id="findCustKeepPage" resultMap="findCustKeepPageResultMap" parameterType="com.lj.business.member.dto.custKeep.FindCustKeepPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM cust_keep 
+ 	 <include refid="findCustKeepPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findCustKeepPageCount" resultType="int" parameterType="com.lj.business.member.dto.custKeep.FindCustKeepPage" >
+    select  count(*)
+     FROM cust_keep 
+     <include refid="findCustKeepPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from cust_keep
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from cust_keep
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.CustKeep" >
+    insert into cust_keep (CODE, MERCHANT_NO, MEMBER_NO, 
+      CREATE_DATE, STATUS)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      NOW(), #{status,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.CustKeep" >
+    insert into cust_keep
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+        CREATE_DATE,
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.CustKeep" >
+    update cust_keep
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.CustKeep" >
+    update cust_keep
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=CHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

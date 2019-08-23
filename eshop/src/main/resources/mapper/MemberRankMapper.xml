@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IMemberRankDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.MemberRank" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="DOUBLE" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="img_src" property="imgSrc" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.MemberRankDto"
+		extends="BaseResultMap"></resultMap>
+		
+  <sql id="Base_Column_List" >
+    code, create_date, modify_date, amount, remark, name, scale, del_flag,seq, img_src
+  </sql>
+  
+  <sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.delFlag != null and param.delFlag !='' ">
+					<![CDATA[and del_flag=#{param.delFlag}]]>
+				</if>
+				<if test="param.name != null and param.name !='' ">
+					<![CDATA[and name=#{param.name}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMemberRanks" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMemberRankPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_member_rank
+		<include refid="findPage_condition" />
+		ORDER BY seq 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMemberRankPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMemberRankPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_member_rank
+		<include refid="findPage_condition" />
+		ORDER BY seq 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMemberRankPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMemberRankPage">
+		select count(*)
+		FROM t_member_rank
+		<include refid="findPage_condition" />
+	</select>
+	
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_member_rank
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_member_rank
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.eshop.domain.MemberRank" >
+    insert into t_member_rank (code, create_date, modify_date, 
+      amount, remark, name, 
+      scale, del_flag, seq, img_src)
+    values (#{code,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, 
+      #{amount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{scale,jdbcType=DOUBLE}, #{delFlag,jdbcType=VARCHAR}, #{seq}, #{imgSrc,jdbcType=VARCHAR })
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.MemberRank" >
+    insert into t_member_rank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="imgSrc != null" >
+        img_src,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq},
+      </if>
+      <if test="imgSrc != null" >
+        #{imgSrc},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MemberRank" >
+    update t_member_rank
+    <set >
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=DOUBLE},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        seq = #{seq},
+      </if>
+      <if test="imgSrc != null" >
+        img_src = #{imgSrc},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.eshop.domain.MemberRank" >
+    update t_member_rank
+    set create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=DOUBLE},
+      del_flag = #{delFlag,jdbcType=VARCHAR},
+      seq = #{seq},
+      img_src = #{imgSrc}
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.ISysSpeDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.SysSpe">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="spe_name" jdbcType="VARCHAR" property="speName" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, spe_name, creater, status, create_time
+  </sql>
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.SysSpeDto"
+	extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<!-- 查询条件根据业务需求自由添加 -->
+			<if test="param">
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.speName != null and param.speName !='' ">
+					<![CDATA[and spe_name like CONCAT('%',#{param.speName},'%' )]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status  =#{param.status} ]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findSysSpes" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindSysSpePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_sys_spe
+		<include refid="findPage_condition" />
+		order by create_time desc
+	</select>
+	<!-- 分页查询 -->
+	<select id="findSysSpePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindSysSpePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_sys_spe
+		<include refid="findPage_condition" />
+		order by create_time desc
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findSysSpePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindSysSpePage">
+		select count(*)
+		FROM t_sys_spe
+		<include refid="findPage_condition" />
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_spe
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+   
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.SysSpe">
+    insert into t_sys_spe
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="speName != null">
+        spe_name,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="speName != null">
+        #{speName,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.SysSpe">
+    update t_sys_spe
+    <set>
+      <if test="speName != null">
+        spe_name = #{speName,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

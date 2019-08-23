@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IClientKeepSummaryDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ClientKeepSummary" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="CK_NO" property="ckNo" jdbcType="VARCHAR" />
+    <result column="KEEP_NUM" property="keepNum" jdbcType="INTEGER" />
+    <result column="BUY" property="buy" jdbcType="CHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, CK_NO, KEEP_NUM, 
+    BUY, BOM_CODE, BOM_NAME, START_DATE, END_DATE, REMARK, CREATE_ID, CREATE_DATE, REMARK4, 
+    REMARK3, REMARK2
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_keep_summary
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectByCkNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_keep_summary
+    where CK_NO = #{ckNo,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from client_keep_summary
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.ClientKeepSummary" >
+    insert into client_keep_summary (CODE, MERCHANT_NO, MEMBER_NO, 
+      MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, 
+      CK_NO, KEEP_NUM, BUY, BOM_CODE, 
+      BOM_NAME, START_DATE, END_DATE, 
+      REMARK, CREATE_ID, CREATE_DATE, 
+      REMARK4, REMARK3, REMARK2
+      )
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, #{memberNameGm,jdbcType=VARCHAR}, 
+      #{ckNo,jdbcType=VARCHAR}, #{keepNum,jdbcType=INTEGER}, #{buy,jdbcType=CHAR}, #{bomCode,jdbcType=VARCHAR}, 
+      #{bomName,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, now(), 
+      #{remark4,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.ClientKeepSummary" >
+    insert into client_keep_summary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="ckNo != null" >
+        CK_NO,
+      </if>
+      <if test="keepNum != null" >
+        KEEP_NUM,
+      </if>
+      <if test="buy != null" >
+        BUY,
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE,
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME,
+      </if>
+      <if test="startDate != null" >
+        START_DATE,
+      </if>
+      <if test="endDate != null" >
+        END_DATE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="ckNo != null" >
+        #{ckNo,jdbcType=VARCHAR},
+      </if>
+      <if test="keepNum != null" >
+        #{keepNum,jdbcType=INTEGER},
+      </if>
+      <if test="buy != null" >
+        #{buy,jdbcType=CHAR},
+      </if>
+      <if test="bomCode != null" >
+        #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        now(),
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ClientKeepSummary" >
+    update client_keep_summary
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="ckNo != null" >
+        CK_NO = #{ckNo,jdbcType=VARCHAR},
+      </if>
+      <if test="keepNum != null" >
+        KEEP_NUM = #{keepNum,jdbcType=INTEGER},
+      </if>
+      <if test="buy != null" >
+        BUY = #{buy,jdbcType=CHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = now(),
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByCkNoSelective" parameterType="com.lj.business.cf.domain.ClientKeepSummary" >
+    update client_keep_summary
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="keepNum != null" >
+        KEEP_NUM = #{keepNum,jdbcType=INTEGER},
+      </if>
+      <if test="buy != null" >
+        BUY = #{buy,jdbcType=CHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = now(),
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CK_NO = #{ckNo,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.ClientKeepSummary" >
+    update client_keep_summary
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      CK_NO = #{ckNo,jdbcType=VARCHAR},
+      KEEP_NUM = #{keepNum,jdbcType=INTEGER},
+      BUY = #{buy,jdbcType=CHAR},
+      BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = now(),
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 查询所有维护总表(分页) -->
+  <select id="findClientKeepSummaryPage" resultMap="BaseResultMap"
+		parameterType="com.lj.business.cf.dto.clientKeepSummary.FindClientKeepSummaryPage">
+		SELECT 
+		<include refid="Base_Column_List"/>
+		FROM
+		client_keep_summary
+		<include refid="findClientKeepSummaryPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<!-- 查询维护总表条数 -->
+	<select id="findClientKeepSummaryPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.clientKeepSummary.FindClientKeepSummaryPage">
+		select count(*)
+		FROM client_keep_summary
+		<include refid="findClientKeepSummaryPage_condition" />
+	</select>
+	
+	<sql id="findClientKeepSummaryPage_condition">
+		<where>
+			<if test="status != null and status != ''">
+				and STATUS like
+				CONCAT('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findClientKeepSummaryLast" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.clientKeepSummary.FindClientKeepSummary" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_keep_summary
+    where MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR} 
+	    	  AND MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+	    	  AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	    	  AND END_DATE IS NULL
+	limit 1
+  </select>
+  
+   
+  <select id="findCountPmKeepByGm" resultType="long">
+  	SELECT count(1)
+  	FROM client_keep_summary
+  	WHERE MEMBER_NO_GM = #{memberNoGm}
+  </select>
+  
+</mapper>

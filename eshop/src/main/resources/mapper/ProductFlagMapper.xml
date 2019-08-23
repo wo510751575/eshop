@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IProductFlagDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ProductFlag">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="flag_code" jdbcType="VARCHAR" property="flagCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, product_code, flag_code
+  </sql>
+
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductFlagDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					<![CDATA[and product_code =#{param.productCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findProductFlags" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindProductFlagPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_flag
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findProductFlagPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindProductFlagPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_flag
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findProductFlagPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindProductFlagPage">
+		select count(*)
+		FROM t_product_flag
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_flag
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+ 
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ProductFlag">
+    insert into t_product_flag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="flagCode != null">
+        flag_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="flagCode != null">
+        #{flagCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ProductFlag">
+    update t_product_flag
+    <set>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="flagCode != null">
+        flag_code = #{flagCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  
+   <delete id="deleteByProductCode" parameterType="com.lj.eshop.domain.ProductFlag">
+    delete from t_product_flag
+    where product_code = #{productCode,jdbcType=VARCHAR}
+  </delete>
+</mapper>

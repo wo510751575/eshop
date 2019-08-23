@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.ILoadingDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Loading">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="index_seq" jdbcType="INTEGER" property="indexSeq" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="biz" jdbcType="CHAR" property="biz"  />
+    <result column="jump_url" jdbcType="VARCHAR" property="jumpUrl"  />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, img_url, index_seq, status, biz, jump_url
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.LoadingDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+						<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+						<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.biz != null and param.biz !='' ">
+						<![CDATA[and biz =#{param.biz}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findLoadings" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindLoadingPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_loading
+		<include refid="findPage_condition" />
+		order by index_seq
+	</select>
+	<!-- 分页查询 -->
+	<select id="findLoadingPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindLoadingPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_loading
+		<include refid="findPage_condition" />
+		order by index_seq
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findLoadingPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindLoadingPage">
+		select count(*)
+		FROM t_loading
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_loading
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Loading">
+    insert into t_loading
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="indexSeq != null">
+        index_seq,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="biz != null">
+        biz,
+      </if>
+      <if test="jumpUrl != null">
+        jump_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="indexSeq != null">
+        #{indexSeq,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="biz != null">
+        #{biz,jdbcType=CHAR},
+      </if>
+      <if test="jumpUrl != null">
+        #{jumpUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Loading">
+    update t_loading
+    <set>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="indexSeq != null">
+        index_seq = #{indexSeq,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="biz != null">
+        biz = #{biz,jdbcType=CHAR},
+      </if>
+      <if test="jumpUrl != null">
+        jump_url = #{jumpUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

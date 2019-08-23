@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.business.cf.dao.ICfErrorInfoDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.cf.domain.CfErrorInfo">
+		<id column="CODE" jdbcType="VARCHAR" property="code" />
+		<result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+		<result column="SHOP_NO" jdbcType="VARCHAR" property="shopNo" />
+		<result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+		<result column="MEMBER_NO_GM" jdbcType="VARCHAR" property="memberNoGm" />
+		<result column="MEMBER_NAME_GM" jdbcType="VARCHAR" property="memberNameGm" />
+		<result column="CODE_LIST" jdbcType="VARCHAR" property="codeList" />
+		<result column="NAME_LIST" jdbcType="VARCHAR" property="nameList" />
+		<result column="ERROR_NUM" jdbcType="BIGINT" property="errorNum" />
+		<result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+		<result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+		<result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+
+	<resultMap id="findCfErrorInfoPageResultMap" type="com.lj.business.cf.dto.cfErrorInfo.FindCfErrorInfoPageDto">
+		<id column="CODE" jdbcType="VARCHAR" property="code" />
+		<result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo" />
+		<result column="SHOP_NO" jdbcType="VARCHAR" property="shopNo" />
+		<result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+		<result column="MEMBER_NO_GM" jdbcType="VARCHAR" property="memberNoGm" />
+		<result column="MEMBER_NAME_GM" jdbcType="VARCHAR" property="memberNameGm" />
+		<result column="CODE_LIST" jdbcType="VARCHAR" property="codeList" />
+		<result column="NAME_LIST" jdbcType="VARCHAR" property="nameList" />
+		<result column="ERROR_NUM" jdbcType="BIGINT" property="errorNum" />
+		<result column="CREATE_ID" jdbcType="VARCHAR" property="createId" />
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+		<result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+		<result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, SHOP_NO, SHOP_NAME, MEMBER_NO_GM,
+		MEMBER_NAME_GM,
+		CODE_LIST, NAME_LIST,
+		ERROR_NUM, CREATE_ID, CREATE_DATE,
+		REMARK4, REMARK3, REMARK2, REMARK
+	</sql>
+	<sql id="findCfErrorInfoPage_condition">
+		<where>
+			<if test="merchantNo != null">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+			<if test="memberNameGm != null and memberNameGm != ''">
+				and MEMBER_NAME_GM like
+				CONCAT('%',#{name,jdbcType=VARCHAR},'%' )
+			</if>
+			<if test="remark != null and remark != ''">
+				and REMARK like
+				CONCAT('%',#{remark,jdbcType=VARCHAR},'%'
+				)
+			</if>
+			<if test="createDate != null">
+		<![CDATA[and CREATE_DATE >= #{createDate}]]>
+			</if>
+			<if test="createDate != null"> 
+		<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
+			</if>
+		</where>
+	</sql>
+
+	<!-- 根据主键查询跟进异常情况表 -->
+	<select id="selectByCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from cf_error_info
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查询所有跟进异常情况表(不分页) -->
+	<select id="findCfErrorInfos" resultMap="findCfErrorInfoPageResultMap"
+		parameterType="com.lj.business.cf.dto.cfErrorInfo.FindCfErrorInfoPageDto">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cf_error_info
+		<include refid="findCfErrorInfoPage_condition" />
+	</select>
+
+	<!-- 查询所有跟进异常情况表(分页) -->
+	<select id="findCfErrorInfoPage" resultMap="findCfErrorInfoPageResultMap"
+		parameterType="com.lj.business.cf.dto.cfErrorInfo.FindCfErrorInfoPageDto">
+		SELECT CODE, MERCHANT_NO, SHOP_NO, SHOP_NAME, MEMBER_NO_GM,
+		MEMBER_NAME_GM,
+		CODE_LIST, NAME_LIST,
+		ERROR_NUM, CREATE_ID, CREATE_DATE,
+		REMARK4, REMARK3, REMARK2, REMARK
+		FROM
+		cf_error_info
+		<include refid="findCfErrorInfoPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<!-- 查询跟进异常情况表条数 -->
+	<select id="findCfErrorInfoPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.cfErrorInfo.FindCfErrorInfoPageDto">
+		select count(*)
+		FROM cf_error_info
+		<include refid="findCfErrorInfoPage_condition" />
+	</select>
+
+	<!-- 添加跟进异常情况表条数 -->
+	<insert id="addCfErrorInfo" parameterType="com.lj.business.cf.dto.cfErrorInfo.AddCfErrorInfoDto">
+		insert into cf_error_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="merchantNo != null">
+				MERCHANT_NO,
+			</if>
+			<if test="shopNo != null">
+				SHOP_NO,
+			</if>
+			<if test="shopName != null">
+				SHOP_NAME,
+			</if>
+			<if test="memberNoGm != null">
+				MEMBER_NO_GM,
+			</if>
+			<if test="memberNameGm != null">
+				MEMBER_NAME_GM,
+			</if>
+			<if test="codeList != null">
+				CODE_LIST,
+			</if>
+			<if test="nameList != null">
+				NAME_LIST,
+			</if>
+			<if test="errorNum != null">
+				ERROR_NUM,
+			</if>
+			<if test="createId != null">
+				CREATE_ID,
+			</if>
+				CREATE_DATE,
+			<if test="remark4 != null">
+				REMARK4,
+			</if>
+			<if test="remark3 != null">
+				REMARK3,
+			</if>
+			<if test="remark2 != null">
+				REMARK2,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="merchantNo != null">
+				#{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shopNo != null">
+				#{shopNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="memberNoGm != null">
+				#{memberNoGm,jdbcType=VARCHAR},
+			</if>
+			<if test="memberNameGm != null">
+				#{memberNameGm,jdbcType=VARCHAR},
+			</if>
+			<if test="codeList != null">
+				#{codeList,jdbcType=VARCHAR},
+			</if>
+			<if test="nameList != null">
+				#{nameList,jdbcType=VARCHAR},
+			</if>
+			<if test="errorNum != null">
+				#{errorNum,jdbcType=BIGINT},
+			</if>
+			<if test="createId != null">
+				#{createId,jdbcType=VARCHAR},
+			</if>
+				NOW(),
+			<if test="remark4 != null">
+				#{remark4,jdbcType=VARCHAR},
+			</if>
+			<if test="remark3 != null">
+				#{remark3,jdbcType=VARCHAR},
+			</if>
+			<if test="remark2 != null">
+				#{remark2,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<!-- 编辑跟进异常情况表条数 -->
+	<update id="editCfErrorInfo" parameterType="com.lj.business.cf.dto.cfErrorInfo.EditCfErrorInfoDto">
+		update cf_error_info
+		<set>
+			<if test="merchantNo != null">
+				MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shopNo != null">
+				SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="memberNoGm != null">
+				MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+			</if>
+			<if test="memberNameGm != null">
+				MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+			</if>
+			<if test="codeList != null">
+				CODE_LIST = #{codeList,jdbcType=VARCHAR},
+			</if>
+			<if test="nameList != null">
+				NAME_LIST = #{nameList,jdbcType=VARCHAR},
+			</if>
+			<if test="errorNum != null">
+				ERROR_NUM = #{errorNum,jdbcType=BIGINT},
+			</if>
+			<if test="createId != null">
+				CREATE_ID = #{createId,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark4 != null">
+				REMARK4 = #{remark4,jdbcType=VARCHAR},
+			</if>
+			<if test="remark3 != null">
+				REMARK3 = #{remark3,jdbcType=VARCHAR},
+			</if>
+			<if test="remark2 != null">
+				REMARK2 = #{remark2,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where CODE = #{code,jdbcType=VARCHAR}
+	</update>
+</mapper>

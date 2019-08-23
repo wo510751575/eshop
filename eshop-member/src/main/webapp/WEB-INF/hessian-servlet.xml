@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 服务 -->
+	<bean name="/testMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="testMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.ITestMemberService" />
+	</bean>
+	
+	<!-- 导购 -->
+	<bean name="/ecGuidMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecGuidMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcGuidMemberService" />
+	</bean>
+	
+	<!-- 会员 -->
+	<bean name="/ecPersonMemberBaseService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecPersonMemberBaseServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcPersonMemberBaseService" />
+	</bean>
+	
+	<!-- 商户 -->
+	<bean name="/ecMerchantService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecMerchantServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcMerchantService" />
+	</bean>
+	
+	<!-- 管理人员 -->
+	<bean name="/ecManagerMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecManagerMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcManagerMemberService" />
+	</bean>
+	
+	<!-- 分店 -->
+	<bean name="/ecShopService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecShopServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcShopService" />
+	</bean>
+	<!-- 客户分类 -->
+	<bean name="/ecPmTypeService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecPmTypeServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcPmTypeService" />
+	</bean>
+	<!-- 客户最近动态-->
+	<bean name="/ecBehaviorPmService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecBehaviorPmServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcBehaviorPmService" />
+	</bean>
+	
+	<bean name="/ecPersonMemberService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="ecPersonMemberServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.member.service.IEcPersonMemberService" />
+	</bean>
+</beans> 

@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IPmTypeDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.PmType" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR" />
+    <result column="PM_TYPE_DIM" property="pmTypeDim" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="SEQ" property="seq" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="FRE_VALUE" property="freValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap type="com.lj.business.member.dto.FindPmTypePageReturn" id="findPmTypePageResultMap">
+  	<id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR" />
+    <result column="PM_TYPE_DIM" property="pmTypeDim" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="FRE_VALUE" property="freValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, TYPE_NAME, PM_TYPE_TYPE, PM_TYPE_DIM, 
+    FRE_VALUE, STATUS, SEQ, CREATE_ID, CREATE_DATE, REMARK, REMARK2, REMARK3, REMARK4
+  </sql>
+  
+  <sql id="findPmTypePage_condition" >
+   	 <where>
+       <if test="typeName != null and typeName != ''" >
+        and  TYPE_NAME like CONCAT('%',#{typeName,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </sql>
+  
+    <sql id="findCfList_Page_List" >
+  	 <where>
+      <if test="merchantNo != null" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+       <if test="memberNo != null and memberNo != ''" >
+        and  MEMBER_NO  = #{memberNo,jdbcType=VARCHAR}
+      </if>
+         <if test="memberName != null and memberName != ''" >
+        and  MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+      </if>
+       <if test="createId != null and createId != ''" >
+        and  CREATE_ID = #{createId,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </sql>
+  
+      <!--  -->
+     <select id="findPmTypePages" resultMap="findPmTypePageResultMap" parameterType="com.lj.business.member.dto.FindPmTypePageReturn" >
+      SELECT   
+  	  <include refid="Base_Column_List" />
+      FROM pm_type
+ 	  <include refid="findCfList_Page_List" />
+    </select>
+  
+       <!-- 分页查询 -->
+   <select id="findPmTypePage" resultMap="findPmTypePageResultMap" parameterType="com.lj.business.member.dto.FindPmTypePageReturn" >
+    SELECT   
+  	<include refid="Base_Column_List" />
+    FROM pm_type
+   <include refid="findPmTypePage_condition" />
+     order by CREATE_DATE ${sortDir}
+     limit ${start} , ${limit}
+  </select>
+  
+  <select id="findPmTypePageCount" resultType="int" parameterType="com.lj.business.member.dto.FindPmTypePage" >
+    select  count(*)
+     FROM pm_type
+     <include refid="findPmTypePage_condition" />
+  </select>
+  <!--获取所有客户分组信息  by rain at 2017-07-03-->
+  <select id="inqueryMemberGroupInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+   from pm_type where MERCHANT_NO=#{merchantNo,jdbcType=VARCHAR} AND STATUS = 'Y'
+  </select>
+  <!-- end -->
+  
+   <!--获取客户分组信息 新增  by 冯辉 at 2017-07-03-->
+  <select id="inqueryNewMemberOutOffGroupInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+   from pm_type 
+   where MERCHANT_NO=#{merchantNo,jdbcType=VARCHAR} 
+         AND STATUS = 'Y'
+         AND PM_TYPE_TYPE NOT IN ('URGENCY', 'REPEAT','GIVE_UP','SUCCESS','UNGROUP')
+  </select>
+  <!-- end -->
+  
+  
+  <!--查询客户分类 除去交叉、成单、暂停、紧急  by 冯辉 at 2017-07-03-->
+  <select id="inqueryModifyMemberOutOffGroupInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+   from pm_type 
+   where MERCHANT_NO=#{merchantNo,jdbcType=VARCHAR} 
+         AND STATUS = 'Y'
+         AND PM_TYPE_TYPE NOT IN ('URGENCY', 'REPEAT','GIVE_UP','SUCCESS','UNGROUP')
+  </select>
+  <!-- end -->
+  
+  <!--查询客户分类是否包含未分组  by 冯辉 at 2017-07-03-->
+  <select id="selectInUnGroupCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	   SELECT count(*)
+	   FROM pm_type pt, PM_TYPE_PM ptp
+	   WHERE pt.CODE = ptp.PM_TYPE_CODE
+	       AND pt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	       AND ptp.CODE_PM = #{codePm,jdbcType=VARCHAR}
+	       AND pt.PM_TYPE_TYPE IN ('UNGROUP')
+  </select>
+  
+  <!--查询客户分类是否包含意向客户  by 彭阳 at 2017-08-14-->
+  <select id="selectIntentionCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	   SELECT count(*)
+	   FROM pm_type pt, PM_TYPE_PM ptp
+	   WHERE pt.CODE = ptp.PM_TYPE_CODE
+	       AND pt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	       AND ptp.CODE_PM = #{codePm,jdbcType=VARCHAR}
+	       AND pt.PM_TYPE_TYPE IN ('INTENTION')
+  </select>
+  
+  
+    
+    
+  
+  <select id="findPmTypeIndex"  resultType="com.lj.business.member.dto.FindPmTypeIndexReturn"  parameterType="com.lj.business.member.dto.FindPmTypeIndex" >
+	SELECT pt.CODE code,
+       pt.TYPE_NAME typeName,
+       pt.PM_TYPE_TYPE pmTypeType,
+       sum(IF(pm.code IS NULL, 0, 1)) numClient
+  FROM PERSON_MEMBER pm
+       INNER JOIN PM_TYPE_PM ptp ON pm.CODE = ptp.CODE_PM
+       RIGHT JOIN PM_TYPE pt
+          ON     pt.MERCHANT_NO = pm.MERCHANT_NO
+             AND pt.CODE = ptp.PM_TYPE_CODE
+	       AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	       AND pt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	       <if test="memberNoGm != null and memberNoGm != ''" >
+      	   AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+   		   </if>
+   		   <if test="shopNo != null and shopNo != ''" >
+	       AND pm.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+	       </if>
+	       AND pt.PM_TYPE_DIM = 'MERCHANT'
+	    where pt.MERCHANT_NO =  #{merchantNo,jdbcType=VARCHAR}  
+	GROUP BY pt.CODE, pt.TYPE_NAME,pt.PM_TYPE_TYPE
+	ORDER BY PT.SEQ
+  </select>
+  <select id="selectByParamKey" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.PmType" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_type
+    <where>
+      <if test="merchantNo != null and merchantNo != ''" >
+       AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="pmTypeType != null and pmTypeType != ''" >
+       AND PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+    <select id="selectByMP" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPmType" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_type
+    <where>
+      <if test="code != null and code != ''" >
+       AND CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantNo != null and merchantNo != ''" >
+       AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="pmTypeType != null and pmTypeType != ''" >
+       AND PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectByParamKey_changePmType" resultType="map" parameterType="com.lj.business.member.domain.PmType" >
+   SELECT ptp.CODE,ptp.PM_TYPE_CODE,pt.TYPE_NAME,pt.PM_TYPE_TYPE
+  FROM pm_type pt, PM_TYPE_PM ptp
+ WHERE     pt.CODE = ptp.PM_TYPE_CODE
+       AND pt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+       AND ptp.CODE_PM = #{codePm,jdbcType=VARCHAR}
+       AND pt.PM_TYPE_TYPE NOT IN ('URGENCY', 'REPEAT')
+  </select>
+   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPmType" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_type
+     <where>
+      <if test="code != null and code !=''">
+        and  CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantNo != null and merchantNo !=''" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="pmTypeType != null and pmTypeType !=''" >
+        and  PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </select>
+  
+   <select id="selectPmTypePmCode" resultType="java.lang.String"  parameterType="map" >
+    SELECT ptp.CODE
+  FROM PM_TYPE pt, PM_TYPE_PM ptp, PERSON_MEMBER pm
+ WHERE     pm.CODE = ptp.CODE_PM
+       AND ptp.PM_TYPE_CODE = pt.CODE
+       AND pm.MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+       AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+       AND pt.PM_TYPE_TYPE NOT IN ('URGENCY','REPEAT')
+  </select>
+  
+  
+  
+  
+  
+ <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pm_type
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pm_type
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.PmType" >
+    insert into pm_type (CODE, MERCHANT_NO, MEMBER_NO, 
+      MEMBER_NAME, TYPE_NAME, PM_TYPE_TYPE, 
+      PM_TYPE_DIM, FRE_VALUE, STATUS, 
+      SEQ, CREATE_ID, CREATE_DATE, 
+      REMARK, REMARK2, REMARK3, 
+      REMARK4)
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{pmTypeType,jdbcType=VARCHAR}, 
+      #{pmTypeDim,jdbcType=VARCHAR}, #{freValue,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{seq,jdbcType=INTEGER}, #{createId,jdbcType=VARCHAR}, NOW(), 
+      #{remark,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      #{remark4,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.PmType" >
+    insert into pm_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME,
+      </if>
+      <if test="pmTypeType != null" >
+        PM_TYPE_TYPE,
+      </if>
+      <if test="pmTypeDim != null" >
+        PM_TYPE_DIM,
+      </if>
+      <if test="freValue != null" >
+        FRE_VALUE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="seq != null" >
+        SEQ,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTypeType != null" >
+        #{pmTypeType,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTypeDim != null" >
+        #{pmTypeDim,jdbcType=VARCHAR},
+      </if>
+      <if test="freValue != null" >
+        #{freValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.PmType" >
+    update pm_type
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTypeType != null" >
+        PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR},
+      </if>
+      <if test="pmTypeDim != null" >
+        PM_TYPE_DIM = #{pmTypeDim,jdbcType=VARCHAR},
+      </if>
+      <if test="freValue != null" >
+        FRE_VALUE = #{freValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="seq != null" >
+        SEQ = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.PmType" >
+    update pm_type
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR},
+      PM_TYPE_DIM = #{pmTypeDim,jdbcType=VARCHAR},
+      FRE_VALUE = #{freValue,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=CHAR},
+      SEQ = #{seq,jdbcType=INTEGER},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK4 = #{remark4,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findPmTypeCodeByPm" resultType="java.lang.String">
+  	 SELECT  pt.PM_TYPE_TYPE
+	 FROM pm_type_pm ptp LEFT JOIN pm_type pt ON ptp.PM_TYPE_CODE = pt.`CODE`
+     where ptp.CODE_PM = #{codePm,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

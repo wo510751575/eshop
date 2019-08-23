@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IGuidMemberDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.GuidMember" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="JOB_NUM" property="jobNum" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="PWD" property="pwd" jdbcType="VARCHAR" />
+    <result column="ENCRYPTION_CODE" property="encryptionCode" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="TIMESTAMP" />
+    <result column="QCORD" property="qcord" jdbcType="VARCHAR" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findGuidMemberPageResultMap" type="com.lj.business.member.dto.FindGuidMemberPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="JOB_NUM" property="jobNum" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="TIMESTAMP" />
+    <result column="QCORD" property="qcord" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="GuidMemberPageResultMap" type="com.lj.business.member.dto.GuidMemberReturnDto" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="WORK_DATE" property="workDate" jdbcType="TIMESTAMP" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="FindShopGmResultMap" type="com.lj.business.member.dto.FindShopGmReturn" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+  </resultMap>
+  
+ <sql id="Base_Column_List">
+    CODE, MEMBER_NO, MEMBER_NAME, SHOP_NO, SHOP_NAME, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+    JOB_NUM, MOBILE, IMEI, EMAIL, NICK_NAME, AREA_CODE, PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, 
+    ADDRESS, AGE, GENDER, PWD, ENCRYPTION_CODE, HEAD_ADDRESS, WORK_DATE, QCORD, UPDATE_ID, 
+    UPDATE_DATE, CREATE_ID, CREATE_DATE, REMARK4, REMARK3, REMARK2, REMARK,NO_WX
+  </sql>
+  
+  <sql id="findGuidMemberPage_condition" >
+  	 <where>
+      <if test="memberNo != null and memberNo !=''">
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      <if test="merchantNo != null and merchantNo !=''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+      <if test="status != null and status !=''" >
+        and  STATUS = #{status}
+      </if>
+      <if test="memberName != null and memberName !='' ">
+		and MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+	  </if>
+	  <if test="mobile != null and mobile !='' ">
+			and MOBILE = #{mobile}
+		</if>
+		<if test="imei != null and imei !='' ">
+			and IMEI = #{imei}
+		</if>
+		<if test="shopNo != null and shopNo !='' ">
+			and SHOP_NO = #{shopNo}
+		</if>
+		<if test="shopName != null and shopName !='' ">
+			and SHOP_NAME = #{shopName}
+		</if>
+      <if test="noWx != null and noWx !='' ">
+			and NO_WX = #{noWx}
+		</if>
+		<if test="startTime != null">
+			<![CDATA[and WORK_DATE >= #{startTime}]]>
+		</if>
+		<if test="endTime != null"> 
+			<![CDATA[and WORK_DATE <= #{endTime}]]>
+		</if>
+		<if test="areaCode != null and areaCode !='' ">
+			and AREA_CODE = #{areaCode}
+		</if>
+		<if test="ageFrom != null and ageFrom !='' ">
+			<![CDATA[and AGE >= #{ageFrom}]]>
+		</if>
+		<if test="ageTo != null and ageTo !='' ">
+			<![CDATA[and AGE <= #{ageTo}]]>
+		</if>
+		
+      </where>
+  </sql>
+  <!-- 导购基础信息(个人中心) -->
+   <sql id="Base_GuidMember_List">
+    CODE, MEMBER_NO, MEMBER_NAME, SHOP_NO, SHOP_NAME, MERCHANT_NO, 
+    MERCHANT_NAME, MOBILE, EMAIL,GENDER,AREA_CODE, PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, ADDRESS,  
+    HEAD_ADDRESS, WORK_DATE,NO_WX
+  </sql>
+  
+  <sql id="GuidMember_condition" >
+  	 <where>
+      <if test="memberNo != null and memberNo !=''">
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      <if test="pwd != null and pwd !=''">
+        and  PWD = #{pwd}
+      </if>
+      <if test="shopNo != null and shopNo !=''">
+        and  SHOP_NO = #{shopNo}
+      </if>
+       <if test="noWx != null and noWx !=''">
+        and  NO_WX = #{noWx}
+      </if>
+      </where>
+  </sql>
+  <!-- 修改密码 -->
+  <sql id="updateGuidForPwd_condition" >
+  	 <where>
+      <if test="mobile != null and mobile !=''">
+        and  MOBILE = #{mobile}
+      </if>
+      <if test="pwd != null and pwd !=''">
+        and  PWD = #{pwd}
+      </if>
+      </where>
+  </sql>
+  
+   <sql id="findGuidInfoMemberShops" >
+  	 <where>
+      <if test="merchantNo != null and merchantNo !=''">
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+         <if test="areaCode != null and areaCode !=''">
+        and  AREA_CODE = #{areaCode}
+      </if>
+      </where>
+  </sql>
+  
+   <select id="findGuidInfoShop" resultType="com.lj.business.member.dto.GuidInfoShop" parameterType="com.lj.business.member.dto.FindGuidMemberDto" >
+  	SELECT   MEMBER_NAME memberName,SHOP_NO shopNo,SHOP_NAME shopName, MEMBER_NO memberNO,AREA_CODE areaCode,AREA_NAME areaName,MERCHANT_NO merchantNo
+  	FROM guid_member 
+   <include refid="findGuidInfoMemberShops" />
+  	GROUP BY MEMBER_NO
+  </select>
+  
+  <select id="selectGuidInfoShop" resultType="com.lj.business.member.dto.GuidInfoShop" parameterType="com.lj.business.member.domain.GuidMember" >
+  	SELECT   MEMBER_NAME memberName, WORK_DATE workDate
+  	FROM guid_member 
+  	where SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+  	order by CREATE_DATE desc
+  </select>
+  
+  	<!-- 查找导购个人信息(个人中心) -->
+  <select id="findGuid" resultMap="GuidMemberPageResultMap" parameterType="com.lj.business.member.dto.FindGuidMemberDto" >
+  	SELECT   
+  	 CODE, MEMBER_NO, MEMBER_NAME, SHOP_NO, SHOP_NAME, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+     MOBILE, IMEI, EMAIL,  AREA_CODE, PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, 
+    ADDRESS, AGE, GENDER, WORK_DATE,NO_WX
+  	FROM guid_member 
+ 	  <where>
+      <if test="memberNo != null and memberNo !=''">
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      <if test="shopNo != null and shopNo !=''">
+        and  SHOP_NO = #{shopNo}
+      </if>
+       <if test="noWx != null and noWx !=''">
+        and  NO_WX = #{noWx}
+      </if>
+      </where>
+      order by WORK_DATE desc
+  </select>
+  
+  	<!-- 修改导购密码 邹磊 -->
+	<update id="updateGuidForPwd" parameterType="com.lj.business.member.dto.UpdateManagerOrGuidPwdDto">
+		update guid_member set PWD = #{pwd,jdbcType=VARCHAR},ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR}
+		<include refid="updateGuidForPwd_condition" />
+	</update>
+	
+    <!-- 添加导购信息(个人中心) -->
+  <insert id="addGuid" parameterType="com.lj.business.member.domain.GuidMember" >
+    insert into guid_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE,
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE,
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE,
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS,
+      </if>
+      <if test="gender != null" >
+        GENDER,
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE,
+      </if>
+      <if test="noWx != null" >
+        NO_WX,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="noWx != null" >
+        #{noWx,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 通过导购编号更新导购信息(个人中心) -->
+  <update id="updateGuid" parameterType="com.lj.business.member.domain.GuidMember" >
+     update guid_member
+    <set >
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE = #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS = #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        GENDER = #{gender,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+  </update>
+  
+    	<!-- 修改导购密码 邹磊 -->
+	<update id="updateGuidPwd" parameterType="com.lj.business.member.dto.UpdateManagerOrGuidPwdDto">
+		update guid_member set PWD = #{pwd,jdbcType=VARCHAR},ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR}
+		<include refid="GuidMember_condition" />
+	</update>
+  
+  
+     <!-- 分页查询 -->
+   <select id="findGuidMemberPage" resultMap="findGuidMemberPageResultMap" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+  SELECT   CODE, MEMBER_NO, MEMBER_NAME, SHOP_NO, SHOP_NAME, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+    JOB_NUM, MOBILE, IMEI, EMAIL, NICK_NAME, AREA_CODE, AREA_NAME, PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, 
+    ADDRESS, AGE, GENDER, HEAD_ADDRESS, WORK_DATE, QCORD, CREATE_DATE,NO_WX
+  FROM guid_member 
+ 	 <include refid="findGuidMemberPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+   <!-- 导出Excel查询 -->
+   <select id="findGuidMemberExport" resultMap="findGuidMemberPageResultMap" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+	  SELECT   CODE, MEMBER_NO, MEMBER_NAME, SHOP_NO, SHOP_NAME, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+	    JOB_NUM, MOBILE, IMEI, EMAIL, NICK_NAME, AREA_CODE, PROVINCE_CODE, CITY_CODE, CITY_AREA_CODE, 
+	    ADDRESS, AGE, GENDER, HEAD_ADDRESS, WORK_DATE, QCORD, CREATE_DATE,NO_WX
+	  FROM guid_member 
+	 	 <include refid="findGuidMemberPage_condition" />
+	   order by CREATE_DATE ${sortDir}
+  </select>
+  
+  <select id="findGuidMemberPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+    select  count(DISTINCT MEMBER_NO)
+     FROM guid_member 
+     <include refid="findGuidMemberPage_condition" />
+  </select>
+  
+  <select id="findGuidMemberByMerchantNo" resultType="int" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+    select  count(*)
+     FROM guid_member 
+     WHERE MERCHANT_NO = #{merchantNo}
+  </select>
+  
+  <select id="findGuidMember" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.GuidMember" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  	FROM guid_member 
+  	<where>
+ 	 <if test="memberNo != null and memberNo !=''">
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      <if test="merchantNo != null and merchantNo !=''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+      <if test="status != null and status !=''" >
+        and  STATUS = #{status}
+      </if>
+      <if test="memberName != null and memberName !='' ">
+		and MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+	  </if>
+	  <if test="mobile != null and mobile !='' ">
+			and MOBILE = #{mobile}
+		</if>
+		<if test="shopNo != null and shopNo !='' ">
+			and SHOP_NO = #{shopNo}
+		</if>
+      <if test="noWx != null and noWx !='' ">
+			and NO_WX = #{noWx}
+		</if>
+		</where>
+  </select>
+  
+ <select id="findGuidMembers" resultMap="findGuidMemberPageResultMap" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM guid_member 
+ 	 <include refid="findGuidMemberPage_condition" />
+  </select>
+  
+  <select id="findGuidMembersNoSelf" resultMap="findGuidMemberPageResultMap" parameterType="com.lj.business.member.dto.FindGuidMemberPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM guid_member 
+  where MEMBER_NO != #{memberNo}
+       AND MERCHANT_NO = #{merchantNo}
+       AND STATUS = 'NORMAL'
+       AND SHOP_NO = #{shopNo}
+  </select>
+  
+   <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.GuidMember" >
+    select 
+    <include refid="Base_Column_List" />
+    from guid_member
+     <where>
+      <if test="code != null and code !=''">
+        and  CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNo != null and memberNo !=''" >
+        and  MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+      </if>
+       <if test="noWx != null and noWx !=''" >
+        and  NO_WX = #{noWx,jdbcType=VARCHAR}
+      </if>
+      </where>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from guid_member
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from guid_member
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.GuidMember" >
+    insert into guid_member (CODE, MEMBER_NO, MEMBER_NAME, 
+      SHOP_NO, SHOP_NAME, MERCHANT_NO, 
+      MERCHANT_NAME, STATUS, JOB_NUM, 
+      MOBILE, IMEI, EMAIL, 
+      NICK_NAME, AREA_CODE,AREA_NAME, PROVINCE_CODE, 
+      CITY_CODE, CITY_AREA_CODE, ADDRESS, 
+      AGE, GENDER, PWD, ENCRYPTION_CODE, 
+      HEAD_ADDRESS, WORK_DATE, QCORD, 
+      UPDATE_ID, UPDATE_DATE, CREATE_ID, 
+      CREATE_DATE, REMARK4, REMARK3, 
+      REMARK2, REMARK,NO_WX)
+    values (#{code,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+      #{shopNo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, 
+      #{merchantName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{jobNum,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{imei,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{nickName,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR},#{areaName,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
+      #{cityCode,jdbcType=VARCHAR}, #{cityAreaCode,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{gender,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{encryptionCode,jdbcType=VARCHAR}, 
+      #{headAddress,jdbcType=VARCHAR}, #{workDate,jdbcType=TIMESTAMP}, #{qcord,jdbcType=VARCHAR}, 
+      #{updateId,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}, 
+      NOW(), #{remark4,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      #{remark2,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{noWx,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.GuidMember" >
+    insert into guid_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="jobNum != null" >
+        JOB_NUM,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="imei != null" >
+        IMEI,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="nickName != null" >
+        NICK_NAME,
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE,
+      </if>
+        <if test="areaName != null" >
+        AREA_NAME,
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE,
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE,
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="gender != null" >
+        GENDER,
+      </if>
+      <if test="pwd != null" >
+        PWD,
+      </if>
+      <if test="encryptionCode != null" >
+        ENCRYPTION_CODE,
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS,
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE,
+      </if>
+      <if test="qcord != null" >
+        QCORD,
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+       <if test="noWx != null" >
+        NO_WX,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNum != null" >
+        #{jobNum,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null" >
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionCode != null" >
+        #{encryptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qcord != null" >
+        #{qcord,jdbcType=VARCHAR},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="noWx != null" >
+        #{noWx,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.GuidMember" >
+    update guid_member
+    <set >
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNum != null" >
+        JOB_NUM = #{jobNum,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null" >
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+      </if>
+       <if test="areaName != null" >
+        AREA_NAME = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaCode != null" >
+        CITY_AREA_CODE = #{cityAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        AGE = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        GENDER = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        PWD = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionCode != null" >
+        ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="headAddress != null" >
+        HEAD_ADDRESS = #{headAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        WORK_DATE = #{workDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qcord != null" >
+        QCORD = #{qcord,jdbcType=VARCHAR},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="noWx != null" >
+        NO_WX = #{noWx,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.GuidMember" >
+    update guid_member
+    set MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      JOB_NUM = #{jobNum,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+       AREA_NAME = #{areaName,jdbcType=VARCHAR},
+      PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      CITY_AREA_CODE = #{cityAreaCode,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=INTEGER},
+      GENDER = #{gender,jdbcType=VARCHAR},
+      PWD = #{pwd,jdbcType=VARCHAR},
+      ENCRYPTION_CODE = #{encryptionCode,jdbcType=VARCHAR},
+      HEAD_ADDRESS = #{headAddress,jdbcType=VARCHAR},
+      WORK_DATE = #{workDate,jdbcType=TIMESTAMP},
+      QCORD = #{qcord,jdbcType=VARCHAR},
+      UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      NO_WX = #{noWx,jdbcType=VARCHAR},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findGuidMemberList" parameterType="com.lj.business.member.dto.FindGuidMemberDto" resultMap="GuidMemberPageResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from guid_member
+    where SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+          AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    ORDER BY CODE 
+  </select>
+  
+  <!-- create by 杨杰 查询所有的导购 -->
+  <select id="findGuidMemberAllList" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.GuidMember" >
+  	select 
+    <include refid="Base_Column_List" />
+    from guid_member
+  </select>
+  
+  <select id="findShopGm" parameterType="com.lj.business.member.dto.FindShopGmDto" resultMap="FindShopGmResultMap">
+	select MEMBER_NO,MEMBER_NAME,HEAD_ADDRESS
+    from guid_member
+    where SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+          AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+          AND MEMBER_NO != #{memberNoGm,jdbcType=VARCHAR}
+    ORDER BY CODE 
+  </select>  
+  
+  <!-- create by 杨杰  获取每个顾问未分组的客户数量 -->
+  <select id="findPersonUngroupCount" parameterType="com.lj.business.member.domain.GuidMember" resultType="java.lang.Integer">
+  	SELECT count(1) FROM person_member pm 
+	JOIN pm_type_pm ptp ON pm.`CODE` = ptp.CODE_PM 
+	JOIN pm_type pt ON pt.`CODE`=ptp.PM_TYPE_CODE WHERE pt.PM_TYPE_TYPE='UNGROUP'
+	<if test="memberNo != null" >
+		and pm.MEMBER_NO_GM = #{memberNo,jdbcType=VARCHAR}
+    </if>
+	
+  </select>
+  
+    <select id="findShopGmPy" parameterType="com.lj.business.member.dto.FindShopGmDto" resultMap="FindShopGmResultMap">
+	select MEMBER_NO,MEMBER_NAME,HEAD_ADDRESS,MERCHANT_NO
+    from guid_member
+    where SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+          AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    ORDER BY CODE 
+  </select>  
+  
+</mapper>

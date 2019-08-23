@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IWorkTaskListDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.WorkTaskList" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="TASK_DESC" property="taskDesc" jdbcType="VARCHAR" />
+     <result column="TASK_TYPE" property="taskType" jdbcType="VARCHAR" />
+      <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findWorkTaskListPageResultMap" type="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPageReturn">
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="TASK_DESC" property="taskDesc" jdbcType="VARCHAR" />
+     <result column="TASK_TYPE" property="taskType" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     CODE, TASK_NAME, TASK_DESC, TASK_TYPE, STATUS, CREATE_ID, CREATE_DATE,TASK_UNIT
+  </sql>
+  <sql id="findWorkTaskListPage_condition" >
+  	 <where>
+      <if test="taskName != null and taskName!=''">
+        and  TASK_NAME like CONCAT('%',#{taskName,jdbcType=VARCHAR},'%' )
+        </if>
+      <if test="taskDesc != null and taskDesc!=''" >
+        and  TASK_DESC like CONCAT('%',#{taskDesc,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="taskType != null and taskType != ''" >
+        and  TASK_TYPE = #{taskType,jdbcType=DECIMAL}
+      </if>
+      <if test="status != null and status!=''" >
+        and  STATUS = #{status,jdbcType=DECIMAL}
+      </if>
+      <if test="createId != null" >
+        and  CREATE_ID = #{createId,jdbcType=DECIMAL}
+      </if>
+      </where>
+  </sql>
+  
+    
+   <select id="findWorkTaskListPages" resultMap="findWorkTaskListPageResultMap" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPage" >
+      SELECT 
+    <include refid="Base_Column_List" />   
+      FROM WORK_TASK_LIST
+ 	<include refid="findWorkTaskListPage_condition" />
+   </select>
+   
+   <!-- 查找所有工作事项表信息 -->
+    <select id="findWorkTaskListAll" resultMap="findWorkTaskListPageResultMap" >
+      SELECT 
+      <include refid="Base_Column_List" />   
+      FROM WORK_TASK_LIST
+   </select>
+  
+   <!-- 分页查询 -->
+   <select id="findWorkTaskListPage" resultMap="findWorkTaskListPageResultMap" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPage" >
+  SELECT    <include refid="Base_Column_List" />
+  FROM WORK_TASK_LIST
+ 	 <include refid="findWorkTaskListPage_condition" />
+   order by CODE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+   <select id="findWorkTaskListPageCount" resultType="int" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskListPage" >
+    select  count(*)
+     FROM WORK_TASK_LIST
+     <include refid="findWorkTaskListPage_condition" />
+  </select>
+  
+  
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_task_list
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="findWorkTaskListByTaskType" resultMap="BaseResultMap" parameterType="com.lj.business.cf.dto.workTaskList.FindWorkTaskList" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_task_list
+    where TASK_TYPE = #{taskType,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_task_list
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.lj.business.cf.domain.WorkTaskList" >
+   insert into work_task_list (CODE, TASK_NAME, TASK_DESC, 
+      TASK_TYPE, STATUS, CREATE_ID, 
+      CREATE_DATE,TASK_UNIT)
+    values (#{code,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{taskDesc,jdbcType=VARCHAR}, 
+      #{taskType,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{createId,jdbcType=VARCHAR}, 
+      NOW(),#{taskUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.WorkTaskList" >
+    insert into work_task_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME,
+      </if>
+      <if test="taskDesc != null" >
+        TASK_DESC,
+      </if>
+       <if test="taskType != null" >
+        TASK_TYPE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="taskUnit != null" >
+        TASK_UNIT,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDesc != null" >
+        #{taskDesc,jdbcType=VARCHAR},
+      </if>
+          <if test="taskType != null" >
+        #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUnit != null" >
+        #{taskUnit,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.WorkTaskList" >
+    update work_task_list
+    <set >
+      <if test="taskName != null" >
+        TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDesc != null" >
+        TASK_DESC = #{taskDesc,jdbcType=VARCHAR},
+      </if>
+           <if test="taskType != null" >
+        TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="taskUnit != null" >
+        TASK_UNIT = #{taskUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.WorkTaskList" >
+    update work_task_list
+    set TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      TASK_DESC = #{taskDesc,jdbcType=VARCHAR},
+      TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=CHAR},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+       TASK_UNIT = #{taskUnit,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+
+    <select id="findByCodeList" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM WORK_TASK_LIST
+        WHERE CODE IN
+        <foreach collection="codeList" open="(" close=")" item="code" separator=",">
+        #{code}
+        </foreach>
+    </select>
+
+</mapper>

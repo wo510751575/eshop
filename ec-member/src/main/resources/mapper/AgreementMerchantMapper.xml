@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IAgreementMerchantDao">
+	<resultMap id="BaseResultMap"
+		type="com.lj.business.member.domain.AgreementMerchant">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="AGREEMENT" property="agreement" jdbcType="VARCHAR" />
+		<result column="AGREEMENT_TYPE" property="agreementType" jdbcType="VARCHAR" />
+		<result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+		<result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="findAgreementMerchantPageResultMap"
+		type="com.lj.business.member.dto.FindAgreementMerchantPageDto">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+		<result column="AGREEMENT" property="agreement" jdbcType="VARCHAR" />
+		<result column="AGREEMENT_TYPE" property="agreementType" jdbcType="VARCHAR" />
+		<result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+		<result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, AGREEMENT,AGREEMENT_TYPE, CREATE_ID, CREATE_DATE,
+		UPDATE_ID,
+		UPDATE_DATE
+	</sql>
+
+	<sql id="findAgreementMerchantPage_condition">
+		<where>
+			<if test="code != null and code != ''">
+				and CODE = #{code,jdbcType=VARCHAR}
+			</if>
+				<if test="merchantNo != null  and merchantNo != ''">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="findAgreementMerchant_condition">
+		<where>
+			<if test="code != null and code != ''">
+				and CODE = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="merchantNo != null  and merchantNo != ''">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 添加服务协议 -->
+	<insert id="addAgreementMerchant" parameterType="com.lj.business.member.dto.AddAgreementMerchantDto">
+		insert into agreement_merchant
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="merchantNo != null">
+				MERCHANT_NO,
+			</if>
+			<if test="agreement != null">
+				AGREEMENT,
+			</if>
+			<if test="agreementType != null">
+				AGREEMENT_TYPE,
+			</if>
+			<if test="createId != null">
+				CREATE_ID,
+			</if>
+				CREATE_DATE,
+			<if test="updateId != null">
+				UPDATE_ID,
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="merchantNo != null">
+				#{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="agreement != null">
+				#{agreement,jdbcType=VARCHAR},
+			</if>
+			<if test="agreementType != null">
+				#{agreementType,jdbcType=VARCHAR},
+			</if>
+			<if test="createId != null">
+				#{createId,jdbcType=VARCHAR},
+			</if>
+				NOW(),
+			<if test="updateId != null">
+				#{updateId,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 编辑服务协议 -->
+	<update id="editAgreementMerchant" parameterType="com.lj.business.member.dto.EditAgreementMerchantDto">
+		update agreement_merchant
+		<set>
+			<if test="merchantNo != null">
+				MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+			</if>
+			<if test="agreement != null">
+				AGREEMENT = #{agreement,jdbcType=VARCHAR},
+			</if>
+			<if test="agreementType != null">
+				AGREEMENT_TYPE = #{agreementType,jdbcType=VARCHAR},
+			</if>
+			<if test="createId != null">
+				CREATE_ID = #{createId,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateId != null">
+				UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where CODE = #{code,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 查询商户服务协议(个人中心) -->
+	<select id="findAgreementMerchant" resultMap="BaseResultMap"
+		parameterType="com.lj.business.member.dto.FindAgreementMerchant">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM agreement_merchant
+		<include refid="findAgreementMerchant_condition" />
+	</select>
+	
+	<!-- 根据主键查询产品 -->
+	<select id="selectByCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from agreement_merchant
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查询所有产品(不分页) -->
+	<select id="findAgreementMerchants" resultMap="findAgreementMerchantPageResultMap"
+		parameterType="com.lj.business.member.dto.FindAgreementMerchantPageDto">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM agreement_merchant
+		<include refid="findAgreementMerchantPage_condition" />
+	</select>
+	
+	<!-- 查询所有产品(分页) -->
+	<select id="findAgreementMerchantPage" resultMap="findAgreementMerchantPageResultMap"
+		parameterType="com.lj.business.member.dto.FindAgreementMerchantPageDto">
+		SELECT CODE, MERCHANT_NO, AGREEMENT,AGREEMENT_TYPE, CREATE_ID, CREATE_DATE,
+		UPDATE_ID, UPDATE_DATE
+		FROM agreement_merchant
+		<include refid="findAgreementMerchantPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+	
+	<!-- 查询产品条数 -->
+	<select id="findAgreementMerchantPageCount" resultType="int"
+		parameterType="com.lj.business.member.dto.FindAgreementMerchantPageDto">
+		select count(*)
+		FROM agreement_merchant
+		<include refid="findAgreementMerchantPage_condition" />
+	</select>
+</mapper>

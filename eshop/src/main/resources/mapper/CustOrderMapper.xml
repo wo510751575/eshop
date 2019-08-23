@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.ICustOrderDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.CustOrder">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" />
+    <result column="img1" jdbcType="VARCHAR" property="img1" />
+    <result column="img2" jdbcType="VARCHAR" property="img2" />
+    <result column="img3" jdbcType="VARCHAR" property="img3" />
+    <result column="img4" jdbcType="VARCHAR" property="img4" />
+    <result column="img5" jdbcType="VARCHAR" property="img5" />
+    <result column="img6" jdbcType="VARCHAR" property="img6" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="pay_amt" jdbcType="DECIMAL" property="payAmt" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="catalog_code" jdbcType="VARCHAR" property="catalogCode" />
+    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+    <result column="pay_type" jdbcType="CHAR" property="payType" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="org_price" jdbcType="DECIMAL" property="orgPrice" />
+    <result column="gap_price" jdbcType="DECIMAL" property="gapPrice" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+  </resultMap>
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.CustOrderDto" extends="BaseResultMap">
+  </resultMap>  
+  <sql id="Base_Column_List">
+    code, supply_code, supply_name, img1, img2, img3, img4, img5, img6, remarks, pay_amt, 
+    create_time, update_time, catalog_code, catalog_name, pay_type, order_no, cost_price, 
+    org_price, gap_price, sale_price,merchant_code,status,express_no,express_name,mbr_code,
+    shop_code,shop_name
+  </sql>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.merchantCode != null and param.merchantCode !='' ">
+					<![CDATA[and merchant_code =#{param.merchantCode}]]>
+				</if>
+				<if test="param.orderNo != null and param.orderNo !='' ">
+					<![CDATA[and order_no =#{param.orderNo}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and shop_code =#{param.shopCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findCustOrders" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindCustOrderPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_cust_order
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findCustOrderPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindCustOrderPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_cust_order
+		<include refid="findPage_condition" />
+		ORDER BY create_time desc 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findCustOrderPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindCustOrderPage">
+		select count(*)
+		FROM t_cust_order
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_cust_order
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.CustOrder">
+    insert into t_cust_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="img1 != null">
+        img1,
+      </if>
+      <if test="img2 != null">
+        img2,
+      </if>
+      <if test="img3 != null">
+        img3,
+      </if>
+      <if test="img4 != null">
+        img4,
+      </if>
+      <if test="img5 != null">
+        img5,
+      </if>
+      <if test="img6 != null">
+        img6,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="payAmt != null">
+        pay_amt,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="catalogCode != null">
+        catalog_code,
+      </if>
+      <if test="catalogName != null">
+        catalog_name,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="costPrice != null">
+        cost_price,
+      </if>
+      <if test="orgPrice != null">
+        org_price,
+      </if>
+      <if test="gapPrice != null">
+        gap_price,
+      </if>
+      <if test="salePrice != null">
+        sale_price,
+      </if>
+       <if test="merchantCode != null">
+        merchant_code,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="expressNo != null">
+        express_no,
+      </if>
+      <if test="expressName != null">
+        express_name,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="shopCode != null">
+        shop_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null">
+        #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null">
+        #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="img5 != null">
+        #{img5,jdbcType=VARCHAR},
+      </if>
+      <if test="img6 != null">
+        #{img6,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="payAmt != null">
+        #{payAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="catalogCode != null">
+        #{catalogCode,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogName != null">
+        #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="costPrice != null">
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orgPrice != null">
+        #{orgPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gapPrice != null">
+        #{gapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+       <if test="expressNo != null">
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.CustOrder">
+    update t_cust_order
+    <set>
+      <if test="supplyCode != null">
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null">
+        img1 = #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        img2 = #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        img3 = #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null">
+        img4 = #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="img5 != null">
+        img5 = #{img5,jdbcType=VARCHAR},
+      </if>
+      <if test="img6 != null">
+        img6 = #{img6,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="payAmt != null">
+        pay_amt = #{payAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="catalogCode != null">
+        catalog_code = #{catalogCode,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogName != null">
+        catalog_name = #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="costPrice != null">
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orgPrice != null">
+        org_price = #{orgPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gapPrice != null">
+        gap_price = #{gapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null">
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="expressNo != null">
+      	express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+      	express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+      	mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+      	shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+      	shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,1340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IPersonMemberDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.PersonMember" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="SPRUCE_UP" property="spruceUp" jdbcType="VARCHAR" />
+    <result column="HOUSES" property="houses" jdbcType="VARCHAR" />
+    <result column="KEEP_EYE" property="keepEye" jdbcType="VARCHAR" />
+    <result column="URGENCY_PM" property="urgencyPm" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+    <result column="CONTACT_DATE_LAST" property="contactDateLast" jdbcType="TIMESTAMP" />
+    <result column="BRAND_COMPARE" property="brandCompare" jdbcType="VARCHAR" />
+    <result column="CLIENT_SPECIAL" property="clientSpecial" jdbcType="VARCHAR" />
+    <result column="SCAN_ADDRESS" property="scanAddress" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="FIRST_INTRODUCE" property="firstIntroduce" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CONTACT_DATE_LAST" property="contactDateLast" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="findPersonMemberPageResultMap" type="com.lj.business.member.dto.FindPersonMemberPageReturn" >
+  <!-- 		客户信息 -->
+     <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="SPRUCE_UP" property="spruceUp" jdbcType="VARCHAR" />
+    <result column="HOUSES" property="houses" jdbcType="VARCHAR" />
+    <result column="KEEP_EYE" property="keepEye" jdbcType="VARCHAR" />
+    <result column="URGENCY_PM" property="urgencyPm" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="CONTACT_DATE_LAST" property="contactDateLast" jdbcType="TIMESTAMP" />
+    <result column="BRAND_COMPARE" property="brandCompare" jdbcType="VARCHAR" />
+    <result column="CLIENT_SPECIAL" property="clientSpecial" jdbcType="VARCHAR" />
+    <result column="SCAN_ADDRESS" property="scanAddress" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="FIRST_INTRODUCE" property="firstIntroduce" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <!-- 		客户基础信息 -->
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CERT_TYPE_CODE" property="certTypeCode" jdbcType="VARCHAR" />
+    <result column="CERT_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="IMEI" property="imei" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="NAME_AUTH_FLAG" property="nameAuthFlag" jdbcType="CHAR" />
+    <result column="PWD" property="pwd" jdbcType="VARCHAR" />
+    <result column="ENCRYPTION_CODE" property="encryptionCode" jdbcType="VARCHAR" />
+    <result column="MEMBER_SRC" property="memberSrc" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_GZH_WX" property="openIdGzhWx" jdbcType="VARCHAR" />
+    <result column="OPEN_ID_XCX_WX" property="openIdXcxWx" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="CITY_WX" property="cityWx" jdbcType="VARCHAR" />
+    <result column="COUNTRY_WX" property="countryWx" jdbcType="VARCHAR" />
+    <result column="PROVINCE_WX" property="provinceWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="SUBSRIBE_TIME" property="subsribeTime" jdbcType="TIMESTAMP" />
+    <result column="FAMILY_CODE" property="familyCode" jdbcType="VARCHAR" />
+    <result column="FAMILY_NAME" property="familyName" jdbcType="VARCHAR" />
+    <result column="INTEREST" property="interest" jdbcType="VARCHAR" />
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITY_AREA_CODE" property="cityAreaCode" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="TIMESTAMP" />
+    <!-- 		客户分类信息 -->
+   	<result column="PM_TYPE_CODE" property="pmTypeCode" jdbcType="VARCHAR" />
+   	<result column="TYPE_NAME" property="pmTypeName" jdbcType="VARCHAR" />
+   	<result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR" />
+   	<result column="PM_TYPE_DIM" property="pmTypeDim" jdbcType="VARCHAR" />
+   	<result column="PM_TYPE_STATUS" property="pmTypeStatus" jdbcType="VARCHAR" />
+   	 <!-- 		跟进、维护、放弃记录次数 -->
+   	<result column="FOLLOW_NUM" property="followNum" jdbcType="VARCHAR" />
+   	<result column="KEEP_NUM" property="keepNum" jdbcType="VARCHAR" />
+   	<result column="PA_NUM" property="paNum" jdbcType="VARCHAR" />
+   	 <!-- 		导购头像 -->
+   	<result column="GMPHOTO" property="gmPhoto" jdbcType="VARCHAR" />
+   	
+  </resultMap>
+  
+  <!-- 客户管理返回  add by rain at 2017-07-3  start -->
+  <resultMap id="findPMForMemberManagerResultMap" type="com.lj.business.member.dto.FindPersonMemberPageReturn" >
+     <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="UNGRANT_FLAG" property="ungrantFlag" jdbcType="CHAR" />
+    <result column="REP_FLAG" property="repFlag" jdbcType="CHAR" />
+    <result column="GROUP_FLAG" property="groupFlag" jdbcType="CHAR" />
+  </resultMap>
+  
+  <!--客户管理返回 add by rain at 2017-07-3 end -->
+  <resultMap id="findPmTypeIndexPageResultMap" type="com.lj.business.member.dto.FindPmTypeIndexPageReturn" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DESC" property="behaviorDesc" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DATE" property="behaviorDate" jdbcType="TIMESTAMP" />
+    <result column="CODE" property="codePmTypePm" jdbcType="VARCHAR" />
+   <result column="URGENCY_PM" property="urgencyPm" jdbcType="VARCHAR" />
+   <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="findPmSeachPageResultMap" type="com.lj.business.member.dto.FindPmSeachPageReturn" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DESC" property="behaviorDesc" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DATE" property="behaviorDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="findUrgentMbrPageResultMap" type="com.lj.business.member.dto.FindUrgentMbrPageReturn" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DESC" property="behaviorDesc" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="findPmWxBpInfoResultMap" type="com.lj.business.member.dto.FindPmWxBpInfoReturn" >
+  	<result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DESC" property="behaviorDesc" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DATE" property="behaviorDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="findNewPmPageResultMap" type="com.lj.business.member.dto.FindNewPmPageReturn" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="REMARK_COM" property="remarkCom" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UNGROUP" property="unGroup" jdbcType="VARCHAR" />
+    <result column="COMPLETE" property="complete" jdbcType="VARCHAR" />
+    <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
+    <result column="FIRST_INTRODUCE" property="firstIntroduce" jdbcType="VARCHAR" />
+  </resultMap>
+
+    <resultMap id="findUnContactMemberResultMap" type="com.lj.business.member.dto.FindUnContactMemberReturn" >
+        <result column="MEMBER_NO" property="memberNo" />
+        <result column="MEMBER_NAME" property="memberName" />
+        <result column="MOBILE" property="mobile" />
+        <result column="NO_WX" property="noWx" />
+        <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" />
+        <result column="NICK_NAME_WX" property="nickNameWx" />
+        <result column="HEAD_ADDRESS" property="imgAddr" />
+        <result column="BEHAVIOR_DATE" property="behaviorDate" />
+        <result column="BEHAVIOR_DESC" property="behaviorDesc" />
+    </resultMap>
+
+   <resultMap id="findPmWxInfoResultMap" type="com.lj.business.member.dto.FindPmWxInfoReturn" >
+  	<result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+  	<result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="NO_WX" property="noWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_WX" property="nickNameRemarkWx" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_REMARK_LOCAL" property="nickNameRemarkLocal" jdbcType="VARCHAR" />
+    <result column="NICK_NAME_WX" property="nickNameWx" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DESC" property="behaviorDesc" jdbcType="VARCHAR" />
+    <result column="BEHAVIOR_DATE" property="behaviorDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="findListResultMap" type="com.lj.business.member.dto.FindPersonMemberReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="SPRUCE_UP" property="spruceUp" jdbcType="VARCHAR" />
+    <result column="HOUSES" property="houses" jdbcType="VARCHAR" />
+    <result column="KEEP_EYE" property="keepEye" jdbcType="VARCHAR" />
+    <result column="URGENCY_PM" property="urgencyPm" jdbcType="VARCHAR" />
+    <result column="BOM_CODE" property="bomCode" jdbcType="VARCHAR" />
+    <result column="BOM_NAME" property="bomName" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="TodayManageShopNewResultMap" type="com.lj.business.member.dto.FindTodayManageShopReturn" >
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="HEAD_ADDRESS" property="headAddress" jdbcType="VARCHAR" />
+    <result column="RATIO_WORK" property="ratioWork" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="findPersonMemberReturn" type="com.lj.business.member.dto.FindPersonMemberReturnList" >
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="PM_TYPE_TYPE" property="pmTypeType" jdbcType="VARCHAR"/>
+    <result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   CODE, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, SHOP_NO, SHOP_NAME, MERCHANT_NO, 
+    MERCHANT_NAME, SPRUCE_UP, HOUSES, KEEP_EYE, URGENCY_PM, BOM_CODE, BOM_NAME, NICK_NAME_REMARK_WX, 
+    CONTACT_DATE_LAST, BRAND_COMPARE, CLIENT_SPECIAL, SCAN_ADDRESS, LATITUDE, LONGITUDE, 
+    FIRST_INTRODUCE, CREATE_ID, CREATE_DATE, UPDATE_ID, UPDATE_DATE, REMARK4, REMARK3, 
+    REMARK2, REMARK
+  </sql>
+  
+  <!-- 客户信息关联查询  add by duanzhipeng at 2017-07-08  start -->
+  <sql id="Join_Column_List" >
+	<!--   	客户信息 -->
+     pm.CODE, pm.MEMBER_NO, pm.MEMBER_NAME, pm.MEMBER_NO_GM, pm.MEMBER_NAME_GM, pm.SHOP_NO, pm.SHOP_NAME, pm.MERCHANT_NO, 
+    pm.MERCHANT_NAME, pm.SPRUCE_UP, pm.HOUSES, pm.KEEP_EYE, pm.URGENCY_PM, pm.BOM_CODE, pm.BOM_NAME, pm.CREATE_ID, 
+    pm.CREATE_DATE, pm.UPDATE_ID, pm.UPDATE_DATE, pm.REMARK4, pm.REMARK3, pm.REMARK2, pm.REMARK
+   <!-- 		客户基础信息 -->
+    ,pmb.STATUS, pmb.CERT_TYPE_CODE, pmb.CERT_NO, pmb.MOBILE,pmb.IMEI,
+	pmb.EMAIL, pmb.JOB,pmb.ADDRESS, pmb.AGE, pmb.SEX, pmb.NAME_AUTH_FLAG, pmb.PWD, pmb.ENCRYPTION_CODE, pmb.MEMBER_SRC,
+	pmb.OPEN_ID_GZH_WX,pmb.OPEN_ID_XCX_WX, pmb.NICK_NAME_WX, pmb.CITY_WX, pmb.COUNTRY_WX, pmb.PROVINCE_WX, pmb.HEAD_ADDRESS,
+	pmb.SUBSRIBE_TIME,pmb.FAMILY_CODE, pmb.FAMILY_NAME, pmb.INTEREST, pmb.AREA_CODE,pmb.PROVINCE_CODE,pmb.CITY_CODE,pmb.CITY_AREA_CODE,
+	pmb.NO_WX,pmb.BIRTHDAY
+	<!-- 		客户分类关联表 -->
+	,ptp.PM_TYPE_CODE
+	<!-- 		客户分类表 -->
+	,pt.TYPE_NAME,pt.PM_TYPE_TYPE,pt.PM_TYPE_DIM,pt.STATUS as PM_TYPE_STATUS
+	<!-- 		导购信息 -->
+	,(SELECT gm.HEAD_ADDRESS from guid_member gm WHERE gm.MEMBER_NO = pm.MEMBER_NO_GM) GMPHOTO
+  </sql>
+   <!-- 客户信息关联查询  add by duanzhipeng at 2017-07-08  end -->
+  
+  <!-- 客户信息关联查询  add by duanzhipeng at 2017-07-08  start -->
+  <sql id="findPersonMemberPage_condition" >
+  	 <where>
+      <if test="memberNo != null  and memberNo !=''" >
+        and  pm.MEMBER_NO = #{memberNo}
+      </if>
+      <if test="memberName != null and memberName !='' ">
+		and pm.MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+	  </if>
+	  <if test="startTime != null">
+		<![CDATA[and pm.CREATE_DATE >= #{startTime}]]>
+		</if>
+		<if test="endTime != null"> 
+			<![CDATA[and pm.CREATE_DATE <= #{endTime}]]>
+		</if>
+	  	<if test="memberNoGm != null and memberNoGm !='' ">
+			and pm.MEMBER_NO_GM = #{memberNoGm}
+		</if>
+		<if test="memberNameGm != null and memberNameGm !='' ">
+			and pm.MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
+	  	</if>
+		<if test="merchantNo != null and merchantNo !='' ">
+			and pm.MERCHANT_NO = #{merchantNo}
+		</if>
+		<if test="shopNo != null and shopNo !='' ">
+			and pm.SHOP_NO = #{shopNo}
+		</if>
+		<if test="shopName != null and shopName !='' ">
+			and pm.SHOP_NAME like CONCAT('%',#{shopName,jdbcType=VARCHAR},'%' )
+		</if>
+		<!-- 	  客户基础条件 -->
+	      <if test="imei != null and imei !='' ">
+			and pmb.IMEI = #{imei}
+		</if>
+		<if test="mobile != null and mobile !='' ">
+			and pmb.MOBILE = #{mobile}
+		</if>
+		<if test="memberSrc != null and memberSrc !='' ">
+			and pmb.MEMBER_SRC = #{memberSrc}
+		</if>
+		<if test="area != null and area !='' ">
+			and (pmb.PROVINCE_WX like CONCAT('%',#{area},'%') OR pmb.CITY_WX like CONCAT('%',#{area},'%'))
+		</if>
+		<!-- DZP 客户类型条件 -->
+		<if test="pmTypeType != null and pmTypeType !='' ">
+			and pt.PM_TYPE_TYPE = #{pmTypeType}
+		</if>
+		<if test="pmTypeDim != null and pmTypeDim !='' ">
+			and pt.PM_TYPE_DIM = #{pmTypeDim}
+		</if>
+     </where>
+  </sql>
+  <!-- 客户信息关联查询条件  add by duanzhipeng at 2017-07-08  end -->
+   <sql id="findPersonMemberSex">
+   <where>
+    <if test="merchantNo != null and merchantNo !='' ">
+		and pm.MERCHANT_NO = #{merchantNo}
+	</if>
+	  <if test="areaCode != null and areaCode !='' ">
+		and  pmb.AREA_CODE = #{areaCode}
+	  </if>
+	    <if test="shopNo != null and shopNo !='' ">
+		and  pm.SHOP_NO= #{shopNo}
+	  </if>
+   </where>
+   </sql>
+   
+  <sql id="findPmTypeIndexPage_condition" >
+	WHERE pmb.MEMBER_NO = pm.MEMBER_NO
+     AND pm.CODE = ptp.CODE_PM
+     AND bp.MEMBER_NO = pm.MEMBER_NO
+	 AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+     <if test="memberNoGm != null and memberNoGm != ''" >
+      AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+      <if test="shopNo != null and shopNo != ''" >
+	       AND pm.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+	       </if>
+         AND ptp.PM_TYPE_CODE = #{pmTypeCode,jdbcType=VARCHAR}
+  </sql>
+  
+  <sql id="findPmSeachPage_condition" >
+	  WHERE pmb.MEMBER_NO = pm.MEMBER_NO
+     AND pm.CODE = ptp.CODE_PM
+     AND bp.MEMBER_NO = pm.MEMBER_NO
+	       AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	       <if test="memberNoGm != null and memberNoGm != ''" >
+      	 AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      	 </if>
+      	 <if test="shopNo != null and shopNo != ''" >
+	       AND pm.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+	      </if>
+	      <if test="searchKey != null and searchKey != ''" >
+	       and (pm.MEMBER_NAME like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%') 
+	       or pmb.MOBILE like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%')
+	       or pmb.NICK_NAME_WX like CONCAT('%', #{searchKey,jdbcType=VARCHAR},'%')
+	       )
+	      </if>
+  </sql>
+  
+  <sql id="findUrgentMbrPage_condition" >
+	WHERE pmb.MEMBER_NO = pm.MEMBER_NO
+   AND bp.MEMBER_NO = pm.MEMBER_NO
+	       AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+	     <if test="memberNoGm != null and memberNoGm != ''" >
+      	 AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      	 </if>
+      	 <if test="shopNo != null and shopNo != ''" >
+	       AND pm.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+	     </if>
+	       AND pm.URGENCY_PM = 'Y'
+  </sql>
+  
+  <sql id="findNewPmPage_condition" >
+	WHERE     pm.MEMBER_NO = pmb.MEMBER_NO
+       AND pm.CODE = ptp.CODE_PM
+       AND pt.CODE = ptp.PM_TYPE_CODE
+       AND pt.PM_TYPE_TYPE IN ('SUCCESS',
+                               'GIVE_UP',
+                               'INTENTION',
+                               'UNGROUP',
+                               'INTENTION_N',
+                               'OTHER')
+       AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+       AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+       AND pm.CREATE_DATE >= CURDATE()
+  </sql>
+  
+  <sql id="findPersonMemberTypeNums">
+  <where>
+  	 <if test="merchantNo != null and merchantNo !='' ">
+			and pm.MERCHANT_NO = #{merchantNo}
+    </if>
+      <if test="areaCode != null and areaCode !='' ">
+		  and  pmb.AREA_CODE = #{areaCode}
+    </if>
+     <if test="shopNo != null and shopNo !='' ">
+		  and  pm.SHOP_NO = #{shopNo}
+    </if>
+     <if test="memberNoGm!= null and memberNoGm !='' ">
+		  and  pm.MEMBER_NO_GM = #{memberNoGm}
+    </if>
+  </where>
+  </sql>
+  
+  <select id="findPersonMemberCont" resultType="int" parameterType="com.lj.business.member.dto.FindPersonMember">
+   SELECT COUNT(DISTINCT pm.MEMBER_NO) 
+   FROM  person_member pm LEFT JOIN person_member_base pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+   WHERE 1=1
+    <if test="merchantNo != null and merchantNo !='' ">
+	 and  pm.MERCHANT_NO = #{merchantNo}
+    </if>
+      <if test="areaCode != null and areaCode !='' ">
+	 and  pmb.AREA_CODE = #{areaCode}
+    </if>
+      <if test="provinceCode != null and provinceCode !='' ">
+	 and  pmb.PROVINCE_CODE = #{provinceCode}
+    </if>
+ </select>
+  
+   <!-- 统计报表客户分组数量统计-->
+  <select id="findPersonMemberTypeNum" resultMap="findPersonMemberReturn" parameterType="com.lj.business.member.dto.FindPersonMember">
+    SELECT COUNT(pm.MEMBER_NO)AS MEMBER_NO,pt.PM_TYPE_TYPE,pmb.AREA_CODE,pmb.AREA_NAME
+    FROM person_member  pm
+    LEFT JOIN pm_type_pm  ptm ON pm.CODE = ptm.CODE_PM 
+    LEFT JOIN pm_type pt ON pt.CODE= ptm.PM_TYPE_CODE
+    LEFT JOIN person_member_base pmb ON pmb.MEMBER_NO=pm.MEMBER_NO
+    <include refid="findPersonMemberTypeNums"/>
+    GROUP BY pt.PM_TYPE_TYPE
+    ORDER BY COUNT(pm.MEMBER_NO) DESC
+    LIMIT 1
+  </select>
+  <!-- 统计客户分组列表 -->
+  <select id="findPersonMemberTypeList" resultType="com.lj.business.member.dto.FindPersonMemberReturnList" parameterType="com.lj.business.member.dto.FindPersonMember">
+  SELECT pm.SHOP_NO shopNo,pm.SHOP_NAME shopName,pm.MEMBER_NO_GM  memberNoGm,pm.MEMBER_NAME_GM memberNameGm,pmb.AREA_CODE areaCode,
+  pmb.AREA_NAME areaName,COUNT(pm.MEMBER_NO)AS count,pt.PM_TYPE_TYPE pmTypeType,pm.MERCHANT_NO merchantNo,pt.CODE code,pt.TYPE_NAME typeName
+  FROM person_member pm
+  LEFT JOIN person_member_base pmb on pm.MEMBER_NO=pmb.MEMBER_NO
+  LEFT JOIN pm_type_pm  ptm ON pm.CODE = ptm.CODE_PM 
+  LEFT JOIN pm_type pt ON pt.CODE= ptm.PM_TYPE_CODE
+  <include refid="findPersonMemberTypeNums"/>
+  GROUP BY pt.PM_TYPE_TYPE
+  </select>
+  <select id="findPersonMemberTypeCount"  resultType="int" parameterType="com.lj.business.member.dto.FindPersonMember">
+  SELECT count(pm.MEMBER_NO)
+  FROM person_member pm
+  LEFT JOIN person_member_base pmb on pm.MEMBER_NO=pmb.MEMBER_NO
+  LEFT JOIN pm_type_pm  ptm ON pm.CODE = ptm.CODE_PM 
+  LEFT JOIN pm_type pt ON pt.CODE= ptm.PM_TYPE_CODE
+  <include refid="findPersonMemberTypeNums"/>
+  <if test="createDate!= null and createDate !='' ">
+	and  date_format(pm.CREATE_DATE,'%Y-%m-%d') = date_format(#{createDate},'%Y-%m-%d')
+  </if>
+  <if test="pmTypeType != null and pmTypeType != ''">
+  	and pt.PM_TYPE_TYPE = #{pmTypeType}
+  </if>
+  </select>
+  
+   <!-- 根据导购查询客户-->
+  <select id="findPersonMemberByGm" resultMap="findListResultMap" parameterType="com.lj.business.member.dto.FindPersonMember">
+	select 
+    <include refid="Base_Column_List"/>
+    from person_member pm
+    where 1 = 1 
+    <if test="merchantNo != null and merchantNo !='' ">
+			and pm.MERCHANT_NO = #{merchantNo}
+    </if>
+    <if test="merchantNo != null and merchantNo !='' ">
+			and pm.MEMBER_NO_GM = #{memberNoGm}
+    </if>
+  </select>
+  
+   <!-- 新增客户,分页查询 -->
+   <select id="findNewPmPage" resultMap="findNewPmPageResultMap" parameterType="com.lj.business.member.dto.FindPmTypeIndexPage" >
+ SELECT pm.MEMBER_NO,
+       pm.MEMBER_NAME,
+       pmb.MOBILE,
+       pmb.NO_WX,
+       pmb.NICK_NAME_WX,
+       pm.NICK_NAME_REMARK_WX,
+       pm.NICK_NAME_REMARK_LOCAL,
+       pmb.HEAD_ADDRESS,
+       pm.CREATE_DATE,
+       '客户资料完成' AS REMARK_COM,
+       IF(pt.PM_TYPE_TYPE = 'UNGROUP', 'Y', 'N') AS UNGROUP,
+       IF(pmb.MEMBER_NAME is NOT NULL AND pmb.NO_WX IS NOT NULL AND pmb.MEMBER_SRC IS NOT NULL AND pmb.MOBILE IS NOT NULL, 'Y', 'N' ) AS COMPLETE,
+       pmb.RATIO_CLIENT_INFO,
+       pm.FIRST_INTRODUCE
+  FROM PERSON_MEMBER pm,
+       PERSON_MEMBER_BASE pmb,
+       PM_TYPE pt,
+       PM_TYPE_PM ptp
+	 <include refid="findNewPmPage_condition" />
+   order by UNGROUP DESC, pm.CREATE_DATE DESC
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findNewPmPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindNewPmPage" >
+   SELECT count(*)
+	   FROM PERSON_MEMBER pm,
+       PERSON_MEMBER_BASE pmb,
+       PM_TYPE pt,
+       PM_TYPE_PM ptp
+	 <include refid="findNewPmPage_condition" />
+  </select>
+  
+  <!-- 分页查询紧急客户信息 -->
+   <select id="findUrgentMbrPage" resultMap="findUrgentMbrPageResultMap" parameterType="com.lj.business.member.dto.FindUrgentMbrPage" >
+    SELECT pm.MEMBER_NO,pm.MEMBER_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,pmb.NO_WX,pm.NICK_NAME_REMARK_WX,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,bp.BEHAVIOR_DESC
+	FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, BEHAVIOR_PM bp
+	 <include refid="findUrgentMbrPage_condition" />
+   order by pm.CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+   <select id="findPersonMemberSums" resultType="int" parameterType="com.lj.business.member.dto.FindUrgentMbrPage" >
+   SELECT count(MEMBER_NO)
+   FROM PERSON_MEMBER
+   WHERE MERCHANT_NO = #{merchantNo}
+  </select>
+   <!-- 统计 -->
+   <select id="findPersonMemberSexCount" resultMap="findUrgentMbrPageResultMap" parameterType="com.lj.business.member.dto.FindPersonMember" >
+   SELECT COUNT(pm.MEMBER_NO) AS count,pmb.SEX
+    FROM person_member pm
+    LEFT JOIN person_member_base pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+    <include refid="findPersonMemberSex" />
+    GROUP BY pmb.SEX,pmb.PROVINCE_CODE ORDER BY COUNT(pm.MEMBER_NO) DESC  LIMIT 1
+   </select>
+  
+  
+  <select id="findUrgentMbrPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindUrgentMbrPage" >
+   SELECT count(*)
+	  FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm,BEHAVIOR_PM bp
+	 <include refid="findUrgentMbrPage_condition" />
+  </select>
+  
+   <!-- 客户管理搜索：搜索页面,分页查询 -->
+   <select id="findPmSeachPage" resultMap="findPmSeachPageResultMap" parameterType="com.lj.business.member.dto.FindPmTypeIndexPage">
+   SELECT DISTINCT pm.code,pm.MEMBER_NO,pm.MEMBER_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,pmb.NO_WX,pm.NICK_NAME_REMARK_WX,
+   pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,pmb.RATIO_CLIENT_INFO,bp.BEHAVIOR_DESC,bp.BEHAVIOR_DATE
+   FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, PM_TYPE_PM ptp,BEHAVIOR_PM bp
+	 <include refid="findPmSeachPage_condition" />
+   order by pm.CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findPmSeachPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindPmSeachPage" >
+   SELECT count(*)
+	  FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, PM_TYPE_PM ptp,BEHAVIOR_PM bp
+	 <include refid="findPmSeachPage_condition" />
+  </select>
+  
+  
+   <!-- 客户管理首页：分类信息明细查询,分页查询 -->
+   <select id="findPmTypeIndexPage" resultMap="findPmTypeIndexPageResultMap" parameterType="com.lj.business.member.dto.FindPmTypeIndexPage" >
+ SELECT pm.MEMBER_NO,pm.MEMBER_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,pmb.NO_WX,pm.NICK_NAME_REMARK_WX,pm.NICK_NAME_REMARK_LOCAL
+        ,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,bp.BEHAVIOR_DESC,bp.BEHAVIOR_DATE,ptp.CODE,pm.URGENCY_PM,pmb.MOBILE,pmb.RATIO_CLIENT_INFO
+	  FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, PM_TYPE_PM ptp,BEHAVIOR_PM bp
+	 <include refid="findPmTypeIndexPage_condition" />
+   order by pm.CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findPmTypeIndexPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindPmTypeIndexPage" >
+   SELECT count(*)
+	  FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, PM_TYPE_PM ptp,BEHAVIOR_PM bp
+	 <include refid="findPmTypeIndexPage_condition" />
+  </select>
+  
+   <select id="findPmTypeRepeatCount" resultType="int" parameterType="com.lj.business.member.domain.PersonMember" >
+        SELECT count(*)
+		  FROM PERSON_MEMBER pm
+		 WHERE pm.MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+		  AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+  </select>
+  
+     <!-- 分页查询 -->
+   <select id="findPersonMemberPage" resultMap="findPersonMemberPageResultMap" parameterType="com.lj.business.member.dto.FindPersonMemberPage" >
+  SELECT  <include refid="Join_Column_List" />
+  FROM person_member pm
+  INNER JOIN person_member_base  pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+  LEFT JOIN pm_type_pm ptp ON pm.CODE = ptp.CODE_PM
+  LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+  <include refid="findPersonMemberPage_condition"/>
+  GROUP BY pm.CODE
+   ORDER BY pm.CREATE_DATE ${sortDir}
+   limit ${start},${limit}
+  </select>
+  
+  
+  <!-- 查询客户列表 -->
+   <select id="findPersonMemberList" resultMap="findPersonMemberPageResultMap" parameterType="com.lj.business.member.dto.FindPersonMemberPage" >
+  SELECT  <include refid="Join_Column_List" />
+  FROM person_member pm
+  INNER JOIN person_member_base  pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+  LEFT JOIN pm_type_pm ptp ON pm.CODE = ptp.CODE_PM
+  LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+  <include refid="findPersonMemberPage_condition"/>
+  </select>
+  
+  
+  
+  <select id="findPersonMemberPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindPersonMemberPage" >
+    select  count(DISTINCT pm.CODE)
+     FROM person_member pm
+     INNER JOIN person_member_base  pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+	  LEFT JOIN pm_type_pm ptp ON pm.CODE = ptp.CODE_PM
+	  LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+     <include refid="findPersonMemberPage_condition" />
+     
+  </select>
+  
+ <!-- 查询客户 add by rain at 2017-07-3  start -->
+  <!-- 查询客户，根据导购编号，客户手机号，微信号码，姓名-->
+  <select id="selectByPhoneWxName" resultMap="findPMForMemberManagerResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	<where> 1= 1
+      <if test="param != null and param != ''" >
+        and  (pmb.MOBILE = #{param} ||  pmb.MEMBER_NAME like CONCAT('%',#{param}, '%') || pmb.NICK_NAME_WX like CONCAT('%',#{param}, '%'))
+      </if>
+       <if test="memberGMCode != null and memberGMCode != ''" >
+        and  pm.MEMBER_NO_GM = #{memberGMCode}
+      </if>
+      </where>
+   	order by pm.UPDATE_DATE desc
+   </select>
+   
+   <!-- 查询紧急客户-->
+  <select id="inqueryUngrentMember" resultMap="findPMForMemberManagerResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	where ptp.UNGRANT_FLAG =  #{flag,jdbcType=VARCHAR} and pm.MEMBER_NO_GM = #{memberGMCode}
+	order by pm.UPDATE_DATE desc
+  </select>
+ 
+  <!-- 查询未分组客户-->
+  <select id="inqueryUnGroupMember" resultMap="findPMForMemberManagerResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	where ptp.GROUP_FLAG =  #{flag,jdbcType=VARCHAR} pm.MEMBER_NO_GM = #{memberGMCode}
+	order by pm.UPDATE_DATE desc
+  </select>
+
+  <!-- 查询意向,非意向，放弃，成单客户-->
+  <select id="inqueryMemberByPmType" resultMap="findPMForMemberManagerResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	where ptp.PM_TYPE_CODE =  #{code,jdbcType=VARCHAR} pm.MEMBER_NO_GM = #{memberGMCode}
+	order by pm.UPDATE_DATE desc
+  </select>
+ 
+    <!-- 查询交叉客户-->
+  <select id="inqueryRepeatMember" resultMap="findPMForMemberManagerResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	where ptp.REP_FLAG =  #{flag,jdbcType=VARCHAR} pm.MEMBER_NO_GM = #{memberGMCode}
+	order by pm.UPDATE_DATE desc
+  </select>
+  
+  <!-- 查询客户，跟进导购编号，客户编号-->
+  <select id="selectByMemberNoGMCode" resultMap="BaseResultMap" parameterType="map" >
+    select pm.CODE,pm.MEMBER_NO,pm.MEMBER_NAME,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,ptp.UNGRANT_FLAG,ptp.REP_FLAG,ptp.GROUP_FLAG  from person_member pm
+	INNER JOIN person_member_base pmb on pmb.code = pm.code
+	LEFT OUTER JOIN pm_type_pm ptp on ptp.code = pm.code
+	where ptp.REP_FLAG =  #{flag,jdbcType=VARCHAR} pm.MEMBER_NO_GM = #{memberGMCode}
+	order by pm.UPDATE_DATE desc
+  </select>
+ <!-- rain at 2017-07-3 end -->
+ 
+ <select id="getByCond" resultMap="findPersonMemberPageResultMap" parameterType="map" >
+    select <include refid="Join_Column_List" />
+     FROM person_member pm
+     INNER JOIN person_member_base  pmb ON pm.MEMBER_NO=pmb.MEMBER_NO
+	  LEFT JOIN pm_type_pm ptp ON pm.CODE = ptp.CODE_PM
+	  LEFT JOIN pm_type pt ON pt.CODE = ptp.PM_TYPE_CODE
+    where pm.CODE = #{code,jdbcType=VARCHAR}
+    AND pt.PM_TYPE_TYPE = #{pmTypeType}
+  </select>
+ <select id="selectByParamKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+     select 
+    <include refid="Base_Column_List" />
+    from person_member
+    <where>
+      <if test="code != null and code != ''" >
+       AND CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNo != null and memberNo != ''" >
+       AND MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+      </if>
+      <if test="memberNoGm != null and memberNoGm != ''" >
+       AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantNo != null and merchantNo != ''" >
+       AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+    </where>
+    
+  </select>
+  
+  <select id="findPmWxBpInfo" resultMap="findPmWxBpInfoResultMap" parameterType="com.lj.business.member.dto.FindPmWxBpInfo" >
+    SELECT pm.MEMBER_NO,pm.NICK_NAME_REMARK_WX, pm.NICK_NAME_REMARK_LOCAL,  pmb.NO_WX,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,bp.BEHAVIOR_DESC,bp.BEHAVIOR_DATE
+  FROM PERSON_MEMBER pm, PERSON_MEMBER_BASE pmb, BEHAVIOR_PM bp
+ WHERE     pmb.MEMBER_NO = bp.MEMBER_NO
+       AND pmb.MEMBER_NO = pm.MEMBER_NO
+        AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	  AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+       AND pm.MEMBER_NO in (
+               <foreach item="memberNoArItem" index="index" collection="memberNoAr"
+                   separator=","> #{memberNoArItem} </foreach>
+              )
+  </select>
+
+   <select id="findPmWxInfo" resultMap="findPmWxInfoResultMap" parameterType="com.lj.business.member.dto.FindPmWxInfo" >
+	   SELECT pm.MEMBER_NO,
+	       pm.NICK_NAME_REMARK_WX,
+	       pm.NICK_NAME_REMARK_LOCAL,
+	       pmb.NO_WX,
+	       pmb.NICK_NAME_WX,
+	       pmb.HEAD_ADDRESS,
+	       pmb.MOBILE
+	  FROM PERSON_MEMBER pm, PERSON_MEMBER_BASE pmb
+	 WHERE pmb.MEMBER_NO = pm.MEMBER_NO
+	  AND pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+	  AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+       AND pm.MEMBER_NO in (
+               <foreach item="memberNoArItem" index="index" collection="memberNoAr" 
+                   separator=","> #{memberNoArItem} </foreach> 
+              ) 
+  </select>
+  <select id="findCountByMemberNo" parameterType="com.lj.business.member.dto.FindPersonMember" resultType="int">
+  	 select count(*)
+  	 from person_member
+  	 where MEMBER_NO = #{memberNo,jdbcType=VARCHAR} AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+  </select>
+
+    <sql id="findUnContactMember_condition">
+         where pm.MERCHANT_NO = #{merchantNo} and pm.MEMBER_NO_GM = #{memberNoGm}
+        <if test="startDate != null" >
+            <![CDATA[
+              and pm.CONTACT_DATE_LAST >= #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null" >
+            <![CDATA[
+              and pm.CONTACT_DATE_LAST < #{endDate}
+            ]]>
+        </if>
+    </sql>
+    <select id="findUnContactMember" resultMap="findUnContactMemberResultMap" parameterType="com.lj.business.member.dto.FindUnContactMember">
+        select pmb.MEMBER_NO, pmb.MEMBER_NAME, pmb.MOBILE, pmb.NO_WX, pmb.NICK_NAME_WX,
+        pmb.HEAD_ADDRESS, pm.NICK_NAME_REMARK_WX, bp.BEHAVIOR_DATE, bp.BEHAVIOR_DESC
+        from person_member pm left join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+        left JOIN BEHAVIOR_PM bp on pm.MEMBER_NO = bp.MEMBER_NO
+        <include refid="findUnContactMember_condition" />
+        order by bp.BEHAVIOR_DATE desc
+        limit ${start} , ${limit}
+    </select>
+
+    <select id="findUnContactMemberCount" resultType="int" parameterType="com.lj.business.member.dto.FindUnContactMember" >
+        select count(*)
+        from person_member pm
+        <include refid="findUnContactMember_condition" />
+    </select>
+
+    <select id="findCountByMemberNoGm" resultType="int" >
+        SELECT count(*) FROM PERSON_MEMBER
+        WHERE MEMBER_NO_GM = #{memberNoGm} AND MERCHANT_NO = #{merchantNo}
+    </select>
+  
+  
+   
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lj.business.member.domain.PersonMember" >
+   select 
+    <include refid="Base_Column_List" />
+    from person_member
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectByMGM" resultMap="BaseResultMap" parameterType="com.lj.business.member.dto.FindPersonMember" >
+    select 
+    <include refid="Base_Column_List" />
+    from person_member
+    where MEMBER_NO = #{memberNo,jdbcType=VARCHAR} AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from person_member
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.PersonMember" >
+    insert into person_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="spruceUp != null" >
+        SPRUCE_UP,
+      </if>
+      <if test="houses != null" >
+        HOUSES,
+      </if>
+      <if test="keepEye != null" >
+        KEEP_EYE,
+      </if>
+      <if test="urgencyPm != null" >
+        URGENCY_PM,
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE,
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME,
+      </if>
+      <if test="nickNameRemarkWx != null" >
+        NICK_NAME_REMARK_WX,
+      </if>
+      <if test="nickNameRemarkLocal != null" >
+        NICK_NAME_REMARK_LOCAL,
+      </if>
+      <if test="contactDateLast != null" >
+        CONTACT_DATE_LAST,
+      </if>
+      <if test="brandCompare != null" >
+        BRAND_COMPARE,
+      </if>
+      <if test="clientSpecial != null" >
+        CLIENT_SPECIAL,
+      </if>
+      <if test="scanAddress != null" >
+        SCAN_ADDRESS,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="firstIntroduce != null" >
+        FIRST_INTRODUCE,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="updateId != null" >
+        UPDATE_ID,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="spruceUp != null" >
+        #{spruceUp,jdbcType=VARCHAR},
+      </if>
+      <if test="houses != null" >
+        #{houses,jdbcType=VARCHAR},
+      </if>
+      <if test="keepEye != null" >
+        #{keepEye,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyPm != null" >
+        #{urgencyPm,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameRemarkWx != null" >
+        #{nickNameRemarkWx,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameRemarkLocal != null" >
+        #{nickNameRemarkLocal,jdbcType=VARCHAR},
+      </if>
+      <if test="contactDateLast != null" >
+        #{contactDateLast,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandCompare != null" >
+        #{brandCompare,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSpecial != null" >
+        #{clientSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="scanAddress != null" >
+        #{scanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="firstIntroduce != null" >
+        #{firstIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="updateId != null" >
+        #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.PersonMember" >
+    update person_member
+    <set >
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="spruceUp != null" >
+        SPRUCE_UP = #{spruceUp,jdbcType=VARCHAR},
+      </if>
+      <if test="houses != null" >
+        HOUSES = #{houses,jdbcType=VARCHAR},
+      </if>
+      <if test="keepEye != null" >
+        KEEP_EYE = #{keepEye,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyPm != null" >
+        URGENCY_PM = #{urgencyPm,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameRemarkWx != null" >
+        NICK_NAME_REMARK_WX = #{nickNameRemarkWx,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameRemarkLocal != null" >
+        NICK_NAME_REMARK_LOCAL = #{nickNameRemarkLocal,jdbcType=VARCHAR},
+      </if>
+      <if test="contactDateLast != null" >
+        CONTACT_DATE_LAST = #{contactDateLast,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandCompare != null" >
+        BRAND_COMPARE = #{brandCompare,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSpecial != null" >
+        CLIENT_SPECIAL = #{clientSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="scanAddress != null" >
+        SCAN_ADDRESS = #{scanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="firstIntroduce != null" >
+        FIRST_INTRODUCE = #{firstIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByMGM" parameterType="com.lj.business.member.domain.PersonMember" >
+    update person_member
+    <set >
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="spruceUp != null" >
+        SPRUCE_UP = #{spruceUp,jdbcType=VARCHAR},
+      </if>
+      <if test="houses != null" >
+        HOUSES = #{houses,jdbcType=VARCHAR},
+      </if>
+      <if test="keepEye != null" >
+        KEEP_EYE = #{keepEye,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyPm != null" >
+        URGENCY_PM = #{urgencyPm,jdbcType=VARCHAR},
+      </if>
+      <if test="bomCode != null" >
+        BOM_CODE = #{bomCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bomName != null" >
+        BOM_NAME = #{bomName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickNameRemarkWx != null" >
+        NICK_NAME_REMARK_WX = #{nickNameRemarkWx,jdbcType=VARCHAR},
+      </if>
+      <if test="brandCompare != null" >
+        BRAND_COMPARE = #{brandCompare,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSpecial != null" >
+        CLIENT_SPECIAL = #{clientSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="firstIntroduce != null" >
+        FIRST_INTRODUCE = #{firstIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UPDATE_ID = #{updateId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="contactDateLast != null" >
+        CONTACT_DATE_LAST = #{contactDateLast,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MEMBER_NO = #{memberNo,jdbcType=VARCHAR} AND MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectSexStatisticsByShopNo" resultType="map">
+        <!-- select count(*) as 'sexCount', pm.MERCHANT_NO as 'merchantNo',pm.SHOP_NO as 'shopNo',
+        pmb.SEX as 'sex',s.AREA_CODE as 'areaCode',s.SHOP_NAME as 'shopName'
+        from person_member pm left join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+        LEFT JOIN shop s on s.SHOP_NO = pm.SHOP_NO
+        group by pm.SHOP_NO, pmb.SEX -->
+        
+        SELECT count(DISTINCT pm.MEMBER_NO) AS 'sexCount',
+       pm.MERCHANT_NO AS 'merchantNo',
+       pm.SHOP_NO AS 'shopNo',
+       pmb.SEX AS 'sex',
+       pmb.AREA_CODE AS 'areaCode',
+       pmb.AREA_NAME AS 'areaName',
+       pm.SHOP_NAME AS 'shopName'
+  FROM person_member pm
+       INNER JOIN person_member_base pmb ON pm.MEMBER_NO = pmb.MEMBER_NO
+GROUP BY pm.SHOP_NO, pmb.SEX
+    </select>
+
+    <select id="selectAgeStatisticsByShopNo" resultType="map">
+        select count(DISTINCT pm.MEMBER_NO) as 'ageCount',pm.SHOP_NO as 'shopNo'
+        from person_member pm inner join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+        WHERE pmb.BIRTHDAY BETWEEN #{beginDate} AND #{endDate}
+        group by pm.SHOP_NO
+    </select>
+
+    <select id="selectLineStatisticsByShopNo" resultType="map">
+        SELECT count(*) as 'numLine', ml.CODE as 'codeLine',ml.NAME as 'lineName',s.SHOP_NAME as 'shopName',
+        pm.MERCHANT_NO as 'merchantNo',pm.SHOP_NO as 'shopNo',s.AREA_CODE as 'areaCode'
+        from person_member pm left join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+         left join mem_line ml on pmb.JOB = ml.CODE
+        LEFT JOIN shop s on s.SHOP_NO = pm.SHOP_NO
+         GROUP BY pm.SHOP_NO, ml.code
+    </select>
+
+    <select id="selectInterestStatisticsByShopNo" resultType="map">
+        SELECT count(*) as 'numInterest', ip.CODE as 'codeInterest',ip.NAME as 'interestName',s.SHOP_NAME as 'shopName',
+        pm.MERCHANT_NO as 'merchantNo',pm.SHOP_NO as 'shopNo',s.AREA_CODE as 'areaCode'
+        from person_member pm left join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO
+         left join interest_pm ip on pmb.INTEREST = ip.CODE
+        LEFT JOIN shop s on s.SHOP_NO = pm.SHOP_NO
+         GROUP BY pm.SHOP_NO,ip.code
+    </select>
+    
+    <select id="findList" resultMap="findListResultMap" parameterType="com.lj.business.member.dto.DoRepeatMemberDto">
+    	select 
+    	<include refid="Base_Column_List"/>
+    	from person_member
+    	where MEMBER_NO = #{memberNo,jdbcType=VARCHAR} 
+    		  AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="todayManageShopNew" resultMap="TodayManageShopNewResultMap" parameterType="com.lj.business.member.dto.FindTodayManageShop">
+    
+	    SELECT gm.MEMBER_NO as MEMBER_NO_GM,
+	           gm.MEMBER_NAME as MEMBER_NAME_GM,
+	           gm.HEAD_ADDRESS,
+	           IFNULL(a.total,0.0)  RATIO_WORK,
+	           gm.MERCHANT_NO,
+	           gm.SHOP_NO,
+	           gm.SHOP_NAME
+		FROM guid_member gm LEFT JOIN 
+		(
+		SELECT gmid.MEMBER_NO,SUM(INTEGRAL_SCORE) total
+		FROM guid_member_integral_day gmid 
+		WHERE gmid.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+			  AND gmid.DAY_ST= #{daySt,jdbcType=DATE}
+			  AND gmid.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		GROUP BY gmid.MEMBER_NO ,gmid.DAY_ST
+		) a
+		ON gm.MEMBER_NO = a.MEMBER_NO
+		where gm.SHOP_NO = #{shopNo,jdbcType=VARCHAR} 
+		      AND gm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    	order by total DESC
+    </select>
+    
+    <select id="findCountPmAddByGmDay" resultType="long">
+    	select COUNT(1)
+    	from person_member
+    	where member_no_gm = #{memberNo}
+    	and date_format(CREATE_DATE,'%Y-%m-%d') = date_format(#{date},'%Y-%m-%d')
+    </select>
+    
+    <select id="findNewPmCount" resultType="int" parameterType="com.lj.business.member.dto.FindNewPmCountDto">
+    	select count(*)
+    	from person_member
+    	where MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR} 
+    		  AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    	<![CDATA[	  
+    		  AND CREATE_DATE >= #{beginDate,jdbcType=TIMESTAMP}
+    		  AND CREATE_DATE <= #{endDate,jdbcType=TIMESTAMP}
+    	]]> 
+    </select>
+    
+    <select id="findCountPmByType" resultType="integer">
+    	SELECT count(1)
+		FROM person_member pm
+		LEFT JOIN pm_type_pm ptp ON pm.`CODE` = ptp.CODE_PM
+		LEFT JOIN pm_type pt ON ptp.PM_TYPE_CODE = pt.`CODE`
+		WHERE pm.MEMBER_NO_GM = #{memberNo,jdbcType=VARCHAR}
+			AND pt.PM_TYPE_TYPE = #{pmTypeType,jdbcType=VARCHAR} 
+    </select>
+    
+    <!-- 根据导购编号和商户号查询客户信息	create by 杨杰 -->
+    <select id="findMemberRecord" resultType="com.lj.business.member.dto.FindMemberInfoReturn" parameterType="com.lj.business.member.dto.FindMemberRecord">
+    	SELECT 
+		pmb.NO_WX AS noWx,
+		pmb.HEAD_ADDRESS AS headAddress,
+		pmb.NICK_NAME_WX AS nickNameWx,
+		pm.NICK_NAME_REMARK_WX AS nickNameRemarkWx,
+		pm.NICK_NAME_REMARK_LOCAL AS nickNameRemarkLocal
+		FROM person_member pm join person_member_base pmb on pm.MEMBER_NO = pmb.MEMBER_NO 
+		where 
+		pm.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR} 
+		AND pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		AND pmb.NO_WX IS NOT NULL
+		AND pm.NICK_NAME_REMARK_LOCAL IS NOT NULL
+    </select>
+    
+    <select id="findGroupCountByDay" resultType="com.lj.business.member.dto.CountPersonMemberReturn">
+    	SELECT date_format(pmb.CREATE_DATE,'%Y-%m-%d') createDate,COUNT(DISTINCT pmb.MEMBER_NO) numAdd
+		FROM person_member pm LEFT JOIN person_member_base pmb ON pm.member_no = pmb.member_no
+		WHERE pm.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		<![CDATA[
+		AND date_format(pmb.CREATE_DATE,'%Y-%m-%d') >= #{startTime} AND date_format(pmb.CREATE_DATE,'%Y-%m-%d') <= #{endTime}
+		]]> 
+		GROUP BY date_format(pmb.CREATE_DATE,'%Y-%m-%d')
+    </select>
+    
+</mapper>

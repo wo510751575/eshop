@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	
+	<!-- 公用素材中心表 -->
+	<bean name="/materialCommenService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="materialCommenServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IMaterialCommenService" />
+	</bean>
+		<!-- 素材类型表 -->
+	<bean name="/materialTypeService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="materialTypeServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IMaterialTypeService" />
+	</bean>
+	
+		<!-- 素材中心表 -->
+	<bean name="/materialService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="materialServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IMaterialService" />
+	</bean>
+		<!-- 产品表 -->
+	<bean name="/bomService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="bomServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IBomService" />
+	</bean>
+	
+		<!-- 话术信息 -->
+	<bean name="/textInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="textInfoServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.ITextInfoService" />
+	</bean>
+			
+	<!-- 问候信息 -->
+	<bean name="/greetClientService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="greetClientServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IGreetClientService" />
+	</bean>
+	<!-- 活动表信息 -->
+	<bean name="/activityService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="activityServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IActivityService" />
+	</bean>
+	
+	<!-- 活动调度任务信息 -->
+	<!-- <bean name="/activityJobService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="activityJobServiceImpl" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IActivityJobService" />
+	</bean> -->
+	<!-- 活动调度任务信息 -->
+	<bean name="/activityJobService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job" ref="activityJobServiceImpl"/>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+</beans> 

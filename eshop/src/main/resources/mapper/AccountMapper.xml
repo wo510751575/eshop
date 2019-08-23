@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IAccountDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Account">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="acc_no" jdbcType="VARCHAR" property="accNo" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="cash_amt" jdbcType="DECIMAL" property="cashAmt" />
+    <result column="rank_cash_amt" jdbcType="DECIMAL" property="rankCashAmt" />
+    <result column="total_withdraw_amt" jdbcType="DECIMAL" property="totalWithdrawAmt" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="free_amt" jdbcType="DECIMAL" property="freeAmt" />
+    <result column="pay_pwd" jdbcType="VARCHAR" property="payPwd" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="wrong_cnt" jdbcType="INTEGER" property="wrongCnt" />
+    <result column="wrong_time" jdbcType="TIMESTAMP" property="wrongTime" />
+    <result column="payed_amount" jdbcType="DECIMAL" property="payedAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, acc_no, mbr_code, cash_amt, rank_cash_amt, total_withdraw_amt, type, status, free_amt, pay_pwd, 
+    update_time, creater, create_time, wrong_cnt, wrong_time,payed_amount
+  </sql>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.AccountDto" extends="BaseResultMap">
+  </resultMap>
+  
+  	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and mbr_code =#{param.mbrCode}]]>
+				</if>
+				
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findAccounts" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindAccountPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_account
+	<include refid="findPage_condition" />
+	
+	</select>
+	<!-- 分页查询 -->
+	<select id="findAccountPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindAccountPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_account
+		<include refid="findPage_condition" />
+		
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findAccountPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindAccountPage">
+		select count(*)
+		FROM t_account
+		<include refid="findPage_condition" />
+	</select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_account
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Account">
+    insert into t_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="accNo != null">
+        acc_no,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="cashAmt != null">
+        cash_amt,
+      </if>
+      <if test="rankCashAmt != null">
+        rank_cash_amt,
+      </if>
+      <if test="totalWithdrawAmt != null">
+        total_withdraw_amt,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="freeAmt != null">
+        free_amt,
+      </if>
+      <if test="payPwd != null">
+        pay_pwd,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="wrongCnt != null">
+        wrong_cnt,
+      </if>
+      <if test="wrongTime != null">
+        wrong_time,
+      </if>
+      <if test="payedAmount != null">
+        payed_amount,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="accNo != null">
+        #{accNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cashAmt != null">
+        #{cashAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCashAmt != null">
+        #{rankCashAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="totalWithdrawAmt != null">
+        #{totalWithdrawAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="freeAmt != null">
+        #{freeAmt,jdbcType=INTEGER},
+      </if>
+      <if test="payPwd != null">
+        #{payPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wrongCnt != null">
+        #{wrongCnt,jdbcType=INTEGER},
+      </if>
+      <if test="wrongTime != null">
+        #{wrongTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="payedAmount != null">
+        #{payedAmount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Account">
+    update t_account
+    <set>
+      <if test="accNo != null">
+        acc_no = #{accNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cashAmt != null">
+        cash_amt = #{cashAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCashAmt != null">
+        rank_cash_amt = #{rankCashAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="totalWithdrawAmt != null">
+        total_withdraw_amt = #{totalWithdrawAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="freeAmt != null">
+        free_amt = #{freeAmt,jdbcType=INTEGER},
+      </if>
+      <if test="payPwd != null">
+        pay_pwd = #{payPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wrongCnt != null">
+        wrong_cnt = #{wrongCnt,jdbcType=INTEGER},
+      </if>
+      <if test="wrongTime != null">
+        wrong_time = #{wrongTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payedAmount != null">
+        payed_amount = #{payedAmount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

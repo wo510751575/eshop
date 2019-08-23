@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.ITaskSetShopDetailDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cf.domain.TaskSetShopDetail" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CODE_TSS" property="codeTss" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_SP" property="memberNoSp" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_SP" property="memberNameSp" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="NUM_MONTH" property="numMonth" jdbcType="BIGINT" />
+    <result column="NUM_DAY" property="numDay" jdbcType="BIGINT" />
+    <result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="FindTaskSetShopDetailByMGMDayResultMap" type="com.lj.business.cf.dto.taskSetShopDetail.FindTaskSetShopDetailReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CODE_TSS" property="codeTss" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_SP" property="memberNoSp" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_SP" property="memberNameSp" jdbcType="VARCHAR" />
+    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+    <result column="NUM_MONTH" property="numMonth" jdbcType="BIGINT" />
+    <result column="NUM_DAY" property="numDay" jdbcType="BIGINT" />
+    <result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="TASK_UNIT" property="taskUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, CODE_TSS, MERCHANT_NO, MEMBER_NO_SP, MEMBER_NAME_SP, SHOP_NO, SHOP_NAME, MEMBER_NO_GM, 
+    MEMBER_NAME_GM, NUM_MONTH, NUM_DAY, START_DATE, END_DATE, CREATE_ID, CREATE_DATE, 
+    REMARK4, REMARK3, REMARK2, REMARK,TASK_UNIT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from task_set_shop_detail
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from task_set_shop_detail
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cf.domain.TaskSetShopDetail" >
+    insert into task_set_shop_detail (CODE, CODE_TSS, MERCHANT_NO, 
+      MEMBER_NO_SP, MEMBER_NAME_SP, SHOP_NO, 
+      SHOP_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, 
+      NUM_MONTH, NUM_DAY, START_DATE, 
+      END_DATE, CREATE_ID, CREATE_DATE, 
+      REMARK4, REMARK3, REMARK2, 
+      REMARK,TASK_UNIT)
+    values (#{code,jdbcType=VARCHAR}, #{codeTss,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, 
+      #{memberNoSp,jdbcType=VARCHAR}, #{memberNameSp,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, #{memberNameGm,jdbcType=VARCHAR}, 
+      #{numMonth,jdbcType=BIGINT}, #{numDay,jdbcType=BIGINT}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}, NOW(), 
+      #{remark4,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR},#{taskUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cf.domain.TaskSetShopDetail" >
+    insert into task_set_shop_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="codeTss != null" >
+        CODE_TSS,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNoSp != null" >
+        MEMBER_NO_SP,
+      </if>
+      <if test="memberNameSp != null" >
+        MEMBER_NAME_SP,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="numMonth != null" >
+        NUM_MONTH,
+      </if>
+      <if test="numDay != null" >
+        NUM_DAY,
+      </if>
+      <if test="startDate != null" >
+        START_DATE,
+      </if>
+      <if test="endDate != null" >
+        END_DATE,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+        CREATE_DATE,
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="taskUnit != null" >
+        TASK_UNIT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="codeTss != null" >
+        #{codeTss,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoSp != null" >
+        #{memberNoSp,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameSp != null" >
+        #{memberNameSp,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="numMonth != null" >
+        #{numMonth,jdbcType=BIGINT},
+      </if>
+      <if test="numDay != null" >
+        #{numDay,jdbcType=BIGINT},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="taskUnit != null" >
+        #{taskUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.TaskSetShopDetail" >
+    update task_set_shop_detail
+    <set >
+      <if test="codeTss != null" >
+        CODE_TSS = #{codeTss,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoSp != null" >
+        MEMBER_NO_SP = #{memberNoSp,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameSp != null" >
+        MEMBER_NAME_SP = #{memberNameSp,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="numMonth != null" >
+        NUM_MONTH = #{numMonth,jdbcType=BIGINT},
+      </if>
+      <if test="numDay != null" >
+        NUM_DAY = #{numDay,jdbcType=BIGINT},
+      </if>
+      <if test="startDate != null" >
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUnit != null" >
+        TASK_UNIT = #{taskUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cf.domain.TaskSetShopDetail" >
+    update task_set_shop_detail
+    set CODE_TSS = #{codeTss,jdbcType=VARCHAR},
+      MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MEMBER_NO_SP = #{memberNoSp,jdbcType=VARCHAR},
+      MEMBER_NAME_SP = #{memberNameSp,jdbcType=VARCHAR},
+      SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      NUM_MONTH = #{numMonth,jdbcType=BIGINT},
+      NUM_DAY = #{numDay,jdbcType=BIGINT},
+      START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      CREATE_ID = #{createId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REMARK4 = #{remark4,jdbcType=VARCHAR},
+      REMARK3 = #{remark3,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      TASK_UNIT = #{taskUnit,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findTaskSetShopDetailList" parameterType="com.lj.business.cf.dto.taskSetShop.ToShopTaskSet" resultMap="BaseResultMap">
+ 		select 
+ 		<include refid="Base_Column_List" />
+	   	from task_set_shop_detail
+	   	where CODE_TSS = #{code,jdbcType=VARCHAR}
+   	      AND MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+   	      AND SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+   	      AND START_DATE = #{startDate}
+   	      AND END_DATE = #{endDate}
+  </select>
+  
+  <select id="findTaskSetShopDetailListByDay" parameterType="java.util.Date" resultMap="BaseResultMap">
+ 		select 
+ 		<include refid="Base_Column_List" />
+	   	from task_set_shop_detail
+	   	where <![CDATA[  START_DATE <= #{now}  AND END_DATE >= #{now} ]]>
+  </select>
+  
+  <select id="findTaskSetShopDetailByMGMDay" resultMap="FindTaskSetShopDetailByMGMDayResultMap" parameterType="com.lj.business.cf.dto.taskSetShopDetail.FindTaskSetShopDetail">
+	   	SELECT tssd.*
+		FROM task_set_shop tss LEFT JOIN task_set_shop_detail tssd ON tss.`CODE` = tssd.CODE_TSS
+		WHERE tss.TASK_TYPE = 'XIAO_SHOU' 
+              AND tss.DIMENSION = 'MERCHANT' 
+              AND tss.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+              AND tssd.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		      AND
+		      <![CDATA[  ( tssd.START_DATE <= #{now}  AND tssd.END_DATE >= #{now} ) ]]>
+		 limit 1
+  </select>
+  
+  
+ <select id="findTaskSetShopDetailNewByMGMDay" resultMap="FindTaskSetShopDetailByMGMDayResultMap" parameterType="com.lj.business.cf.dto.taskSetShopDetail.FindTaskSetShopDetail">
+	   	SELECT tssd.*
+		FROM task_set_shop tss LEFT JOIN task_set_shop_detail tssd ON tss.`CODE` = tssd.CODE_TSS
+		WHERE tss.TASK_TYPE = 'XIN_ZENG' 
+              AND tss.DIMENSION = 'MERCHANT' 
+              AND tss.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+              AND tssd.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+		      AND
+		      <![CDATA[  ( tssd.START_DATE <= #{now}  AND tssd.END_DATE >= #{now} ) ]]>
+		 limit 1
+  </select>
+  
+  
+   <select id="findTaskSetShopDetailByTypeMGMDay" resultMap="FindTaskSetShopDetailByMGMDayResultMap" parameterType="com.lj.business.cf.dto.FindTaskSetShopDetailByTypeMGMDay">
+	   	SELECT tssd.*
+		FROM task_set_shop tss LEFT JOIN task_set_shop_detail tssd ON tss.`CODE` = tssd.CODE_TSS
+		WHERE tss.TASK_TYPE = #{taskType,jdbcType=VARCHAR} 
+              AND tss.DIMENSION = 'MERCHANT' 
+              AND tss.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+              AND tssd.SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+		      AND
+		      <![CDATA[  ( tssd.START_DATE <= #{now}  AND tssd.END_DATE >= #{now} ) ]]>
+		 limit 1
+  </select>
+  
+  <select id="findCountDetail" resultType="integer">
+  	select count(DISTINCT CODE_TSS)
+  	from task_set_shop_detail
+  	where MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+  		  AND SHOP_NO = #{shopNo,jdbcType=VARCHAR}
+  		  <![CDATA[   
+  		  AND START_DATE <= #{now}
+  		  AND END_DATE >= #{now}
+  		    ]]>  
+  </select>
+  
+</mapper>

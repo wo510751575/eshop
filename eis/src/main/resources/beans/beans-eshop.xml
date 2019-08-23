@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd          
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+      
+   <!-- 账户服务 -->
+	<bean id="accountService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="accountService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IAccountService" />
+	</bean>
+	
+	<!-- 商品服务 -->
+	<bean id="productService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductService" />
+	</bean>
+
+    <!-- 流水服务-->
+    <bean id="accWaterService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="accWaterService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IAccWaterService" />
+	</bean>
+    
+    <!-- 收货地址服务 -->
+    <bean id="addrsService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="addrsService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IAddrsService" />
+	</bean>
+    <!--   会员服务 -->
+    <bean id="memberService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="memberService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMemberService" />
+	</bean>
+    
+	<!--     产品分类服务 -->
+	  <bean id="catalogService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="catalogService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ICatalogService" />
+	</bean>
+    
+    <!--    账单服务 -->
+     <bean id="billService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="billService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IBillService" />
+	</bean>
+    
+     <!--    验证码服务 -->
+     <bean id="codeCheckService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="codeCheckService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ICodeCheckService" />
+	</bean>
+    
+    <!--    定制订单服务 -->
+     <bean id="custOrderService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="custOrderService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ICustOrderService" />
+	</bean>
+    
+    <!--     商品评论点赞服务 -->
+    <bean id="evlLikeService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="evlLikeService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IEvlLikeService" />
+	</bean>
+    
+    <!--     商品评价服务 -->
+    <bean id="evlProductService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="evlProductService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IEvlProductService" />
+	</bean>
+    
+    <!--     商品标记服务 -->
+     <bean id="flagService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="flagService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IFlagService" />
+	</bean>
+    
+    <!--     广告服务 -->
+     <bean id="loadingService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="loadingService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ILoadingService" />
+	</bean>
+    
+    <!--     以租代购服务 -->
+    <bean id="markSolutionService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="markSolutionService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMarkSolutionService" />
+	</bean>
+    
+    <!--     银行卡服务 -->
+     <bean id="mbrbankService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="mbrbankService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMbrbankService" />
+	</bean>
+    
+	<!--     商户服务 -->
+	<bean id="merchantService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="merchantService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMerchantService" />
+	</bean>
+	
+	<!--     商户配置服务 -->
+	<bean id="merchantSettingService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="merchantSettingService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMerchantSettingService" />
+	</bean>
+    
+    <!--     消息服务 -->
+    <bean id="messageService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="messageService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMessageService" />
+	</bean>
+      
+	<!--     我的关注店铺服务 -->
+	 <bean id="myAttentionService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="myAttentionService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMyAttentionService" />
+	</bean>
+    
+     <!--     我的收藏服务 -->
+     <bean id="myCollService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="myCollService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMyCollService" />
+	</bean>
+    
+    <!--     订单详情服务 -->
+     <bean id="orderDetailService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="orderDetailService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IOrderDetailService" />
+	</bean>
+    
+      <!--     退货明细服务 -->
+      <bean id="orderRetireDetailService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="orderRetireDetailService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IOrderRetireDetailService" />
+	</bean>
+	
+	 <!--     退货服务 -->
+	  <bean id="orderRetireService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="orderRetireService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IOrderRetireService" />
+	</bean>
+    
+    <!--     订单服务 -->
+    <bean id="orderService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="orderService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IOrderService" />
+	</bean>
+    
+    <!--     商品标签关联服务 -->
+     <bean id="productFlagService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productFlagService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductFlagService" />
+	</bean>
+	
+	<!--     商品图片服务 -->
+	 <bean id="productImgService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productImgService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductImgService" />
+	</bean>
+	
+	<!--     商品规格分类服务 -->
+	 <bean id="productRuleService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productRuleService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductRuleService" />
+	</bean>
+	
+	<!--     商品规格价格库存关联服务 -->
+	<bean id="productSkuService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productSkuService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductSkuService" />
+	</bean>
+	
+	<!--     商品规格值服务 -->
+	<bean id="productSpeService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productSpeService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductSpeService" />
+	</bean>
+	
+	<!--     退设备服务 -->
+	<bean id="retireMimeService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="retireMimeService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IRetireMimeService" />
+	</bean>
+	
+	<!--     门店背景服务 -->
+	<bean id="shopBgImgService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopBgImgService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopBgImgService" />
+	</bean>
+    
+    <!--     购物车服务 -->
+    <bean id="shopCarService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopCarService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopCarService" />
+	</bean>
+	
+	<!--      店铺商品服务 -->
+	 <bean id="shopProductService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopProductService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopProductService" />
+	</bean>
+    
+   <!--      店铺押金退出申请服务 -->
+   <bean id="shopRetireService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopRetireService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopRetireService" />
+	</bean>
+	
+	<!--          门店服务 -->
+	 <bean id="shopService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopService" />
+	</bean>
+    
+	<!--          门店风格服务 -->
+	<bean id="shopStyleService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="shopStyleService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IShopStyleService" />
+	</bean>
+    
+	<!--         意见与建议服务 -->
+	<bean id="suggestionService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="suggestionService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISuggestionService" />
+	</bean>
+	
+	<!--         统计维度服务 -->
+	<bean id="sumDimensionService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="sumDimensionService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISumDimensionService" />
+	</bean>
+	
+	<!--         统计服务 -->
+	<bean id="summaryService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="summaryService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISummaryService" />
+	</bean>
+	
+	<!--         供应商服务 -->
+	<bean id="supplyService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="supplyService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISupplyService" />
+	</bean>
+	
+	<!--         提现申请服务 -->
+	<bean id="withdrawService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="withdrawService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IWithdrawService" />
+	</bean>
+	
+	<!--         微信加油站服务 -->
+	<bean id="wshopInfoService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="wshopInfoService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IWshopInfoService" />
+	</bean>
+    
+	<!-- 商品规格 -->
+	<bean id="sysSpeService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="sysSpeService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISysSpeService" />
+	</bean>
+	
+	<!-- 会员特权 -->
+	<bean id="memberRankService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="memberRankService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMemberRankService" />
+	</bean>
+
+	<!-- 特权申请服务 -->
+	<bean id="memberRankApplyService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="memberRankApplyService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMemberRankApplyService" />
+	</bean>
+	<!-- 支付服务 -->
+	<bean id="paymentService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="paymentService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IPaymentService" />
+	</bean>
+	<!-- 关联cm素材服务 -->
+	<bean id="materialCmService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="materialCmService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IMaterialCmService" />
+	</bean>
+    
+	
+	<!-- 短信服务 -->
+	<bean id="smsSenderService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="smsSenderService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.ISmsSenderService" />
+	</bean>
+	<!-- 银行卡服务 -->
+	<bean id="bankInfoService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="bankInfoService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IBankInfoService" />
+	</bean>
+	
+</beans> 
+

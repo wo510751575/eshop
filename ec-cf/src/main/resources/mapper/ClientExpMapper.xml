@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IClientExpDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ClientExp">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+	    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+	    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+	    <result column="EXP_TIME" property="expTime" jdbcType="TIMESTAMP" />
+	    <result column="EXP_FB" property="expFb" jdbcType="VARCHAR" />
+	    <result column="IMGS" property="imgs" jdbcType="VARCHAR" />
+	    <result column="RESOURCES_URL" property="resourcesUrl" jdbcType="VARCHAR" />
+	    <result column="EXP_RESULT" property="expResult" jdbcType="VARCHAR" />
+	    <result column="FAIL_REASON" property="failReason" jdbcType="VARCHAR" />
+	    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+	    <result column="CF_CODE" property="cfCode" jdbcType="VARCHAR" />
+	    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+	    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+	    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+	    <result column="REMARK1" property="remark1" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ClientExpDto" type="com.lj.business.cf.dto.clientExp.ClientExpDto">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME" property="memberName" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NO_GM" property="memberNoGm" jdbcType="VARCHAR" />
+	    <result column="MEMBER_NAME_GM" property="memberNameGm" jdbcType="VARCHAR" />
+	    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+	    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+	    <result column="EXP_TIME" property="expTime" jdbcType="TIMESTAMP" />
+	    <result column="EXP_FB" property="expFb" jdbcType="VARCHAR" />
+	    <result column="IMGS" property="imgs" jdbcType="VARCHAR" />
+	    <result column="RESOURCES_URL" property="resourcesUrl" jdbcType="VARCHAR" />
+	    <result column="EXP_RESULT" property="expResult" jdbcType="VARCHAR" />
+	    <result column="FAIL_REASON" property="failReason" jdbcType="VARCHAR" />
+	    <result column="CF_NO" property="cfNo" jdbcType="VARCHAR" />
+	    <result column="CF_CODE" property="cfCode" jdbcType="VARCHAR" />
+	    <result column="REMARK4" property="remark4" jdbcType="VARCHAR" />
+	    <result column="REMARK3" property="remark3" jdbcType="VARCHAR" />
+	    <result column="REMARK2" property="remark2" jdbcType="VARCHAR" />
+	    <result column="REMARK1" property="remark1" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+	  CODE, MERCHANT_NO, MEMBER_NO, MEMBER_NAME, MEMBER_NO_GM, MEMBER_NAME_GM, SHOP_NO, 
+    SHOP_NAME, EXP_TIME, EXP_FB, IMGS, RESOURCES_URL, EXP_RESULT, FAIL_REASON, CF_NO, 
+    CF_CODE, REMARK4, REMARK3, REMARK2, REMARK1
+	</sql>
+	<sql id="map_Column_List" >
+	  CODE code, MERCHANT_NO merchantNo, MEMBER_NO memberNo, MEMBER_NAME memberName, MEMBER_NO_GM memberNoGm, MEMBER_NAME_GM memberNameGm, SHOP_NO shopNo, 
+    SHOP_NAME shopName, EXP_TIME expTime, EXP_FB expFb, IMGS imgs, RESOURCES_URL resourcesUrl, EXP_RESULT expResult, FAIL_REASON failReason, CF_NO cfNo, 
+    CF_CODE cfCode, REMARK4 remark4, REMARK3 remark3, REMARK2 remark2, REMARK1 remark1
+	</sql>
+	
+   <sql id="find_condition">
+		<where>
+			<if test="merchantNo != null and merchantNo !=''">
+				and MERCHANT_NO = #{merchantNo}
+			</if>
+			<if test="memberNo != null and memberNo !=''">
+				and MEMBER_NO = #{memberNo}
+			</if>
+			<if test="memberNoGm != null and memberNoGm !=''">
+				and MEMBER_NO_GM = #{memberNoGm}
+			</if>
+			<if test="memberName != null and memberName !=''">
+				and MEMBER_NAME = #{memberName}
+			</if>
+			<if test="shopNo != null and shopNo !=''">
+				and SHOP_NO = #{shopNo}
+			</if>
+			<if test="shopName != null and shopName!=''">
+				and SHOP_NAME = #{shopName}
+			</if>
+			<if test="startTime !=null and startTime!=''">
+				<![CDATA[and EXP_TIME >=#{startTime}]]>
+			</if>
+			<if test="endTime !=null and endTime!=''">
+				<![CDATA[ and EXP_TIME <= #{endTime}]]>
+			</if>
+			<if test="cfCode != null and cfCode !=''">
+				and CF_CODE = #{cfCode}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 统计到店体验人数	段志鹏	2017-08-09-->
+	<select id="findExpResults" resultType="map" parameterType="map" >
+	    SELECT <include refid="map_Column_List" /> FROM client_exp
+	    <where>
+	    	<if test="merchantNo != null and merchantNo !=''">
+				and MERCHANT_NO = #{merchantNo}
+			</if>
+			<if test="memberNoGm != null and memberNoGm !=''">
+				and MEMBER_NO_GM = #{memberNoGm}
+			</if>
+		    <if test="expResult != null and expResult !=''">
+				and EXP_RESULT = #{expResult}
+			</if>
+			<if test="shopNo != null and shopNo !=''">
+				and SHOP_NO = #{shopNo}
+			</if>
+			<!-- 店长看到下属客户 排除自己本身-->
+			<if test="isShopMemberNoGm != null and isShopMemberNoGm !=''">
+				and MEMBER_NO_GM != #{isShopMemberNoGm}
+			</if>
+			<if test="startTime !=null">
+				<![CDATA[AND DATE_FORMAT(EXP_TIME, "%Y-%m-%d") >=#{startTime}]]>
+			</if>
+			<if test="endTime !=null">
+				<![CDATA[ AND DATE_FORMAT(EXP_TIME, "%Y-%m-%d") <= #{endTime}]]>
+			</if>
+		</where>
+		GROUP BY MEMBER_NO
+	  </select>
+	
+	<select id="findClientExps" resultMap="ClientExpDto" parameterType="com.lj.business.cf.dto.clientExp.FindClientExpPage">
+		SELECT <include refid="Base_Column_List" />
+		FROM client_exp
+		<include refid="find_condition" />
+		order by EXP_TIME DESC
+	</select>
+    
+	<!-- 分页查询 -->
+	<select id="findClientExpPage" resultMap="ClientExpDto"
+		parameterType="com.lj.business.cf.dto.clientExp.FindClientExpPage">
+		SELECT <include refid="Base_Column_List" />
+		FROM client_exp
+		<include refid="find_condition" />
+		order by EXP_TIME desc
+		limit ${start},${limit}
+	</select>
+
+	<select id="findClientExpPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.clientExp.FindClientExpPage">
+		select count(*)
+		FROM client_exp
+		<include refid="find_condition" />
+	</select>
+
+	<!-- 查询客户体验记录 -->
+	<select id="clientExpHistory" resultMap="BaseResultMap" parameterType="map">
+		select * FROM client_exp
+		<where>
+			1= 1
+			<if test="memberNo != null and memberNo != ''">
+				and MEMBER_NO = #{memberNo}
+			</if>
+			<if test="memberGMCode != null and memberGMCode != ''">
+				and MEMBER_NO_GM = #{memberGMCode}
+			</if>
+			<if test="startTime !=null ">
+				and EXP_TIME<![CDATA[ >= ]]>#{startTime}
+			</if>
+			<if test="endTime !=null ">
+				and EXP_TIME<![CDATA[ <= ]]>#{endTime}
+			</if>
+		</where>
+		order by UPDATE_DATE desc
+	</select>
+
+	<select id="selectByCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from client_exp
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="addClientExp" parameterType="com.lj.business.cf.domain.ClientExp" >
+    insert into client_exp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM,
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME,
+      </if>
+      <if test="expTime != null" >
+        EXP_TIME,
+      </if>
+      <if test="expFb != null" >
+        EXP_FB,
+      </if>
+      <if test="imgs != null" >
+        IMGS,
+      </if>
+      <if test="resourcesUrl != null" >
+        RESOURCES_URL,
+      </if>
+      <if test="expResult != null" >
+        EXP_RESULT,
+      </if>
+      <if test="failReason != null" >
+        FAIL_REASON,
+      </if>
+      <if test="cfNo != null" >
+        CF_NO,
+      </if>
+      <if test="cfCode != null" >
+        CF_CODE,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark1 != null" >
+        REMARK1,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="expTime != null" >
+        #{expTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expFb != null" >
+        #{expFb,jdbcType=VARCHAR},
+      </if>
+      <if test="imgs != null" >
+        #{imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcesUrl != null" >
+        #{resourcesUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="expResult != null" >
+        #{expResult,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cfCode != null" >
+        #{cfCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cf.domain.ClientExp" >
+     update client_exp
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNoGm != null" >
+        MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameGm != null" >
+        MEMBER_NAME_GM = #{memberNameGm,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="expTime != null" >
+        EXP_TIME = #{expTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expFb != null" >
+        EXP_FB = #{expFb,jdbcType=VARCHAR},
+      </if>
+      <if test="imgs != null" >
+        IMGS = #{imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcesUrl != null" >
+        RESOURCES_URL = #{resourcesUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="expResult != null" >
+        EXP_RESULT = #{expResult,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        FAIL_REASON = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="cfNo != null" >
+        CF_NO = #{cfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cfCode != null" >
+        CF_CODE = #{cfCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        REMARK1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="clientExpCount" resultType="int" parameterType="com.lj.business.cf.dto.clientExp.ClientExpDto">
+		select count(*)
+		FROM client_exp
+		where 
+		      CF_NO = #{cfNo,jdbcType=VARCHAR}
+		      AND EXP_RESULT = 'Y'
+	</select>
+  
+  <select id="findCountVisitByGm" resultType="integer">
+  	SELECT COUNT(1) FROM client_exp
+	WHERE MEMBER_NO_GM = #{memberNoGm}
+	AND EXP_RESULT = #{expResult}
+	<![CDATA[ AND EXP_TIME >= #{beginTime} AND EXP_TIME <= #{endTime} ]]>
+  </select>
+  
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.member.dao.IMemberLoginInfoDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.member.domain.MemberLoginInfo" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_TYPE" property="memberType" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="IP_ADDRESS" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="MAC" property="mac" jdbcType="VARCHAR" />
+    <result column="NET_TYPE" property="netType" jdbcType="VARCHAR" />
+    <result column="EQUIPMENT" property="equipment" jdbcType="VARCHAR" />
+    <result column="AREA_INFO" property="areaInfo" jdbcType="VARCHAR" />
+    <result column="LOGIN_AREA" property="loginArea" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+   <resultMap id="findMemberLoginInfoPageResultMap" type="com.lj.business.member.dto.FindMemberLoginInfoPageReturn" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MEMBER_TYPE" property="memberType" jdbcType="VARCHAR" />
+    <result column="MEMBER_NO" property="memberNo" jdbcType="VARCHAR" />
+    <result column="IP_ADDRESS" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="MAC" property="mac" jdbcType="VARCHAR" />
+    <result column="NET_TYPE" property="netType" jdbcType="VARCHAR" />
+    <result column="EQUIPMENT" property="equipment" jdbcType="VARCHAR" />
+    <result column="AREA_INFO" property="areaInfo" jdbcType="VARCHAR" />
+    <result column="LOGIN_AREA" property="loginArea" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    CODE, MEMBER_TYPE, MEMBER_NO, IP_ADDRESS, MAC, NET_TYPE, EQUIPMENT, AREA_INFO, LOGIN_AREA, 
+    CREATE_DATE
+  </sql>
+  
+  <sql id="findMemberLoginInfoPage_condition" >
+  	 <where>
+      <if test="memberNo != null" >
+        and  MEMBERNO = #{memberNo}
+      </if>
+      </where>
+  </sql>
+  
+     <!-- 分页查询 -->
+   <select id="findMemberLoginInfoPage" resultMap="findMemberLoginInfoPageResultMap" parameterType="com.lj.business.member.dto.FindMemberLoginInfoPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM member_login_info 
+ 	 <include refid="findMemberLoginInfoPage_condition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findMemberLoginInfoPageCount" resultType="int" parameterType="com.lj.business.member.dto.FindMemberLoginInfoPage" >
+    select  count(*)
+     FROM member_login_info 
+     <include refid="findMemberLoginInfoPage_condition" />
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from member_login_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from member_login_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.member.domain.MemberLoginInfo" >
+    insert into member_login_info (CODE, MEMBER_TYPE, MEMBER_NO, 
+      IP_ADDRESS, MAC, NET_TYPE, 
+      EQUIPMENT, AREA_INFO, LOGIN_AREA, 
+      CREATE_DATE)
+    values (#{code,jdbcType=VARCHAR}, #{memberType,jdbcType=VARCHAR}, #{memberNo,jdbcType=VARCHAR}, 
+      #{ipAddress,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{netType,jdbcType=VARCHAR}, 
+      #{equipment,jdbcType=VARCHAR}, #{areaInfo,jdbcType=VARCHAR}, #{loginArea,jdbcType=VARCHAR}, 
+      NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.member.domain.MemberLoginInfo" >
+    insert into member_login_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberType != null" >
+        MEMBER_TYPE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="ipAddress != null" >
+        IP_ADDRESS,
+      </if>
+      <if test="mac != null" >
+        MAC,
+      </if>
+      <if test="netType != null" >
+        NET_TYPE,
+      </if>
+      <if test="equipment != null" >
+        EQUIPMENT,
+      </if>
+      <if test="areaInfo != null" >
+        AREA_INFO,
+      </if>
+      <if test="loginArea != null" >
+        LOGIN_AREA,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberType != null" >
+        #{memberType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null" >
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        #{netType,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="areaInfo != null" >
+        #{areaInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="loginArea != null" >
+        #{loginArea,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.member.domain.MemberLoginInfo" >
+    update member_login_info
+    <set >
+      <if test="memberType != null" >
+        MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null" >
+        IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        MAC = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        NET_TYPE = #{netType,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        EQUIPMENT = #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="areaInfo != null" >
+        AREA_INFO = #{areaInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="loginArea != null" >
+        LOGIN_AREA = #{loginArea,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.member.domain.MemberLoginInfo" >
+    update member_login_info
+    set MEMBER_TYPE = #{memberType,jdbcType=VARCHAR},
+      MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+      MAC = #{mac,jdbcType=VARCHAR},
+      NET_TYPE = #{netType,jdbcType=VARCHAR},
+      EQUIPMENT = #{equipment,jdbcType=VARCHAR},
+      AREA_INFO = #{areaInfo,jdbcType=VARCHAR},
+      LOGIN_AREA = #{loginArea,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

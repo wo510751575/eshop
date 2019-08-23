@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cm.dao.ITextInfoDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.cm.domain.TextInfo" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="TEXT_TYPE" property="textType" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="DIM_START" property="dimStart" jdbcType="VARCHAR" />
+    <result column="DIM_END" property="dimEnd" jdbcType="VARCHAR" />
+    <result column="DIM_KEY_WORD" property="dimKeyWord" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="findTextInfoPageMap" type="com.lj.business.cm.dto.textInfo.FindTextInfoPageReturn" >
+   <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="TEXT_TYPE" property="textType" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="DIM_START" property="dimStart" jdbcType="VARCHAR" />
+    <result column="DIM_END" property="dimEnd" jdbcType="VARCHAR" />
+    <result column="DIM_KEY_WORD" property="dimKeyWord" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
+   <sql id="Base_Column_List" >
+    CODE, MERCHANT_NO, MERCHANT_NAME, TEXT_TYPE, CONTENT, DIM_START, DIM_END, DIM_KEY_WORD, 
+    CREATE_DATE
+  </sql>
+  
+  <sql id="findByCondition" >
+  	 <where>
+      <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+      </where>
+  </sql>
+  
+   <sql id="findTextInfo" >
+  	 <where>
+      <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO = #{merchantNo}
+      </if>
+       <if test="textType != null and textType != ''" >
+        and  TEXT_TYPE = #{textType}
+      </if>
+    <if test="count != null ">
+      		<![CDATA[ AND DIM_START <= #{count,jdbcType=DATE}]]>
+        </if>
+      <if test="count != null">
+       	<![CDATA[AND DIM_END >= #{count,jdbcType=DATE} ]]>
+      </if>
+      </where>
+  </sql>
+     <!-- 内部统计接口查询 -->
+    <select id="findTextInfoReturnContent" resultMap="findTextInfoPageMap" parameterType="com.lj.business.cm.dto.textInfo.FindTextInfo" >
+    SELECT   CONTENT
+    FROM text_info 
+   <include refid="findTextInfo" />
+   limit 1
+  </select>
+  
+  <!-- 分页查询 -->
+   <select id="findTextInfoPage" resultMap="findTextInfoPageMap" parameterType="com.lj.business.cm.dto.textInfo.FindTextInfoPage" >
+  SELECT    CODE, MERCHANT_NO, MERCHANT_NAME, TEXT_TYPE, CONTENT, DIM_START, DIM_END, DIM_KEY_WORD, 
+    CREATE_DATE
+     FROM text_info 
+ 	 <include refid="findByCondition" />
+   order by CREATE_DATE ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <!-- 分页查询条数 -->
+  <select id="findTextInfoPageCount" resultType="int" parameterType="com.lj.business.cm.dto.textInfo.FindTextInfoPage" >
+    select  count(*)
+     FROM text_info
+     <include refid="findByCondition" />   
+  </select>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from text_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from text_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.business.cm.domain.TextInfo" >
+    insert into text_info (CODE, MERCHANT_NO, MERCHANT_NAME, 
+      TEXT_TYPE, CONTENT, DIM_START, 
+      DIM_END, DIM_KEY_WORD, CREATE_DATE
+      )
+    values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{textType,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{dimStart,jdbcType=VARCHAR}, 
+      #{dimEnd,jdbcType=VARCHAR}, #{dimKeyWord,jdbcType=VARCHAR}, NOW()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.business.cm.domain.TextInfo" >
+    insert into text_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="merchantNo != null" >
+        MERCHANT_NO,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="textType != null" >
+        TEXT_TYPE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="dimStart != null" >
+        DIM_START,
+      </if>
+      <if test="dimEnd != null" >
+        DIM_END,
+      </if>
+      <if test="dimKeyWord != null" >
+        DIM_KEY_WORD,
+      </if>
+        CREATE_DATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="textType != null" >
+        #{textType,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="dimStart != null" >
+        #{dimStart,jdbcType=VARCHAR},
+      </if>
+      <if test="dimEnd != null" >
+        #{dimEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="dimKeyWord != null" >
+        #{dimKeyWord,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.cm.domain.TextInfo" >
+    update text_info
+    <set >
+      <if test="merchantNo != null" >
+        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="textType != null" >
+        TEXT_TYPE = #{textType,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="dimStart != null" >
+        DIM_START = #{dimStart,jdbcType=VARCHAR},
+      </if>
+      <if test="dimEnd != null" >
+        DIM_END = #{dimEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="dimKeyWord != null" >
+        DIM_KEY_WORD = #{dimKeyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.business.cm.domain.TextInfo" >
+    update text_info
+    set MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      TEXT_TYPE = #{textType,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      DIM_START = #{dimStart,jdbcType=VARCHAR},
+      DIM_END = #{dimEnd,jdbcType=VARCHAR},
+      DIM_KEY_WORD = #{dimKeyWord,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

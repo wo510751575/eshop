@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.cf.dao.IComTaskListDao">
+	<resultMap id="BaseResultMap" type="com.lj.business.cf.domain.ComTaskList">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+	    <result column="DES_LIST" property="desList" jdbcType="VARCHAR" />
+	    <result column="COM_TASK_TYPE" property="comTaskType" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="CHAR" />
+	    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="findComTaskListPageResultMap" type="com.lj.business.cf.dto.comTaskList.FindComTaskListPageDto">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+	    <result column="DES_LIST" property="desList" jdbcType="VARCHAR" />
+	    <result column="COM_TASK_TYPE" property="comTaskType" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="CHAR" />
+	    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="findComTaskListResultMap" type="com.lj.business.cf.dto.comTaskList.FindComTaskListReturn">
+		<id column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+	    <result column="NAME_LIST" property="nameList" jdbcType="VARCHAR" />
+	    <result column="DES_LIST" property="desList" jdbcType="VARCHAR" />
+	    <result column="COM_TASK_TYPE" property="comTaskType" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		CODE, MERCHANT_NO, NAME_LIST, DES_LIST, COM_TASK_TYPE, STATUS, CREATE_DATE
+	</sql>
+
+	<sql id="findComTaskListPage_condition">
+		<where>
+			<if test="merchantNo != null and merchantNo != ''">
+				and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+			</if>
+			<if test="nameList != null and nameList != ''">
+				and NAME_LIST = #{nameList,jdbcType=VARCHAR}
+			</if>
+			<if test="desList != null and desList != ''">
+				and DES_LIST like
+				CONCAT('%',#{desList,jdbcType=VARCHAR},'%' )
+			</if>
+			<if test="status != null and status != ''">
+				and STATUS =#{status,jdbcType=VARCHAR}				
+			</if>
+			<if test="createDate != null">
+			<![CDATA[and CREATE_DATE = #{createDate}]]>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findComTaskList" resultMap="findComTaskListResultMap" parameterType="com.lj.business.cf.dto.comTaskList.FindComTaskList">
+		select
+		<include refid="Base_Column_List" />
+		from com_task_list
+		where MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+		and COM_TASK_TYPE = #{comTaskType,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<!-- 根据主键查询客户沟通任务事项表 -->
+	<select id="selectByCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from com_task_list
+		where CODE = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查询所有客户沟通任务事项表(不分页) -->
+	<select id="findComTaskLists" resultMap="findComTaskListPageResultMap"
+		parameterType="com.lj.business.cf.dto.comTaskList.FindComTaskListPageDto">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM com_task_list
+		<include refid="findComTaskListPage_condition" />
+	</select>
+
+	<!-- 查询所有客户沟通任务事项表(分页) -->
+	<select id="findComTaskListPage" resultMap="findComTaskListPageResultMap"
+		parameterType="com.lj.business.cf.dto.comTaskList.FindComTaskListPageDto">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM
+		com_task_list
+		<include refid="findComTaskListPage_condition" />
+		order by code ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+
+	<!-- 查询客户沟通任务事项表条数 -->
+	<select id="findComTaskListPageCount" resultType="int"
+		parameterType="com.lj.business.cf.dto.comTaskList.FindComTaskListPageDto">
+		select count(*)
+		FROM com_task_list
+		<include refid="findComTaskListPage_condition" />
+	</select>
+	<!-- 添加客户沟通任务事项表 -->
+	<insert id="addComTaskList" parameterType="com.lj.business.cf.dto.comTaskList.AddComTaskListDto">
+		insert into com_task_list
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="code != null" >
+	        CODE,
+	      </if>
+	      <if test="merchantNo != null" >
+	        MERCHANT_NO,
+	      </if>
+	      <if test="nameList != null" >
+	        NAME_LIST,
+	      </if>
+	      <if test="desList != null" >
+	        DES_LIST,
+	      </if>
+	      <if test="comTaskType != null" >
+	        COM_TASK_TYPE,
+	      </if>
+	      <if test="status != null" >
+	        STATUS,
+	      </if>
+	        CREATE_DATE,
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="code != null" >
+	        #{code,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchantNo != null" >
+	        #{merchantNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="nameList != null" >
+	        #{nameList,jdbcType=VARCHAR},
+	      </if>
+	      <if test="desList != null" >
+	        #{desList,jdbcType=VARCHAR},
+	      </if>
+	      <if test="comTaskType != null" >
+	        #{comTaskType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null" >
+	        #{status,jdbcType=CHAR},
+	      </if>
+	        NOW(),
+	    </trim>
+	</insert>
+	<!--编辑客户沟通任务事项表 -->
+	<update id="editComTaskList" parameterType="com.lj.business.cf.dto.comTaskList.EditComTaskListDto">
+		update com_task_list
+	    <set >
+	      <if test="merchantNo != null" >
+	        MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="nameList != null" >
+	        NAME_LIST = #{nameList,jdbcType=VARCHAR},
+	      </if>
+	      <if test="desList != null" >
+	        DES_LIST = #{desList,jdbcType=VARCHAR},
+	      </if>
+	      <if test="comTaskType != null" >
+	        COM_TASK_TYPE = #{comTaskType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null" >
+	        STATUS = #{status,jdbcType=CHAR},
+	      </if>
+	      <if test="createDate != null" >
+	        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+	      </if>
+	    </set>
+	    where CODE = #{code,jdbcType=VARCHAR}
+	</update>
+</mapper>
