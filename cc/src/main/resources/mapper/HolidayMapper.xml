@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.cc.dao.IHolidayDao" >
+  <resultMap id="BaseResultMap" type="com.lj.cc.domain.Holiday" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="DAY_DATE" property="dayDate" jdbcType="DATE" />
+    <result column="DAY_STR" property="dayStr" jdbcType="CHAR" />
+    <result column="DAY_TYPE" property="dayType" jdbcType="CHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DAY_DATE, DAY_STR, DAY_TYPE, CREATE_DATE
+  </sql>
+   <select id="selectByDayStr" resultType="string" parameterType="string" >
+    select DAY_TYPE
+    from holiday
+    where DAY_STR = #{dayStr,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectByDayDate" resultType="string" parameterType="date" >
+    select DAY_TYPE
+    from holiday
+    where  DAY_DATE = #{dayDate,jdbcType=DATE}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from holiday
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from holiday
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+   <insert id="replace" parameterType="com.lj.cc.domain.Holiday" >
+    REPLACE into holiday (ID, DAY_DATE, DAY_STR, 
+      DAY_TYPE, CREATE_DATE)
+    values (#{id,jdbcType=BIGINT}, #{dayDate,jdbcType=DATE}, #{dayStr,jdbcType=CHAR}, 
+      #{dayType,jdbcType=CHAR}, NOW())
+  </insert>
+  <insert id="insert" parameterType="com.lj.cc.domain.Holiday" >
+    insert into holiday (ID, DAY_DATE, DAY_STR, 
+      DAY_TYPE, CREATE_DATE)
+    values (#{id,jdbcType=BIGINT}, #{dayDate,jdbcType=DATE}, #{dayStr,jdbcType=CHAR}, 
+      #{dayType,jdbcType=CHAR}, NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.cc.domain.Holiday" >
+    insert into holiday
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dayDate != null" >
+        DAY_DATE,
+      </if>
+      <if test="dayStr != null" >
+        DAY_STR,
+      </if>
+      <if test="dayType != null" >
+        DAY_TYPE,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="dayDate != null" >
+        #{dayDate,jdbcType=DATE},
+      </if>
+      <if test="dayStr != null" >
+        #{dayStr,jdbcType=CHAR},
+      </if>
+      <if test="dayType != null" >
+        #{dayType,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        NOW(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.cc.domain.Holiday" >
+    update holiday
+    <set >
+      <if test="dayDate != null" >
+        DAY_DATE = #{dayDate,jdbcType=DATE},
+      </if>
+      <if test="dayStr != null" >
+        DAY_STR = #{dayStr,jdbcType=CHAR},
+      </if>
+      <if test="dayType != null" >
+        DAY_TYPE = #{dayType,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = NOW(),
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.cc.domain.Holiday" >
+    update holiday
+    set DAY_DATE = #{dayDate,jdbcType=DATE},
+      DAY_STR = #{dayStr,jdbcType=CHAR},
+      DAY_TYPE = #{dayType,jdbcType=CHAR},
+      CREATE_DATE = NOW()
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

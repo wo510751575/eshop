@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.cc.dao.IJobCenterDao" >
+  <resultMap id="BaseResultMap" type="com.lj.cc.domain.JobCenter" >
+    <id column="JOB_ENGLISH_NAME" property="jobEnglishName" jdbcType="VARCHAR" />
+    <result column="JOB_NAME" property="jobName" jdbcType="VARCHAR" />
+    <result column="SYSTEM_ALIAS_NAME" property="systemAliasName" jdbcType="VARCHAR" />
+    <result column="JOB_INTF" property="jobIntf" jdbcType="VARCHAR" />
+    <result column="JOB_PARAM" property="jobParam" jdbcType="VARCHAR" />
+    <result column="IS_ENABLE" property="isEnable" jdbcType="CHAR" />
+    <result column="JOB_CALENDER" property="jobCalender" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    JOB_ENGLISH_NAME, JOB_NAME, SYSTEM_ALIAS_NAME, JOB_INTF, JOB_PARAM, IS_ENABLE, JOB_CALENDER
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from cc_job_center
+    where JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR}
+  </select>
+    <sql id="queryJobExecuteLogs">
+     <where>
+     1=1
+	<if test="param.jobEnglishName != null and param.jobEnglishName != ''">
+		and JOB_ENGLISH_NAME = #{param.jobEnglishName}
+    </if>
+     <if test="param.jobName != null and param.jobName != ''">
+		and JOB_NAME = #{param.jobName}
+    </if>
+    
+    <if test="param.isEnable != null and param.isEnable != ''">
+		and IS_ENABLE = #{param.isEnable}
+    </if>
+     
+     </where>
+    </sql>
+  
+  	<!-- 定时任务分页列表 -->
+	<select id="queryJobExecuteLogList" resultMap="BaseResultMap">
+		select
+			   <include refid="Base_Column_List"/>
+		  from cc_job_center t
+	  	 	   <include refid="queryJobExecuteLogs"/>
+	  	 order by SYSTEM_ALIAS_NAME desc 
+	  	 limit #{param.start}, #{param.limit}
+	</select>
+    
+     <select id="queryJobExecuteLogCount" resultType="int">
+		select 
+			  count(*)
+		 from cc_job_center t
+			  <include refid="queryJobExecuteLogs"/>
+	</select>
+  
+  
+  <select id="selectAllJobs" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from cc_job_center
+    where IS_ENABLE = '1'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from cc_job_center
+    where JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.cc.domain.JobCenter" >
+    insert into cc_job_center (JOB_ENGLISH_NAME, JOB_NAME, SYSTEM_ALIAS_NAME, 
+      JOB_INTF, JOB_PARAM, IS_ENABLE, JOB_CALENDER
+      )
+    values (#{jobEnglishName,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR}, #{systemAliasName,jdbcType=VARCHAR}, 
+      #{jobIntf,jdbcType=VARCHAR}, #{jobParam,jdbcType=VARCHAR}, #{isEnable,jdbcType=CHAR}, #{jobCalender,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.cc.domain.JobCenter" >
+    insert into cc_job_center
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobEnglishName != null" >
+        JOB_ENGLISH_NAME,
+      </if>
+      <if test="jobName != null" >
+        JOB_NAME,
+      </if>
+      <if test="systemAliasName != null" >
+        SYSTEM_ALIAS_NAME,
+      </if>
+      <if test="jobIntf != null" >
+        JOB_INTF,
+      </if>
+      <if test="jobParam != null" >
+        JOB_PARAM,
+      </if>
+      <if test="isEnable != null" >
+        IS_ENABLE,
+      </if>
+      <if test="jobCalender != null" >
+        JOB_CALENDER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jobEnglishName != null" >
+        #{jobEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobName != null" >
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="systemAliasName != null" >
+        #{systemAliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIntf != null" >
+        #{jobIntf,jdbcType=VARCHAR},
+      </if>
+      <if test="jobParam != null" >
+        #{jobParam,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        #{isEnable,jdbcType=CHAR},
+      </if>
+      <if test="jobCalender != null" >
+        #{jobCalender,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.cc.domain.JobCenter" >
+    update cc_job_center
+    <set >
+      <if test="jobName != null" >
+        JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="systemAliasName != null" >
+        SYSTEM_ALIAS_NAME = #{systemAliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIntf != null" >
+        JOB_INTF = #{jobIntf,jdbcType=VARCHAR},
+      </if>
+      <if test="jobParam != null" >
+        JOB_PARAM = #{jobParam,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        IS_ENABLE = #{isEnable,jdbcType=CHAR},
+      </if>
+      <if test="jobCalender != null" >
+        JOB_CALENDER = #{jobCalender,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.cc.domain.JobCenter" >
+    update cc_job_center
+    set JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      SYSTEM_ALIAS_NAME = #{systemAliasName,jdbcType=VARCHAR},
+      JOB_INTF = #{jobIntf,jdbcType=VARCHAR},
+      JOB_PARAM = #{jobParam,jdbcType=VARCHAR},
+      IS_ENABLE = #{isEnable,jdbcType=CHAR},
+      JOB_CALENDER = #{jobCalender,jdbcType=VARCHAR}
+    where JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR}
+  </update>
+</mapper>

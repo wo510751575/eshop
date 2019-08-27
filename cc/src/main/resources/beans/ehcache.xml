@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+
+	<diskStore path="java.io.tmpdir" />
+
+	<!-- DefaultCache setting. -->
+	<defaultCache eternal="false" 
+		   		  overflowToDisk="false" 
+		   		  diskPersistent="false" 
+		   		  timeToLiveSeconds="36000" 
+		   		  timeToIdleSeconds="36000" 
+		   		  maxElementsInMemory="10000" 
+		   		  memoryStoreEvictionPolicy="LRU"/>
+
+	<!-- Special objects setting. -->
+	<!-- Refresh ContentInfoCache every hour. -->
+	<cache name="findDayType_str" 
+		   overflowToDisk="false" 
+		   eternal="false" 
+		   diskPersistent="false" 
+		   timeToLiveSeconds="36000" 
+		   timeToIdleSeconds="36000" 
+		   maxElementsInMemory="10000" 
+		   memoryStoreEvictionPolicy="LRU"/>
+		   
+   <cache name="findDayType_date" 
+		   overflowToDisk="false" 
+		   eternal="false" 
+		   diskPersistent="false" 
+		   timeToLiveSeconds="36000" 
+		   timeToIdleSeconds="36000" 
+		   maxElementsInMemory="10000" 
+		   memoryStoreEvictionPolicy="LRU"/>
+		   
+</ehcache>

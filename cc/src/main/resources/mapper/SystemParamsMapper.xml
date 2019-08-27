@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.cc.dao.ISystemParamsDao" >
+  <resultMap id="BaseResultMap" type="com.lj.cc.domain.SystemParams" >
+    <id column="GROUP_NAME" property="groupName" jdbcType="VARCHAR" />
+    <id column="SYS_PARAM_NAME" property="sysParamName" jdbcType="VARCHAR" />
+    <result column="SYS_PARAM_VALUE" property="sysParamValue" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="SYSTEM_ALIAS_NAME" property="systemAliasName" jdbcType="VARCHAR" />
+    <result column="ONLY_ADMIN_MODIFY" property="onlyAdminModify" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    GROUP_NAME, SYS_PARAM_NAME, SYS_PARAM_VALUE, REMARK, SYSTEM_ALIAS_NAME, ONLY_ADMIN_MODIFY
+  </sql>
+  <!-- 根据条件动态查询 -->
+  <select id="selectByParameters" resultMap="BaseResultMap" parameterType="com.lj.cc.domain.SystemParams"  >
+    select 
+    <include refid="Base_Column_List" />
+    from cc_system_params
+      <where>
+   		<if test="groupName != null">
+       AND GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+       </if>
+       <if test="sysParamName != null">
+       AND SYS_PARAM_NAME = #{sysParamName,jdbcType=VARCHAR}
+       </if>
+       <if test="systemAliasName != null">
+       AND SYSTEM_ALIAS_NAME = #{systemAliasName,jdbcType=VARCHAR}
+       </if>
+   </where>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lj.cc.domain.SystemParamsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from cc_system_params
+    where GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+      and SYS_PARAM_NAME = #{sysParamName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.lj.cc.domain.SystemParamsKey" >
+    delete from cc_system_params
+    where GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+      and SYS_PARAM_NAME = #{sysParamName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.cc.domain.SystemParams" >
+    insert into cc_system_params (GROUP_NAME, SYS_PARAM_NAME, SYS_PARAM_VALUE, 
+      REMARK, SYSTEM_ALIAS_NAME, ONLY_ADMIN_MODIFY
+      )
+    values (#{groupName,jdbcType=VARCHAR}, #{sysParamName,jdbcType=VARCHAR}, #{sysParamValue,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{systemAliasName,jdbcType=VARCHAR}, #{onlyAdminModify,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.cc.domain.SystemParams" >
+    insert into cc_system_params
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="groupName != null" >
+        GROUP_NAME,
+      </if>
+      <if test="sysParamName != null" >
+        SYS_PARAM_NAME,
+      </if>
+      <if test="sysParamValue != null" >
+        SYS_PARAM_VALUE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="systemAliasName != null" >
+        SYSTEM_ALIAS_NAME,
+      </if>
+      <if test="onlyAdminModify != null" >
+        ONLY_ADMIN_MODIFY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysParamName != null" >
+        #{sysParamName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysParamValue != null" >
+        #{sysParamValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="systemAliasName != null" >
+        #{systemAliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="onlyAdminModify != null" >
+        #{onlyAdminModify,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.cc.domain.SystemParams" >
+    update cc_system_params
+    <set >
+      <if test="sysParamValue != null" >
+        SYS_PARAM_VALUE = #{sysParamValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="systemAliasName != null" >
+        SYSTEM_ALIAS_NAME = #{systemAliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="onlyAdminModify != null" >
+        ONLY_ADMIN_MODIFY = #{onlyAdminModify,jdbcType=CHAR},
+      </if>
+    </set>
+    where GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+      and SYS_PARAM_NAME = #{sysParamName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.cc.domain.SystemParams" >
+    update cc_system_params
+    set SYS_PARAM_VALUE = #{sysParamValue,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      SYSTEM_ALIAS_NAME = #{systemAliasName,jdbcType=VARCHAR},
+      ONLY_ADMIN_MODIFY = #{onlyAdminModify,jdbcType=CHAR}
+    where GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+      and SYS_PARAM_NAME = #{sysParamName,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 系统参数分页查询 begin -->
+	<sql id="querySystemParamsWhere">
+		<where>
+			1 = 1
+			<if test="param.systemAliasName != null and param.systemAliasName != ''">
+				and SYSTEM_ALIAS_NAME = #{param.systemAliasName}
+			</if>
+			<if test="param.groupName != null and param.groupName != ''">
+				and GROUP_NAME = #{param.groupName}
+			</if>
+			<if test="param.sysParamName != null and param.sysParamName != ''">
+				and SYS_PARAM_NAME = #{param.sysParamName}
+			</if>
+			<if test="param.modifyFlag != null">
+				and ONLY_ADMIN_MODIFY = #{param.modifyFlag}
+			</if>
+		</where>
+	</sql>
+		<!-- 系统参数查询统计 -->
+	<select id="querySystemParamsCount" resultType="long">
+		select 
+			  count(*)
+		 from cc_system_params t
+			  <include refid="querySystemParamsWhere"/>
+	</select>
+		<!-- 系统参数分页查询列表 -->
+	<select id="querySystemParamsList" resultMap="BaseResultMap">
+		select
+			   <include refid="Base_Column_List"/>
+		  from cc_system_params t
+	  	 	   <include refid="querySystemParamsWhere"/>
+	  	 order by GROUP_NAME desc 
+	  	 limit #{param.start}, #{param.limit}
+	</select>
+	<!-- 系统参数分页查询 end -->	
+	
+	<!-- 修改系统参数 -->
+	<update id="updateSystemParam" parameterType="com.lj.cc.domain.SystemParams">
+		update cc_system_params t
+		   set SYS_PARAM_VALUE = #{sysParamValue},
+		       ONLY_ADMIN_MODIFY = #{onlyAdminModify},
+		       REMARK = #{remark}
+		 where t.SYS_PARAM_NAME = #{sysParamName}
+		   and t.GROUP_NAME = #{groupName}
+		   and t.SYSTEM_ALIAS_NAME = #{systemAliasName}
+	</update>
+</mapper>

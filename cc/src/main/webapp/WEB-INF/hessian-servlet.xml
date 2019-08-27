@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+      
+    <!-- 调度中心示例 --> 
+    <bean name="/logJob"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="job">
+		         <!--  业务系统暴露一个IJob的服务 -->
+		         <bean class="com.lj.cc.service.impl.SimpleLogJob" />
+		     </property>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IJob
+			</value>
+		</property>
+	</bean>
+	
+    <!-- 调度中心示例(带参数) --> 
+    <bean name="/logParamJob"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service">
+		  <bean  class="com.lj.cc.clientintf.JobService">
+		     <property name="paramJob">
+		         <!--  业务系统暴露一个IJob的服务 -->
+		         <bean class="com.lj.cc.service.impl.SimpleLogJob" />
+		     </property>
+		  </bean>		  
+		</property>
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.clientintf.IParamJob
+			</value>
+		</property>
+	</bean>
+
+
+
+	<!-- 业务系统定时任务回写状态服务 -->
+	<bean name="/jobExecuteLogFeedbackService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="jobExecuteLogFeedbackServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.service.IJobExecuteFeedbackService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 业务系统信息查询 -->
+	<bean name="/systemInfoService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="systemInfoServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.service.ISystemInfoService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 获取业务系统K/V配置 -->
+	 <bean name="/systemParamsService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="systemParamsServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.service.ISystemParamsService
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 调度任务管理 -->
+	 <bean name="/jobMgrService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="jobMgrServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.service.IJobMgrService
+			</value>
+		</property>
+	</bean>
+	<!-- holiday -->
+	 <bean name="/holidayService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="holidayServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				 com.lj.cc.service.IHolidayService
+			</value>
+		</property>
+	</bean>
+	
+		<!-- job执行日志 -->
+	 <bean name="/jobExecuteFeedbackService"
+		class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="jobExecuteLogFeedbackServiceImpl" />
+		<property name="serviceInterface">
+			<value>
+				com.lj.cc.service.IJobExecuteFeedbackService
+			</value>
+		</property>
+	</bean>
+	 
+</beans> 
+

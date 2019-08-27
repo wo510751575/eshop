@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.cc.dao.IJobExecuteLogDao" >
+  <resultMap id="BaseResultMap" type="com.lj.cc.domain.JobExecuteLog" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="JOB_CODE" property="jobCode" jdbcType="VARCHAR" />
+    <result column="JOB_ENGLISH_NAME" property="jobEnglishName" jdbcType="VARCHAR" />
+    <result column="JOB_EXECUTE_TIME" property="jobExecuteTime" jdbcType="TIMESTAMP" />
+    <result column="JOB_EXECUTE_INFO" property="jobExecuteInfo" jdbcType="VARCHAR" />
+    <result column="JOB_EXECUTE_STATUS" property="jobExecuteStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    	CODE, JOB_CODE, JOB_ENGLISH_NAME, JOB_EXECUTE_TIME, JOB_EXECUTE_INFO, JOB_EXECUTE_STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from cc_job_execute_log
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from cc_job_execute_log
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.cc.domain.JobExecuteLog" >
+    insert into cc_job_execute_log ( CODE, JOB_CODE, JOB_ENGLISH_NAME, JOB_EXECUTE_TIME, 
+      JOB_EXECUTE_INFO, JOB_EXECUTE_STATUS)
+    values ( #{code,jdbcType=VARCHAR}, #{jobCode,jdbcType=VARCHAR},#{jobEnglishName,jdbcType=VARCHAR},#{jobExecuteTime,jdbcType=TIMESTAMP}, 
+      #{jobExecuteInfo,jdbcType=VARCHAR}, #{jobExecuteStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.cc.domain.JobExecuteLog" >
+    insert into cc_job_execute_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="jobCode != null" >
+        JOB_CODE,
+      </if>
+      <if test="jobEnglishName != null" >
+        JOB_ENGLISH_NAME,
+      </if>
+      <if test="jobExecuteTime != null" >
+        JOB_EXECUTE_TIME,
+      </if>
+      <if test="jobExecuteInfo != null" >
+        JOB_EXECUTE_INFO,
+      </if>
+      <if test="jobExecuteStatus != null" >
+        JOB_EXECUTE_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="jobCode != null" >
+        #{jobCode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobEnglishName != null" >
+        #{jobEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecuteTime != null" >
+        #{jobExecuteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jobExecuteInfo != null" >
+        #{jobExecuteInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecuteStatus != null" >
+        #{jobExecuteStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.cc.domain.JobExecuteLog" >
+    update cc_job_execute_log
+    <set >
+      <if test="jobEnglishName != null" >
+        JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecuteTime != null" >
+        JOB_EXECUTE_TIME = #{jobExecuteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jobExecuteInfo != null" >
+        JOB_EXECUTE_INFO = #{jobExecuteInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecuteStatus != null" >
+        JOB_EXECUTE_STATUS = #{jobExecuteStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.cc.domain.JobExecuteLog" >
+    update cc_job_execute_log
+    set JOB_ENGLISH_NAME = #{jobEnglishName,jdbcType=VARCHAR},
+      JOB_EXECUTE_TIME = #{jobExecuteTime,jdbcType=TIMESTAMP},
+      JOB_EXECUTE_INFO = #{jobExecuteInfo,jdbcType=VARCHAR},
+      JOB_EXECUTE_STATUS = #{jobExecuteStatus,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  
+ 	<!-- 任务日志分页查询 begin -->
+	<sql id="queryJobExecuteLogWhere">
+		<where>
+			1 = 1
+			<if test="param.jobEnglishName != null and param.jobEnglishName != ''">
+				and JOB_ENGLISH_NAME = #{param.jobEnglishName}
+			</if>
+			<if test="param.executeStatus != null and param.executeStatus != ''">
+				and JOB_EXECUTE_STATUS = #{param.executeStatus}
+			</if>
+			<if test="param.beginTime != null and param.beginTime != ''">
+			    <![CDATA[ 
+			   	and JOB_EXECUTE_TIME >= #{param.beginTime}
+				]]>
+			</if>
+			<if test="param.endTime != null and param.endTime != ''">
+			   	<![CDATA[ 
+			   	and JOB_EXECUTE_TIME < date_add(#{param.endTime}, INTERVAL 1 day)
+				]]>
+			</if>
+		</where>
+	</sql>
+		<!-- 任务日志查询统计 -->
+	<select id="queryJobExecuteLogTotal" resultType="int">
+		select 
+			  count(*)
+		 from cc_job_execute_log t
+			  <include refid="queryJobExecuteLogWhere"/>
+	</select>
+		<!-- 任务日志分页查询列表 -->
+	<select id="queryJobExecuteLogList" resultMap="BaseResultMap">
+		select
+			   <include refid="Base_Column_List"/>
+		  from cc_job_execute_log t
+	  	 	   <include refid="queryJobExecuteLogWhere"/>
+	  	 order by JOB_EXECUTE_TIME desc 
+	  	 limit #{param.start}, #{param.limit}
+	</select>
+	<!-- 任务日志分页查询 end -->	
+</mapper>

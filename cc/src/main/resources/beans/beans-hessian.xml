@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	  http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<bean id="systemHessianFactoryBean" class="com.lj.cc.clientintf.SystemHessianFactoryBean" abstract="true">
+		<property name="overloadEnabled" value="true"/>
+		<!-- 读超时时间设置为10秒 -->
+		<property name="readTimeout" value="10000"/> 
+		<!-- 连接超时时间设置为10秒 -->
+		<property name="connectTimeout" value="10000"/>
+		<!-- 必须定义配置中心服务 -->
+		<property name="systemInfo" ref="systemInfoServiceImpl"/>
+	</bean>
+	
+	<bean id="redisCache" class="com.lj.distributecache.RedisCacheConfigFromCC">
+    	 <property name="systemParamService" ref="systemParamsServiceImpl" />
+    </bean>
+</beans> 
+
