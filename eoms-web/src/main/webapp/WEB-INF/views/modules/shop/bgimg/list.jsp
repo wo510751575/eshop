@@ -107,9 +107,9 @@
 				</td>
 				<td>
 			    	<div class="lafen-group">
-				    	<img class="img-small" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.spe}" alt="${item.name}">
+				    	<img class="img-small" src="${fns:getUploadUrl()}${item.spe}" alt="${item.name}">
 				    	<div class="img-big">
-				    		<img  src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.spe}" alt="${item.name}">
+				    		<img  src="${fns:getUploadUrl()}${item.spe}" alt="${item.name}">
 				    	</div>
 			    	</div>
 				</td>

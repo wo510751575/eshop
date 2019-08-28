@@ -6,6 +6,9 @@
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<script type="text/javascript">
+	
+		
+	
 		$(document).ready(function() {
 			$("#treeTable").treeTable({expandLevel : 3}).show();
 		});
@@ -34,6 +37,13 @@
 				$.jBox($("#importBox").html(), {title:"店主会员导入导入数据", buttons:{"关闭":true}, 
 					bottomText:"导入文件不能超过10M，仅允许导入“xls”或“xlsx”格式文件！"});
 			});
+			
+			$("#btnCopy").click(function(){
+				var merchantCode = '${merchantCode}';
+				var url = '${url}';
+				$(this).attr("data-clipboard-text",url+merchantCode);
+			});
+			
 		});
 		//跳页
 		function page(n, s) {
@@ -45,6 +55,54 @@
 		
 		
 	</script>
+	<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+.img-small {
+	width: 40px;
+	height: 40px;
+}
+.lafen-group {
+    position: relative;
+}
+.lafen-group .img-big {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -75px;
+    margin-left: 35px;
+    opacity: 0;
+    transform: scale(.2, .2);
+    transition: all .2s ease-in-out;
+    width: 130px;
+    height: 130px;
+}
+.lafen-group .img-small:hover + .img-big {
+    transform: scale(1, 1);
+    opacity: 1;
+}
+.lafen-group .img-big img {
+    width: 130px;
+    height: 130px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -95,12 +153,14 @@
  			<li> 
  				<label>录入时间：</label> 
  				<input id="beginDate" name="startTime" type="text" readonly="readonly" maxlength="20" class="input-mini Wdate"
- 				value="<fmt:formatDate value="${memberPage.startTime}" pattern="yyyy-MM-dd"/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/> 
+ 				value="<fmt:formatDate value="${memberPage.startTime}" pattern="yyyy-MM-dd"/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,maxDate:'#F{$dp.$D(\'endDate\')}'});"/> 
+ 				-
 				<input id="endDate" name="endTime" type="text" readonly="readonly" maxlength="20" class="input-mini Wdate" 
- 				value="<fmt:formatDate value="${memberPage.endTime}" pattern="yyyy-MM-dd"/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>&nbsp;&nbsp; 
+ 				value="<fmt:formatDate value="${memberPage.endTime}" pattern="yyyy-MM-dd"/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true,minDate:'#F{$dp.$D(\'beginDate\')}'});"/>&nbsp;&nbsp; 
  			</li> 
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="店主会员导入"/></li>
+			<li class="btns"><input id="btnCopy" class="btn btn-primary" type="button" value="绑定会员"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form>
@@ -114,6 +174,7 @@
 			<th>手机号码</th>
 			<th>微信号</th>
 			<th>类型</th>
+			<th>会员等级</th>
 			<th>头像</th>
 			<th>省</th>
 			<th>市</th>
@@ -157,9 +218,33 @@
 						</c:forEach>
 					
 					 </td>
+					 <td>
+					 <c:choose>
+					 	<c:when test="${item.memberRankCode eq '1' }">白银会员</c:when>
+					 	<c:when test="${item.memberRankCode eq '2' }">黄金会员</c:when>
+					 	<c:when test="${item.memberRankCode eq '3' }">铂金会员</c:when>
+					 	<c:when test="${item.memberRankCode eq '4' }">钻石会员</c:when>
+						<c:otherwise></c:otherwise>
+					 </c:choose>
+					 </td>
 					<td> 
 					<c:if test="${!empty item.avotor }">
-						<img src="${item.avotor } " width="40" height="40"/>
+						<div class="lafen-group">
+						<c:choose>
+			    		<c:when test="${fn:startsWith(item.avotor, 'http')}">
+   							<img class="img-small" src="${item.avotor}" alt="">
+			    			<div class="img-big">
+			    				<img  src="${item.avotor }" alt="">
+			    			</div>
+						</c:when>
+						<c:otherwise>
+							<img class="img-small" src="${fns:getUploadUrl()}${item.avotor}" alt="">
+			    			<div class="img-big">
+			    				<img  src="${fns:getUploadUrl()}${item.avotor}" alt="">
+			    			</div>
+						</c:otherwise>
+			    		</c:choose>
+			    		</div>
 					</c:if>
 					</td>
 					<td> ${item.province } </td>
@@ -200,5 +285,16 @@
 		<div class="pagination">${page}</div>
 	
 	 </div>
+	 
+	 <script type="text/javascript" src="${ctxStatic}/common/clipboard.min.js"></script>
+	<script>
+		var clipboard = new Clipboard('#btnCopy');
+	    clipboard.on('success', function(e) {
+	    	showTip("已将链接复制到粘贴板","info");
+	    });
+	    clipboard.on('error', function(e) {
+	        console.log(e);
+	    });
+    </script>
 </body>
 </html>

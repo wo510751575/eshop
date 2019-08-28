@@ -3,7 +3,7 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
@@ -26,7 +26,7 @@ import com.lj.business.member.service.IMemberLoginService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年6月24日

@@ -21,61 +21,61 @@
 			<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
 		</layout>
 	</appender>	
-	<appender name="logfile-OtherTaskFinishJobServiceImpl"  
-            class="ch.qos.logback.core.rolling.RollingFileAppender">  
-            <File>${log.base}/OtherTaskFinishJobServiceImpl.log</File> 
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${log.base}/OtherTaskFinishJobServiceImpl_%d{yyyy-MM-dd}.%i.log
-			</FileNamePattern>.
-			<timeBasedFileNamingAndTriggeringPolicy  
-	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
-	      	  <maxFileSize>300MB</maxFileSize>  
-	     	 </timeBasedFileNamingAndTriggeringPolicy>  
-			</rollingPolicy>
-			<layout class="ch.qos.logback.classic.PatternLayout">
-				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
-			</layout>
-    </appender> 
-    <appender name="logfile-RemindJobServiceImpl"  
-            class="ch.qos.logback.core.rolling.RollingFileAppender">  
-            <File>${log.base}/RemindJobServiceImpl.log</File> 
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${log.base}/RemindJobServiceImpl_%d{yyyy-MM-dd}.%i.log
-			</FileNamePattern>.
-			<timeBasedFileNamingAndTriggeringPolicy  
-	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
-	      	  <maxFileSize>300MB</maxFileSize>  
-	     	 </timeBasedFileNamingAndTriggeringPolicy>  
-			</rollingPolicy>
-			<layout class="ch.qos.logback.classic.PatternLayout">
-				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
-			</layout>
-     </appender> 
-     <appender name="logfile-WokTaskJobServiceImpl"  
-            class="ch.qos.logback.core.rolling.RollingFileAppender">  
-            <File>${log.base}/WokTaskJobServiceImpl.log</File> 
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${log.base}/WokTaskJobServiceImpl_%d{yyyy-MM-dd}.%i.log
-			</FileNamePattern>.
-			<timeBasedFileNamingAndTriggeringPolicy  
-	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
-	      	  <maxFileSize>300MB</maxFileSize>  
-	     	 </timeBasedFileNamingAndTriggeringPolicy>  
-			</rollingPolicy>
-			<layout class="ch.qos.logback.classic.PatternLayout">
-				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
-			</layout>
-     </appender> 
+<!-- 	<appender name="logfile-OtherTaskFinishJobServiceImpl"   -->
+<!--             class="ch.qos.logback.core.rolling.RollingFileAppender">   -->
+<!--             <File>${log.base}/OtherTaskFinishJobServiceImpl.log</File>  -->
+<!--             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> -->
+<!-- 			<FileNamePattern>${log.base}/OtherTaskFinishJobServiceImpl_%d{yyyy-MM-dd}.%i.log -->
+<!-- 			</FileNamePattern>. -->
+<!-- 			<timeBasedFileNamingAndTriggeringPolicy   -->
+<!-- 	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   -->
+<!-- 	      	  <maxFileSize>300MB</maxFileSize>   -->
+<!-- 	     	 </timeBasedFileNamingAndTriggeringPolicy>   -->
+<!-- 			</rollingPolicy> -->
+<!-- 			<layout class="ch.qos.logback.classic.PatternLayout"> -->
+<!-- 				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern> -->
+<!-- 			</layout> -->
+<!--     </appender>  -->
+<!--     <appender name="logfile-RemindJobServiceImpl"   -->
+<!--             class="ch.qos.logback.core.rolling.RollingFileAppender">   -->
+<!--             <File>${log.base}/RemindJobServiceImpl.log</File>  -->
+<!--             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> -->
+<!-- 			<FileNamePattern>${log.base}/RemindJobServiceImpl_%d{yyyy-MM-dd}.%i.log -->
+<!-- 			</FileNamePattern>. -->
+<!-- 			<timeBasedFileNamingAndTriggeringPolicy   -->
+<!-- 	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   -->
+<!-- 	      	  <maxFileSize>300MB</maxFileSize>   -->
+<!-- 	     	 </timeBasedFileNamingAndTriggeringPolicy>   -->
+<!-- 			</rollingPolicy> -->
+<!-- 			<layout class="ch.qos.logback.classic.PatternLayout"> -->
+<!-- 				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern> -->
+<!-- 			</layout> -->
+<!--      </appender>  -->
+<!--      <appender name="logfile-WokTaskJobServiceImpl"   -->
+<!--             class="ch.qos.logback.core.rolling.RollingFileAppender">   -->
+<!--             <File>${log.base}/WokTaskJobServiceImpl.log</File>  -->
+<!--             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> -->
+<!-- 			<FileNamePattern>${log.base}/WokTaskJobServiceImpl_%d{yyyy-MM-dd}.%i.log -->
+<!-- 			</FileNamePattern>. -->
+<!-- 			<timeBasedFileNamingAndTriggeringPolicy   -->
+<!-- 	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   -->
+<!-- 	      	  <maxFileSize>300MB</maxFileSize>   -->
+<!-- 	     	 </timeBasedFileNamingAndTriggeringPolicy>   -->
+<!-- 			</rollingPolicy> -->
+<!-- 			<layout class="ch.qos.logback.classic.PatternLayout"> -->
+<!-- 				<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern> -->
+<!-- 			</layout> -->
+<!--      </appender>  -->
            
-    <logger name="com.lj.business.cf.service.impl.job.WokTaskJobServiceImpl" level="debug" >  
-        <appender-ref ref="logfile-WokTaskJobServiceImpl" />  
-    </logger>              
-    <logger name="com.lj.business.cf.service.impl.job.RemindJobServiceImpl" level="debug" >  
-        <appender-ref ref="logfile-RemindJobServiceImpl" />  
-    </logger>        
-    <logger name="com.lj.business.cf.service.impl.job.OtherTaskFinishJobServiceImpl" level="debug" >  
-        <appender-ref ref="logfile-OtherTaskFinishJobServiceImpl" />  
-    </logger> 
+<!--     <logger name="com.lj.business.cf.service.impl.job.WokTaskJobServiceImpl" level="debug" >   -->
+<!--         <appender-ref ref="logfile-WokTaskJobServiceImpl" />   -->
+<!--     </logger>               -->
+<!--     <logger name="com.lj.business.cf.service.impl.job.RemindJobServiceImpl" level="debug" >   -->
+<!--         <appender-ref ref="logfile-RemindJobServiceImpl" />   -->
+<!--     </logger>         -->
+<!--     <logger name="com.lj.business.cf.service.impl.job.OtherTaskFinishJobServiceImpl" level="debug" >   -->
+<!--         <appender-ref ref="logfile-OtherTaskFinishJobServiceImpl" />   -->
+<!--     </logger>  -->
         
 	<logger name="com.lj.business.cf">
 		<level value="debug" />

@@ -59,10 +59,22 @@
 		</property>
 		<property name="cacheMilliseconds">
 			<!-- 每小时更新 -->
-			<value>3600000</value>
+			<value>360000</value>
 		</property>
 		<property name="systemParamsService" ref="systemParamsService" />
 	</bean>
+    
+    <!-- 分布式缓存IDistributeCache设置 begin -->
+	<bean id="redisCache" class="com.lj.distributecache.RedisCacheConfigFromCC" >   
+	   <property name="systemParamService"  ref="systemParamsService" /> 
+	</bean>
+	 <!-- 分布式缓存IDistributeCache设置 end -->
+	 
+	 <!-- 分布式锁IDistributeCache设置 begin -->
+	 <bean id="redisLock" class="com.lj.distributelock.RedisLock" >   
+	   <property name="redisCache"  ref="redisCache" /> 
+	 </bean>
+	 <!-- 分布式锁IDistributeCache设置 end -->
     
 </beans> 
 

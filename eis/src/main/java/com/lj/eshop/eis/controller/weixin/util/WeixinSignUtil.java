@@ -25,7 +25,7 @@ import com.lj.eshop.eis.spring.SpringContextUtil;
  * 类说明：微信签名。
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  * 
  *         CreateDate: 2017年9月7日

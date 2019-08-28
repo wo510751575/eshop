@@ -4,7 +4,7 @@ import java.util.Date;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -28,7 +28,7 @@ import com.lj.eshop.service.IMemberRankService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月30日 
@@ -160,6 +160,7 @@ public class MemberRankServiceImpl implements IMemberRankService {
 			findMemberRankReturn.setDelFlag(memberRank.getDelFlag());
 			findMemberRankReturn.setSeq(memberRank.getSeq());
 			findMemberRankReturn.setImgSrc(memberRank.getImgSrc());
+			findMemberRankReturn.setAdvancePayment(memberRank.getAdvancePayment());
 			memberRank.setSeq(memberRankDto.getSeq());
 			logger.debug("findMemberRank(MemberRankDto) - end - return value={}", findMemberRankReturn); //$NON-NLS-1$
 			return findMemberRankReturn;

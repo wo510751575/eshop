@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.marketing;
@@ -27,8 +27,8 @@ import com.lj.business.cm.service.IMaterialTypeService;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindMaterialEcmPage;
 import com.lj.eshop.dto.FindProductPage;
-import com.lj.eshop.dto.MaterialCmDto;
 import com.lj.eshop.dto.MateriaEcmDto;
+import com.lj.eshop.dto.MaterialCmDto;
 import com.lj.eshop.dto.ProductDto;
 import com.lj.eshop.service.IMaterialCmService;
 import com.lj.eshop.service.IProductService;
@@ -39,7 +39,7 @@ import com.lj.eshop.service.IProductService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月28日
@@ -76,20 +76,22 @@ public class MaterialCommonController extends BaseController {
 	 *
 	 */
 	@RequestMapping(value = { "list", "" })
-	public String list(FindMaterialEcmPage findMaterialReturnPage, Model model, Integer pageNo, Integer pageSize, String productName) {
+	public String list(FindMaterialEcmPage findMaterialEcmPage, Model model, Integer pageNo, Integer pageSize, String productName) {
 		try {
 			
 			pageNo = pageNo==null?1:pageNo;
 			pageSize = pageSize==null || pageSize>500?10:pageSize;
-//			FindMaterialReturnPage findMaterialReturnPage = new FindMaterialReturnPage();
-			findMaterialReturnPage.setStart((pageNo - 1) * pageSize);
-			findMaterialReturnPage.setLimit(pageSize);
-//			findMaterialReturnPage.setShopCode();
-			findMaterialReturnPage.setMerchantCode(UserUtils.getUser().getMerchant().getCode());
-			MaterialCmDto materialCmDto = new MaterialCmDto();
+			findMaterialEcmPage.setStart((pageNo - 1) * pageSize);
+			findMaterialEcmPage.setLimit(pageSize);
+			MaterialCmDto materialCmDto = findMaterialEcmPage.getParam();
+			if(null==materialCmDto) {
+				materialCmDto = new MaterialCmDto();
+				findMaterialEcmPage.setParam(materialCmDto);
+			}
+			materialCmDto.setMerchantCode(UserUtils.getUser().getMerchant().getCode());
 			materialCmDto.setProductName(productName);
-			findMaterialReturnPage.setParam(materialCmDto);
-			Page<MateriaEcmDto> page = materialCmService.findCmCommonMaterialPgae(findMaterialReturnPage);
+			
+			Page<MateriaEcmDto> page = materialCmService.findCmCommonMaterialPgae(findMaterialEcmPage);
 			
 			if(page.getRows().size()>0) {
 				
@@ -100,13 +102,7 @@ public class MaterialCommonController extends BaseController {
 				page2.initialize();
 				model.addAttribute("page", page2);
 				
-				/* 获取素材类型下拉数据 */
-				FindMaterialTypePage findMaterialTypePage = new FindMaterialTypePage();
-				findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
-				findMaterialTypePage.setIsPublic(true);
-				model.addAttribute("materialType", materialTypeService.findMaterialTypes(findMaterialTypePage));
-
-				model.addAttribute("findMaterialReturnPage", findMaterialReturnPage);
+				
 				
 				//产品
 				FindProductPage productPage = new FindProductPage();
@@ -116,6 +112,14 @@ public class MaterialCommonController extends BaseController {
 				List<ProductDto> productList = productService.findProducts(productPage);
 				model.addAttribute("productList", productList);
 			}
+			
+			/* 获取素材类型下拉数据 */
+			FindMaterialTypePage findMaterialTypePage = new FindMaterialTypePage();
+			findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
+			findMaterialTypePage.setIsPublic(true);
+			model.addAttribute("materialType", materialTypeService.findMaterialTypes(findMaterialTypePage));
+			model.addAttribute("findMaterialReturnPage", findMaterialEcmPage);
+			
 			model.addAttribute("productName", productName);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,7 +141,7 @@ public class MaterialCommonController extends BaseController {
 	 */
 	@RequiresPermissions("marketing:materialcommon:view")
 	@RequestMapping(value = "form")
-	public String form(MateriaEcmDto materialEcDto, String tempId, Model model, String materialCmCode) {
+	public String form(MateriaEcmDto findMateriaEcmDto, String tempId, Model model, String materialCmCode) {
 		try {
 			
 			//产品
@@ -149,13 +153,9 @@ public class MaterialCommonController extends BaseController {
 			model.addAttribute("productList", productList);
 			
 			
-			if (materialEcDto != null && materialEcDto.getCode() != null) {
+			if (findMateriaEcmDto != null && findMateriaEcmDto.getCode() != null) {
 				try {
-					
-					FindMaterialEcmPage findMaterialReturnPage = new FindMaterialEcmPage();
-					findMaterialReturnPage.setCmMaterialCode(materialEcDto.getCmMaterialCode());
-					findMaterialReturnPage.setMaterialCmCode(materialEcDto.getCode());
-					MateriaEcmDto  materialReturnDto = materialCmService.findMaterialCommen(findMaterialReturnPage);
+					MateriaEcmDto  materialReturnDto = materialCmService.findMaterialEcm(findMateriaEcmDto);
 					model.addAttribute("data", materialReturnDto);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -165,7 +165,7 @@ public class MaterialCommonController extends BaseController {
 			}
 			/* 获取素材类型下拉数据 */
 			FindMaterialTypePage findMaterialTypePage = new FindMaterialTypePage();
-			findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
+			findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
 			findMaterialTypePage.setLimit(1000);
 			// 获取门店下拉信息
 			// 分店与地址下拉列表
@@ -208,7 +208,8 @@ public class MaterialCommonController extends BaseController {
 	public String save(MateriaEcmDto materialEcDto, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			materialEcDto.setCode(IdGen.uuid());
-			materialEcDto.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
+			materialEcDto.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
+			materialEcDto.setMerchantCode(UserUtils.getUser().getMerchant().getCode());
 			materialEcDto.setMerchantName(UserUtils.getUser().getCompany().getName());
 			materialEcDto.setCreateId(UserUtils.getUser().getName());
 			materialCmService.addMaterialPub(materialEcDto);
@@ -245,7 +246,6 @@ public class MaterialCommonController extends BaseController {
 		}
 		return "redirect:" + adminPath + "/marketing/materialcommon/";
 	}
-
 	/**
 	 * 
 	 *
@@ -260,13 +260,14 @@ public class MaterialCommonController extends BaseController {
 	public String del(MaterialCmDto materialCmDto, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			
-			materialCmService.delMaterial(materialCmDto);
+			materialCmService.delCommonMaterial(materialCmDto);
 			addMessage(redirectAttributes, "删除素材成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "redirect:" + adminPath + "/marketing/materialcommon/";
 	}
+
 
 	/**
 	 * 
@@ -282,37 +283,60 @@ public class MaterialCommonController extends BaseController {
 	 */
 	@RequiresPermissions("marketing:materialcommon:view")
 	@RequestMapping(value = "view")
-	public String view(FindMaterialEcmPage findMaterialReturnPage, Model model) {
+	public String view(String code, Model model) {
 		try {
-			if(findMaterialReturnPage!=null && findMaterialReturnPage.getCmMaterialCode()!=null){
-//				FindMaterialCommenReturn findMaterialCommenReturn = materialcommenService.findMaterialCommen(findMaterialCommen);
-				
-				MateriaEcmDto  returnDto = materialCmService.findMaterialCommen(findMaterialReturnPage);
+			if(StringUtils.isNotEmpty(code)){
+				MateriaEcmDto findMateriaEcmDto = new MateriaEcmDto();
+				findMateriaEcmDto.setCode(code);
+				MateriaEcmDto  returnDto = materialCmService.findMaterialEcm(findMateriaEcmDto);
 				model.addAttribute("data",returnDto);
-				/*获取模版*/
-				/*if(StringUtils.isNotEmpty(findMaterialCommenReturn.getTempId())){
-					model.addAttribute("temp", dictService.get(findMaterialCommenReturn.getTempId()));
-				}*/
 				
-				if(!returnDto.getMerchantNo().isEmpty()){
-					/*Office company= officeService.get(officeService.get(findMaterialCommenReturn.getMerchantNo()));
-					//公司名
-					model.addAttribute("companyName",company.getName());
-					//公司LOGO
-					model.addAttribute("companyLogo",company.getLogo());
-					//公司简介
-					model.addAttribute("companyRemarks",company.getRemarks());*/
-				}
+				//公司名
+				model.addAttribute("companyName",UserUtils.getUser().getCompany().getName());
+				//公司LOGO
+				model.addAttribute("companyLogo",UserUtils.getUser().getCompany().getLogo());
+				//公司简介
+				model.addAttribute("companyRemarks",UserUtils.getUser().getCompany().getRemarks());
+				
 			}
-			
-			//地址 	TODO获取附近门店
-//			model.addAttribute("addr","深圳市龙华新区民治大道785号");
-			//电话	TODO
-//			model.addAttribute("tel","400-8008001");
 		} catch (Exception e) {
 		  e.printStackTrace();
 		}
 		return "modules/marketing/materialcommon/materialcommenView";
+	}
+	
+	/**
+	 * 
+	 *
+	 * 方法说明：
+	 *
+	 * @param model
+	 * @return 返回静态页面数据
+	 *
+	 * @author 林进权 CreateDate: 2017年9月25日
+	 *
+	 */
+	@RequestMapping(value = "viewH5")
+	public String viewH5(String code, Model model) {
+		try {
+			if(StringUtils.isNotEmpty(code)){
+				MateriaEcmDto findMateriaEcmDto = new MateriaEcmDto();
+				findMateriaEcmDto.setCode(code);
+				MateriaEcmDto materiaEcmDto = materialCmService.findMaterialEcm(findMateriaEcmDto);
+				model.addAttribute("data", materiaEcmDto);
+				
+				//公司名
+				model.addAttribute("companyName",UserUtils.getUser().getCompany().getName());
+				//公司LOGO
+				model.addAttribute("companyLogo",UserUtils.getUser().getCompany().getLogo());
+				//公司简介
+				model.addAttribute("companyRemarks",UserUtils.getUser().getCompany().getRemarks());
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "modules/marketing/materialcommon/materialcommenH5";
 	}
 	
 }

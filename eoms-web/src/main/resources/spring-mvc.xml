@@ -33,7 +33,7 @@
                 </property> 
             </bean>
             <!-- 使用XML格式输出数据 -->
-            <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+            <!-- <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
 		        <constructor-arg>
 		        	<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
 				        <property name="streamDriver">
@@ -47,7 +47,7 @@
 				    </bean>
 		        </constructor-arg>
 		        <property name="supportedMediaTypes" value="application/xml"></property>
-			</bean>
+			</bean> -->
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	

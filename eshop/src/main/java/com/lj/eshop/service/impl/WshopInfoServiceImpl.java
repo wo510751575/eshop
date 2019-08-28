@@ -73,6 +73,7 @@ public class WshopInfoServiceImpl implements IWshopInfoService {
 			WshopInfo record = new WshopInfo();
 			record.setCode(wshopInfoDto.getCode());
 			record.setCreater(wshopInfoDto.getCreater());
+			/*record.setCreateTime(wshopInfoDto.getCreateTime());*/
 			record.setDetail(wshopInfoDto.getDetail());
 			record.setFlagInfo(wshopInfoDto.getFlagInfo());
 			record.setImg1(wshopInfoDto.getImg1());

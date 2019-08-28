@@ -1,11 +1,12 @@
 package com.lj.eshop.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -26,11 +27,13 @@ import com.lj.base.exception.TsfaServiceException;
 import com.lj.eshop.constant.ErrorCode;
 import com.lj.eshop.constant.NoUtil;
 import com.lj.eshop.dao.IMemberRankApplyDao;
+import com.lj.eshop.domain.Member;
 import com.lj.eshop.domain.MemberRankApply;
 import com.lj.eshop.dto.AccWaterDto;
 import com.lj.eshop.dto.AccountDto;
 import com.lj.eshop.dto.FindMemberRankApplyPage;
 import com.lj.eshop.dto.FindMemberRankPage;
+import com.lj.eshop.dto.MemberDto;
 import com.lj.eshop.dto.MemberRankApplyDto;
 import com.lj.eshop.dto.MemberRankDto;
 import com.lj.eshop.dto.MessageDto;
@@ -42,11 +45,13 @@ import com.lj.eshop.emus.AccWaterSource;
 import com.lj.eshop.emus.AccWaterStatus;
 import com.lj.eshop.emus.AccWaterType;
 import com.lj.eshop.emus.MemberRankApplyStatus;
+import com.lj.eshop.emus.MemberType;
 import com.lj.eshop.emus.MessageTemplate;
 import com.lj.eshop.service.IAccWaterService;
 import com.lj.eshop.service.IAccountService;
 import com.lj.eshop.service.IMemberRankApplyService;
 import com.lj.eshop.service.IMemberRankService;
+import com.lj.eshop.service.IMemberService;
 import com.lj.eshop.service.IMessageService;
 import com.lj.eshop.service.IShopService;
 /**
@@ -81,6 +86,9 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 	private IAccountService accountService;
 	@Resource
 	private IMessageService messageService;
+	@Resource
+	private IMemberService memberService;
+	
 	
 	
 	@Override
@@ -93,13 +101,13 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			MemberRankApply memberRankApply = new MemberRankApply();
 			//add数据录入
 			memberRankApply.setCode(GUID.generateCode());
-			memberRankApply.setShopCode(memberRankApplyDto.getShopCode());
+			memberRankApply.setMemberCode(memberRankApplyDto.getMemberCode());
 			memberRankApply.setMemberRankCode(memberRankApplyDto.getMemberRankCode());
 			memberRankApply.setApplyTime(memberRankApplyDto.getApplyTime());
 			memberRankApply.setApproveTime(memberRankApplyDto.getApproveTime());
 			memberRankApply.setStatus(memberRankApplyDto.getStatus());
 			memberRankApply.setDelFlag("0");
-			memberRankApply.setShopName(memberRankApplyDto.getShopName());
+			memberRankApply.setMemberName(memberRankApplyDto.getMemberName());
 			memberRankApply.setMemberRankName(memberRankApplyDto.getMemberRankName());
 			memberRankApplyDao.insert(memberRankApply);
 			logger.debug("addMemberRankApply(MemberRankApplyDto) - end - return"); 
@@ -154,13 +162,13 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			MemberRankApply memberRankApply = new MemberRankApply();
 			//update数据录入
 			memberRankApply.setCode(memberRankApplyDto.getCode());
-			memberRankApply.setShopCode(memberRankApplyDto.getShopCode());
+			memberRankApply.setMemberCode(memberRankApplyDto.getMemberCode());
 			memberRankApply.setMemberRankCode(memberRankApplyDto.getMemberRankCode());
 			memberRankApply.setApplyTime(memberRankApplyDto.getApplyTime());
 			memberRankApply.setApproveTime(memberRankApplyDto.getApproveTime());
 			memberRankApply.setStatus(memberRankApplyDto.getStatus());
 			memberRankApply.setDelFlag(memberRankApplyDto.getDelFlag());
-			memberRankApply.setShopName(memberRankApplyDto.getShopName());
+			memberRankApply.setMemberName(memberRankApplyDto.getMemberName());
 			memberRankApply.setMemberRankName(memberRankApplyDto.getMemberRankName());
 			AssertUtils.notUpdateMoreThanOne(memberRankApplyDao.updateByPrimaryKeySelective(memberRankApply));
 			logger.debug("updateMemberRankApply(MemberRankApplyDto) - end - return"); //$NON-NLS-1$
@@ -191,7 +199,7 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			MemberRankApplyDto findMemberRankApplyReturn = new MemberRankApplyDto();
 			//find数据录入
 			findMemberRankApplyReturn.setCode(memberRankApply.getCode());
-			findMemberRankApplyReturn.setShopCode(memberRankApply.getShopCode());
+			findMemberRankApplyReturn.setMemberCode(memberRankApply.getMemberCode());
 			findMemberRankApplyReturn.setMemberRankCode(memberRankApply.getMemberRankCode());
 			findMemberRankApplyReturn.setApplyTime(memberRankApply.getApplyTime());
 			findMemberRankApplyReturn.setApproveTime(memberRankApply.getApproveTime());
@@ -247,10 +255,7 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 		paramRankDto.setCode(memberRankApplyDto.getCode());
 		MemberRankApplyDto rltRankApplyDto = findMemberRankApply(memberRankApplyDto);
 		
-		//商店
-		ShopDto paramShopDto = new ShopDto();
-		paramShopDto.setCode(rltRankApplyDto.getShopCode());
-		ShopDto rltShopDto = shopService.findShop(paramShopDto);
+		
 		
 		//新购买特权
 		MemberRankDto memberRankDto = new MemberRankDto();
@@ -269,10 +274,10 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			
 			int successCnt = memberRankApplyDao.updateByPkAndStatus(memberRankApply);
 			
-			//更新商店的特权过期时间和特权号
+			//审批通过更新会员的特权过期时间和会员等级
 			if(successCnt>0 && memberRankApplyDto.getStatus().equals(MemberRankApplyStatus.SUCCESS.getValue())) {
 				
-				if(StringUtils.isNotEmpty(rltShopDto.getRankCode())) {
+				/*if(StringUtils.isNotEmpty(rltShopDto.getRankCode())) {
 					
 					//如果已经过期，清除特权信息
 					if(null!=rltShopDto.getRankExpireTime() && (rltShopDto.getRankExpireTime().getTime()<new Date().getTime())) {
@@ -290,12 +295,12 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 							throw new TsfaServiceException(ErrorCode.MEMBER_RANK_APPLY_UPDATE_ERROR,"不允许购买低级特权！");
 						}
 					}
-				}
+				}*/
 				
 				//支付
 				PaymentDto paymentDto = new PaymentDto();
 				paymentDto.setBizNo(rltRankApplyDto.getCode());
-				paymentDto.setMbrCode(rltShopDto.getMbrCode());
+				paymentDto.setMbrCode(memberRankApplyDto.getMemberCode());
 				paymentDto.setAmount(rltNewMemberRank.getAmount());
 				payment(paymentDto);
 				
@@ -325,18 +330,11 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			MemberRankApplyDto  rApplyDto = findMemberRankApply(pRankApplyDto);
 			rApplyDto.setStatus(MemberRankApplyStatus.SUCCESS.getValue());
 			
-			
 			MemberRankDto pmemberRankDto = new MemberRankDto();
 			pmemberRankDto.setCode(rApplyDto.getMemberRankCode());
 			MemberRankDto rmemberRankDto = memberRankService.findMemberRank(pmemberRankDto);
 			
-			
-			ShopDto paramShopDto = new ShopDto();
-			paramShopDto.setCode(rApplyDto.getShopCode());
-			ShopDto rShopDto = shopService.findShop(paramShopDto);
 			AccountDto accountDto = accountService.findAccountByMbrCode(paymentDto.getMbrCode());
-			
-			
 			if(rmemberRankDto.getAmount().compareTo(paymentDto.getAmount())<=0){
 				
 				/*记录账户流水*/
@@ -356,26 +354,66 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			} else {
 				throw new TsfaServiceException(ErrorCode.ORDER_PAYMENT_ERROR,"付款金额有误："+paymentDto.getAmount());
 			}
-
+			
+			//更新会员特权
+			MemberDto memberDto = new MemberDto();
+			memberDto.setCode(paymentDto.getMbrCode());
+			MemberDto member = memberService.findMember(memberDto);
+			//首次开通
+			if(null==member.getMemberRankCode()||StringUtils.isEmpty(member.getMemberRankCode())){
+				member.setMemberRankCode(rmemberRankDto.getCode());
+				member.setOpenMemberDate(new Date());
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(member.getOpenMemberDate());
+				calendar.add(calendar.YEAR, 1);
+				member.setCloseMemberDate(calendar.getTime());
+				//设置会员类型为卖家
+				member.setType(MemberType.SHOP.getValue());
+				//更新账户特权可用余额
+				accountDto.setRankCashAmt(rmemberRankDto.getAdvancePayment());
+				accountDto.setUpdateTime(new Date());
+			}else{
+				int oldLevel = Integer.parseInt(member.getMemberRankCode());
+				int memberLevel = Integer.parseInt(rApplyDto.getMemberRankCode());
+				//升级会员
+				if(memberLevel>oldLevel){
+					member.setMemberRankCode(rmemberRankDto.getCode());
+					member.setOpenMemberDate(new Date());
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(member.getOpenMemberDate());
+					calendar.add(calendar.YEAR, 1);
+					member.setCloseMemberDate(calendar.getTime());
+				}else{
+					//续费会员
+					if(member.getCloseMemberDate().before(new Date())){
+						member.setMemberRankCode(rmemberRankDto.getCode());
+						member.setOpenMemberDate(new Date());
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(member.getOpenMemberDate());
+						calendar.add(calendar.YEAR, 1);
+						member.setCloseMemberDate(calendar.getTime());
+					}else{
+						member.setMemberRankCode(rmemberRankDto.getCode());
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(member.getCloseMemberDate());
+						calendar.add(calendar.YEAR, 1);
+						member.setCloseMemberDate(calendar.getTime());
+					}
+				}
+				//更新账户特权可用余额
+				accountDto.setRankCashAmt(accountDto.getRankCashAmt().add(rmemberRankDto.getAdvancePayment()));
+				accountDto.setUpdateTime(new Date());
+			}
 			
 			
-			//更新商店特权
-			ShopDto updShopDto =  new ShopDto();
-			updShopDto.setCode(rApplyDto.getShopCode());
-			updShopDto.setRankCode(rApplyDto.getMemberRankCode());
-			Date afterOneYear = DateUtils.addYears(new Date(), 1);
-			updShopDto.setRankExpireTime(afterOneYear);
-			shopService.updateShop(updShopDto);
-			
+			//更新会员等级,过期时间
+			memberService.updateMember(member);
 			//更新特权帐户可用余额
-			updAccount4Rank(rShopDto, rApplyDto.getMemberRankCode(), accountDto);
+			accountService.updateAccount(accountDto);
 			
 			/*消息通知*/
-			ShopDto paramShop =  new ShopDto();
-			paramShop.setCode(rApplyDto.getShopCode());
-			ShopDto shopDto = shopService.findShop(paramShop);
 			MessageDto messageDto = new MessageDto();
-			messageDto.setRecevier(shopDto.getMbrCode());
+			messageDto.setRecevier(member.getCode());
 			messageService.addMessageByTemplate(messageDto, MessageTemplate.B_SERVICE_NOT_PARAM_MEMBER_RANK);
 		}catch (TsfaServiceException e) {
 			logger.error(e.getMessage(),e);
@@ -401,9 +439,10 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 	 * @author 林进权
 	 *         CreateDate: 2017年9月11日
 	 */
-	private void updAccount4Rank(ShopDto rShopDto, String rankCode, AccountDto accountDto) {
+	private void updAccount4Rank(MemberDto member, String rankCode, AccountDto accountDto) {
 		
-		rShopDto.getRankName();
+		
+		
 		FindMemberRankPage findMemberRankPage = new FindMemberRankPage();
 		List<MemberRankDto>  ranksList = memberRankService.findMemberRanks(findMemberRankPage);
 		boolean flag = false;
@@ -419,15 +458,15 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			}
 			
 			//如果现有特权为空，直接增加金额
-			if(StringUtils.isEmpty(rShopDto.getRankCode()) && StringUtils.equal(memberRankDto.getCode(), rankCode)) {
+			if(StringUtils.isEmpty(member.getMemberRankCode()) && StringUtils.equal(memberRankDto.getCode(), rankCode)) {
 				accountDto.setRankCashAmt(memberRankDto.getAmount());
 				accountService.updateAccount(accountDto);
 				break;
 			}
 			
 			//如果有小的商店特权，就记录前一次特权，再进行减除特存差异
-			if(StringUtils.equals(rShopDto.getRankCode(), memberRankDto.getCode())) {
-				prevDecimal = memberRankDto.getAmount();
+			if(StringUtils.equals(member.getMemberRankCode(), memberRankDto.getCode())) {
+				prevDecimal = memberRankDto.getAdvancePayment();
 				flag = true;
 				continue;
 			}
@@ -448,18 +487,25 @@ public class MemberRankApplyServiceImpl implements IMemberRankApplyService {
 			
 	
 			ShopDto paramShopDto = new ShopDto();
-			paramShopDto.setCode(rltRankApplyDto.getShopCode());
+			paramShopDto.setCode(rltRankApplyDto.getMemberCode());
 			ShopDto rltShopDto = shopService.findShop(paramShopDto);
-			MemberRankDto shopRankDto = new MemberRankDto();
-			shopRankDto.setCode(rltShopDto.getRankCode());
-			MemberRankDto rltShopRankDto = memberRankService.findMemberRank(shopRankDto);
 			
-			if(rltRankDto.getAmount().compareTo(rltShopRankDto.getAmount())<=0) {
-				throw new TsfaServiceException(ErrorCode.ORDER_PAYMENT_ERROR,"不允许购买更低级的特权！");
+			//如果商店已有权限，进行校验
+			if(null!=rltShopDto && StringUtils.isNotEmpty(rltShopDto.getRankCode())) {
+				
+				MemberRankDto shopRankDto = new MemberRankDto();
+				shopRankDto.setCode(rltShopDto.getRankCode());
+				MemberRankDto rltShopRankDto = memberRankService.findMemberRank(shopRankDto);
+				if(null!=rltShopRankDto) {
+					if(rltRankDto.getAmount().compareTo(rltShopRankDto.getAmount())<=0) {
+						throw new TsfaServiceException(ErrorCode.ORDER_PAYMENT_ERROR,"不允许购买更低级的特权！");
+					}
+					return rltRankDto.getAmount().subtract(rltShopRankDto.getAmount());
+				}
 			}
 			
 			logger.debug("queryAmt(String memberApplyCode={}) - end"); 
-			return rltRankDto.getAmount().subtract(rltShopRankDto.getAmount());
+			return rltRankDto.getAmount();
 		}catch (TsfaServiceException e) {
 			logger.error(e.getMessage(),e);
 			throw e;

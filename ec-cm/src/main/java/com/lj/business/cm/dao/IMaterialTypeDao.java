@@ -18,7 +18,7 @@ import com.lj.business.cm.dto.FindMaterialTypesAppReturn;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 罗书明
  *   
  * CreateDate: 2017年6月21日
@@ -189,4 +189,17 @@ public interface IMaterialTypeDao {
 	 *
 	 */
 	int findMaterialTypeForMemberPageCount(FindMaterialTypePage findMaterialTypePage);
+	/**
+	 * 
+	 *
+	 * 方法说明：素材类型列表_电商用
+	 *
+	 * @param findMaterialTypesApp
+	 * @return
+	 *
+	 * @author 林进权 CreateDate: 2017年9月23日
+	 *
+	 */
+	List<FindMaterialTypesAppReturn> findMaterialTypesAppEc(FindMaterialTypesApp findMaterialTypesApp) ;
+
 }

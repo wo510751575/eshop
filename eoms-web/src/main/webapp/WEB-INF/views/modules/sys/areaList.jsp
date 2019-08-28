@@ -39,7 +39,7 @@
 	</style>
 </head>
 <body>
-<div class="container">
+<div class="container"  style="height:950px;overflow-x:visible;overflow-y:scroll;">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/sys/area/">区域列表</a></li>
 		<shiro:hasPermission name="sys:area:edit"><li><a href="${ctx}/sys/area/form">区域添加</a></li></shiro:hasPermission>

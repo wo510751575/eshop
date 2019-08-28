@@ -148,6 +148,7 @@
    <result column="RATIO_CLIENT_INFO" property="ratioClientInfo" jdbcType="DECIMAL" />
    <result column="PM_TYPE_CODE" property="pmTypeCode" jdbcType="VARCHAR" />
    <result column="pmTypeName" property="pmTypeName" jdbcType="VARCHAR" />
+   <result column="pmTypeType" property="pmTypeType" jdbcType="VARCHAR" />
    
   </resultMap>
   <resultMap id="findPmSeachPageResultMap" type="com.lj.business.member.dto.FindPmSeachPageReturn" >
@@ -597,10 +598,12 @@
    <select id="findPmTypeIndexPage" resultMap="findPmTypeIndexPageResultMap" parameterType="com.lj.business.member.dto.FindPmTypeIndexPage" >
  SELECT pm.MEMBER_NO,pm.MEMBER_NAME,pm.MEMBER_NO_GM,pm.MEMBER_NAME_GM,pmb.NO_WX,pm.NICK_NAME_REMARK_WX,pm.NICK_NAME_REMARK_LOCAL
         ,pmb.NICK_NAME_WX,pmb.HEAD_ADDRESS,bp.BEHAVIOR_DESC,bp.BEHAVIOR_DATE,ptp.CODE,pm.URGENCY_PM,pmb.MOBILE,pmb.RATIO_CLIENT_INFO
-        ,ptp.PM_TYPE_CODE,(SELECT TYPE_NAME FROM pm_type pt WHERE pt.code = ptp.PM_TYPE_CODE) pmTypeName
+        ,ptp.PM_TYPE_CODE
+        ,(SELECT TYPE_NAME FROM pm_type pt WHERE pt.code = ptp.PM_TYPE_CODE) pmTypeName
+        ,(SELECT PM_TYPE_TYPE FROM pm_type pt WHERE pt.code = ptp.PM_TYPE_CODE) pmTypeType
 	  FROM PERSON_MEMBER_BASE pmb, PERSON_MEMBER pm, PM_TYPE_PM ptp,BEHAVIOR_PM bp
 	 <include refid="findPmTypeIndexPage_condition" />
-   order by pm.CREATE_DATE ${sortDir}
+   order by bp.BEHAVIOR_DATE DESC,pm.CREATE_DATE ${sortDir}
    limit ${start} , ${limit}
   </select>
   

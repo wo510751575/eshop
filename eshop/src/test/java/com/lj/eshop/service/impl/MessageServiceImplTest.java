@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
@@ -20,6 +20,7 @@ import com.lj.base.exception.TsfaServiceException;
 import com.lj.base.mvc.web.test.SpringTestCase;
 import com.lj.eshop.dto.FindMessagePage;
 import com.lj.eshop.dto.MessageDto;
+import com.lj.eshop.emus.MessageTemplate;
 import com.lj.eshop.service.IMessageService;
 
 /**
@@ -178,22 +179,19 @@ public class MessageServiceImplTest extends SpringTestCase{
 	
 	public static void main(String[] args) {
 		
-//		MessageDto messageDto = new MessageDto();
-//		messageDto.setcClientOrderNo("cClientBillCode");
-//		messageDto.setcClientCommodity("cClientCommodity");
-//		messageDto.setcClientMoney("1000");
-//		messageDto.setcClientName("cClientName");
-//		messageDto.setcClientReceiveName("cClientReceiveName");
-//		
-//		MessageServiceImpl service = new MessageServiceImpl();
-//		MessageTemplate[] templates = MessageTemplate.values();
-//		System.out.println("total==>>>" + templates.length);
-//		for(int i=0;i<templates.length; i++) {
-//			service.buildDtoParam(messageDto, templates[i]);
-//			System.out.println(templates[i]+"\ttitle-->" + messageDto.getTitle() +"\tcontent-->" + messageDto.getContent());
-//		}
-		for(int i=0;i <100; i++) {
-			System.out.println(new Random().nextInt(2));
+		MessageDto messageDto = new MessageDto();
+		messageDto.setcClientOrderNo("cClientBillCode");
+		messageDto.setcClientCommodity("cClientCommodity");
+		messageDto.setcClientMoney("1000");
+		messageDto.setcClientName("cClientName");
+		messageDto.setcClientReceiveName("cClientReceiveName");
+		
+		MessageServiceImpl service = new MessageServiceImpl();
+		MessageTemplate[] templates = MessageTemplate.values();
+		System.out.println("total==>>>" + templates.length);
+		for(int i=0;i<templates.length; i++) {
+			service.buildDtoParam(messageDto, templates[i]);
+			System.out.println(templates[i]+"\ttitle-->" + messageDto.getTitle() +"\tcontent-->" + messageDto.getContent());
 		}
 		
 	}

@@ -14,7 +14,7 @@ import com.lj.eoms.utils.excel.annotation.ExcelField;
  * <p>
  * 详细描述:
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  *   
  * CreateDate: 2017年9月2日
@@ -46,7 +46,7 @@ public class ShopMemberDto implements Serializable{
 	 /**
      * 手机
      */
-	@ExcelField(title="手机(使用文本格式)", align=3, sort=20)
+	@ExcelField(title="手机(号码前加上英文'符号)", align=3, sort=20)
     private String mobile;
 	
 	/**

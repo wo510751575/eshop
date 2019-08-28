@@ -4,7 +4,7 @@
 	
 	<groupId>com.lj</groupId>
 	<artifactId>eoms-web</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>eoms-web</name>
     
@@ -12,26 +12,16 @@
 	<properties> 
 		<!-- other setting -->
 		<jdk.version>1.8</jdk.version>
-		<jetty.version>7.6.10.v20130312</jetty.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<downloadSources>false</downloadSources>
-		<hessian.version>4.0.38.01</hessian.version>
 	</properties>
 	
 
 	<dependencies>
-	
-		<dependency>  
-	            <groupId>com.caucho</groupId>  
-	            <artifactId>hessian</artifactId>  
-	            <version>${hessian.version}</version>  
-	    </dependency>
 	    
 		
 		<dependency>
 			<groupId>com.lj.business</groupId>
 			<artifactId>ec-member-service</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
@@ -60,7 +50,7 @@
 	  	<dependency>
 	  		<groupId>com.lj</groupId>
 	  		<artifactId>eoms-core</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.0.1-SNAPSHOT</version>
 	  		<type>jar</type>
 	  		<scope>compile</scope>
 	  	</dependency>
@@ -68,7 +58,7 @@
 	  	<dependency>
 	  		<groupId>com.lj.eshop</groupId>
 	  		<artifactId>eshop-service</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.0.1-SNAPSHOT</version>
 	  		<type>jar</type>
 	  		<scope>compile</scope>
 	  	</dependency>
@@ -76,22 +66,22 @@
 	  	<dependency>
 			<groupId>com.lj.base</groupId>
 			<artifactId>base-mvc</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.6.6-SNAPSHOT</version>
 		</dependency>
 	  	<dependency>
 	  		<groupId>com.lj</groupId>
 	  		<artifactId>msg-service</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.6.6-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>com.lj.business</groupId>
 	  		<artifactId>ec-cm-service</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.0.1-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>com.lj</groupId>
 	  		<artifactId>cc-service</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.6.6-SNAPSHOT</version>
 	  	</dependency>
 	</dependencies> 
   <build>

@@ -68,6 +68,7 @@
 			<tr>
 				<th>订单号</th>
 				<th>定制描述</th>
+				<th>图片</th>
 				<th>订单状态</th>
 				<th>售价</th>
 				<th>定制时间</th>
@@ -82,6 +83,9 @@
 				</td>
 				<td>
 			    	${item.remarks}
+				</td>
+				<td>
+			    	<img alt="" src="${fns:getUploadUrl()}${item.img1}" width="50px" height="50px" > 
 				</td>
 				<td>
 					<c:forEach items="${status}" var="sta">

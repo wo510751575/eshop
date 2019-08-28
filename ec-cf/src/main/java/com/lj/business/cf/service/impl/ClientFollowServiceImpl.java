@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -869,15 +869,15 @@ public class ClientFollowServiceImpl implements IClientFollowService {
 		clientFollowSummaryService.updateClientFollowSummaryByCfNo(updateClientFollowSummary2);
 
 		//分类变动
-		ChangePmType changePmType = new ChangePmType();
+		/*ChangePmType changePmType = new ChangePmType();
 		changePmType.setMemberNo(memberNo);
 		changePmType.setMerchantNo(merchantNo);
 		changePmType.setMemberNoGm(memberNoGm);
 		changePmType.setPmTypeType(PmTypeType.SUCCESS);
-		pmTypeService.changePmType(changePmType);
+		pmTypeService.changePmType(changePmType);*/
 
 		//生成沟通任务
-		FindPmType findPmType = new FindPmType();
+		/*FindPmType findPmType = new FindPmType();
 		findPmType.setMerchantNo(merchantNo);
 		findPmType.setPmTypeType(PmTypeType.SUCCESS.toString());
 		FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
@@ -886,7 +886,7 @@ public class ClientFollowServiceImpl implements IClientFollowService {
 			hour = 0;
 		}else{
 			hour = Integer.valueOf(findPmTypeReturn.getFreValue());
-		}
+		}*/
 		AddComTask addComTask = new AddComTask();
 		addComTask.setMerchantNo(merchantNo);
 		addComTask.setMemberNoGm(memberNoGm);
@@ -894,7 +894,8 @@ public class ClientFollowServiceImpl implements IClientFollowService {
 		addComTask.setMemberName(memberName);
 		addComTask.setCfNo(ckNo);
 		addComTask.setNoType(FollowNoType.KEEP.toString());
-		addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+//		addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+		addComTask.setWorkDate(new Date());
 		addComTask.setComTaskType(ComTaskType.COM_TASK);
 		addComTask.setRemarkCom(CommonConstant.REPLACE_REMARK_COM + "成单");
 		addComTask.setLastResultDate(new Date());
@@ -1039,15 +1040,15 @@ public class ClientFollowServiceImpl implements IClientFollowService {
 					clientFollowSummaryService.updateClientFollowSummaryByCfNo(updateClientFollowSummary);
 
 					//分类变动
-					ChangePmType changePmType = new ChangePmType();
+					/*ChangePmType changePmType = new ChangePmType();
 					changePmType.setMemberNo(findPmAbandonReturn.getMemberNo());
 					changePmType.setMerchantNo(findPmAbandonReturn.getMerchantNo());
 					changePmType.setMemberNoGm(findPmAbandonReturn.getMemberNoGm());
 					changePmType.setPmTypeType(PmTypeType.GIVE_UP);
-					pmTypeService.changePmType(changePmType);
+					pmTypeService.changePmType(changePmType);*/
 
 					//生成沟通任务
-					FindPmType findPmType = new FindPmType();
+					/*FindPmType findPmType = new FindPmType();
 					findPmType.setMerchantNo(findPmAbandonReturn.getMerchantNo());
 					findPmType.setCode(PmTypeType.GIVE_UP.toString());
 					FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmType(findPmType);
@@ -1056,13 +1057,14 @@ public class ClientFollowServiceImpl implements IClientFollowService {
 						hour = 0;
 					}else{
 						hour = Integer.valueOf(findPmTypeReturn.getFreValue());
-					}
+					}*/
 					AddComTask addComTask = new AddComTask();
 					addComTask.setMerchantNo(findPmAbandonReturn.getMerchantNo());
 					addComTask.setMemberNoGm(findPmAbandonReturn.getMemberNoGm());
 					addComTask.setCfNo(ckNo);
 					addComTask.setNoType(FollowNoType.KEEP.toString());
-					addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+//					addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+					addComTask.setWorkDate(new Date());
 					addComTask.setComTaskType(ComTaskType.COM_TASK);
 					addComTask.setRemarkCom(CommonConstant.REPLACE_REMARK_COM + "审批通过，暂停跟进客户");
 					addComTask.setLastResultDate(new Date());

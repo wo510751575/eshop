@@ -23,8 +23,8 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/static/** = anon
-				${adminPath}/business/material/viewH5 = anon
-				${adminPath}/business/materialcommen/viewH5 = anon
+				${adminPath}/marketing/material/viewH5 = anon
+				${adminPath}/marketing/materialcommon/viewH5 = anon
 				${adminPath}/cm/activity/viewH5 = anon
 				${adminPath}/login = authc
 				${adminPath}/logout = logout
@@ -64,14 +64,21 @@
 	</bean>
 
 	<!-- 自定义Session存储容器 -->
-	<bean id="sessionDAO" class="com.ape.common.security.shiro.session.CacheSessionDAO">
+	<!-- <bean id="sessionDAO" class="com.ape.common.security.shiro.session.CacheSessionDAO">
 		<property name="sessionIdGenerator" ref="idGen" />
 		<property name="cacheManager" ref="shiroCacheManager" />
+	</bean> -->
+	<bean id="sessionDAO" class="com.lj.eoms.common.SessionRedisDao">
+		<property name="sessionIdGenerator" ref="idGen" />
+		<property name="sessionKeyPrefix" value="${redis.keyPrefix}_session_" />
 	</bean>
 	
 	<!-- 定义授权缓存管理器 -->
-	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+	<!-- <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManager" ref="cacheManager"/>
+	</bean> -->
+	<bean id="shiroCacheManager" class="com.lj.eoms.common.JedisCacheManager">
+		<property name="cacheKeyPrefix" value="${redis.keyPrefix}_cache_" />
 	</bean>
 	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->

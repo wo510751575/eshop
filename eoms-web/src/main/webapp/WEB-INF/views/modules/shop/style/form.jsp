@@ -40,6 +40,7 @@
 			position: static;
 			width: 26px;
     		height: 26px;
+    		margin-top:1px;
 		}
 		.palette-color-picker-bubble.downside{
 			top:18%;

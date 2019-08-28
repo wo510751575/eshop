@@ -41,31 +41,29 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/marketing/materialtype/list">素材类型列表</a></li>
 <%-- 		<shiro:hasPermission name="member:guid:edit"> --%>
-			<li><a href="${ctx}/marketing/materialtype/form">素材类型添加</a></li>
+			<%-- <li><a href="${ctx}/marketing/materialtype/form">素材类型添加</a></li> --%>
 <%-- 		</shiro:hasPermission> --%>
 	</ul>
- 	<form id="searchForm" action="${ctx}/marketing/materialtype" method="post" class="breadcrumb form-search">
+ 	<form id="searchForm" action="${ctx}/marketing/materialtype/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-<!-- 		<ul class="ul-form">
-		    <li><label>导购姓名：</label>
-		    	<input type="text" name="memberNo" class="input-medium" maxlength="100" placeholder="导购姓名">
-			</li>
-			<li><label>标题：</label>
-				<input type="text" name=mobile class="input-medium" maxlength="100" placeholder="标题">
-			</li>
+		<ul class="ul-form">
+			<!-- <li><label>标题：</label>
+				<input type="text" name="title" class="input-medium" maxlength="100" placeholder="标题">
+			</li> -->
 			
-			<li><label>类型：</label>
-				<select name="status">
-					<option value="1">正常</option>
-					<option value="1">注销</option>
-					<option value="1">冻结</option>
-				</select>
+			<li><label>素材维度：</label>
+				<select class="selectEnum"  name="materialDimension">
+                    <option value="">全部</option>
+                    <c:forEach items="${materialDimensionStatuss}" var="item">
+						<option value="${item.value}"
+							<c:if test="${item.value eq findMaterialTypePage.materialDimension}">selected="selected"</c:if> >${item.chName}</option>
+					</c:forEach>
+                </select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="reset" onclick="CancelQuery()" value="取消查询"/></li>
 			<li class="clearfix"></li>
-		</ul> -->
+		</ul>
 	</form> 
 	<tags:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
@@ -74,8 +72,8 @@
 				<th>素材类型名称</th>
 				<!-- <th>所属导购</th> -->
  				<th>素材量</th>
-				<!--<th>客户回应量</th>
-				<th>客户关注率</th> -->
+				<th>维度</th>
+				<!--<th>客户关注率</th>-->
 				<th>备注</th>
 <%-- 				<shiro:hasPermission name="member:guid:edit"> --%>
 				<th>操作</th>
@@ -96,14 +94,21 @@
 				</td>
 				<!-- <td></td>
 				<td></td>
-				<td></td>
-				<td></td> -->
+				<td></td>-->
+				<td>
+					<c:forEach items="${materialDimensionStatuss}" var="p">
+							<c:choose> 
+								<c:when test="${p.value == item.materialDimension}">${p.chName}</c:when>
+								<c:otherwise></c:otherwise>
+							</c:choose>
+						</c:forEach>
+				</td>
 				<td>
 					${item.remark}
 				</td>
-<%-- 				<shiro:hasPermission name="member:guid:edit"> --%>
+<%--<shiro:hasPermission name="member:guid:edit"> --%>
 				<td>
-					<a href="${ctx}/marketing/materialtype/form?code=${item.code}">修改</a>
+<%--<a href="${ctx}/marketing/materialtype/form?code=${item.code}">修改</a>--%>
 				</td>
 <%-- 				</shiro:hasPermission> --%>
 			</tr>

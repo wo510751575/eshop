@@ -30,7 +30,10 @@ public interface IOrderDao {
    	List<CatalogSummaryDto> findProductCatalog(FindOrderPage findOrderPage);
    	
    	/**获取店铺销售排名**/
-	Integer findAmtRank(String loginShopCode);
+	Integer findAmtRank(FindOrderPage findOrderPage);
 
 	List<Map<String,Object>> findOrderGroupStatus(FindOrderPage findOrderPage);
+ 	
+	CatalogSummaryDto findTopProductCatalog(FindOrderPage findOrderPage);
+	
 }

@@ -60,7 +60,7 @@
 		</property>
 		<property name="cacheMilliseconds">
 			<!-- 每小时更新 -->
-			<value>3600000</value>
+			<value>360000</value>
 		</property>
 		<property name="systemParamsService" ref="systemParamsService" />
 	</bean>

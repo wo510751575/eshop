@@ -13,7 +13,7 @@ import com.lj.eoms.utils.excel.annotation.ExcelField;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月29日

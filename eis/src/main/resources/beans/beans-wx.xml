@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	  http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+  
+	<!--   	微信聊天记录 -->
+	<bean id="wxChatInfoService" parent="systemHessianFactoryBean">   
+		<property name="systemAliasName" value="ec-wx" />
+		<property name="serviceName" value="wxChatInfoService" />
+		<property name="serviceInterface" value="com.lj.business.weixin.service.IWxChatInfoService" />   
+    </bean>
+    <!--   	朋友圈信息 -->
+	<bean id="wxFriendsInfoService" parent="systemHessianFactoryBean">   
+		<property name="systemAliasName" value="ec-wx" />
+		<property name="serviceName" value="wxFriendsInfoService" />
+		<property name="serviceInterface" value="com.lj.business.weixin.service.IWxFriendsInfoService" />   
+    </bean>    
+
+</beans> 
+

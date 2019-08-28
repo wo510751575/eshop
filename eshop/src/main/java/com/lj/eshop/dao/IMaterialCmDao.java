@@ -15,6 +15,8 @@ public interface IMaterialCmDao {
 
 	int updateByPrimaryKeySelective(MaterialCm materialCm);
 
+	int updateByPrimaryKey(MaterialCm materialCm);
+
 	List<MaterialCmDto> findMaterialCmPage(FindMaterialCmPage findMaterialCmPage);
 
 	int findMaterialCmPageCount(FindMaterialCmPage findMaterialCmPage);

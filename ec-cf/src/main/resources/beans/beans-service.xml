@@ -12,26 +12,16 @@
 
 
       <bean id="systemParamsService" parent="systemHessianFactoryBean" >   
-		<property name="systemAliasName">
-			<value>cc</value>
-		</property>
-		<property name="serviceName">
-			<value>systemParamsService</value>
-		</property>
-		<property name="serviceInterface">   
-			<value>com.lj.cc.service.ISystemParamsService</value>  
-		</property>
+		<property name="systemAliasName" value="cc" />
+		<property name="serviceName" value="systemParamsService" />
+		<property name="serviceInterface" value="com.lj.cc.service.ISystemParamsService" />   
     </bean> 
       
      <bean id="ccSystemInfoService" class="com.lj.base.mvc.remote.hession.spring.HessianTimeoutProxyFactoryBean">   
 		<!-- 请求代理Servlet路径 -->           
-		<property name="serviceUrl">  
-			<value>${cc_url}/systemInfoService</value>   
-		</property>
+		<property name="serviceUrl" value="${cc_url}/systemInfoService" />  
 		<!-- 接口定义 -->   
-		<property name="serviceInterface">   
-			<value>com.lj.cc.service.ISystemInfoService</value>  
-		</property>
+		<property name="serviceInterface" value="com.lj.cc.service.ISystemInfoService" />   
 		<!-- 读超时时间设置为10秒 -->
 		<property name="readTimeout" value="60000"/> 
 		<!-- 连接超时时间设置为10秒 -->
@@ -50,16 +40,14 @@
 	
 	<!--  系统参数本地缓存 -->
     <bean id="localCacheSystemParams" class="com.lj.cc.clientintf.LocalCacheSystemParamsFromCC">
-		<property name="systemAliasName">
-			<value>all</value>
-		</property>
+		<property name="systemAliasName" value="all" />
 		<property name="defaultSystemAliasName">
 			<!-- 默认查询会员系统参数 -->
 			<value>ec-cf</value>
 		</property>
 		<property name="cacheMilliseconds">
 			<!-- 每小时更新 -->
-			<value>3600000</value>
+			<value>360000</value>
 		</property>
 		<property name="systemParamsService" ref="systemParamsService" />
 	</bean>

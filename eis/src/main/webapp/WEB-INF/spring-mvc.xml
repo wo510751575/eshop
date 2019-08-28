@@ -125,9 +125,11 @@
 		                 	<entry key="/addrs/upd" value="1,2" />
 		                 	<entry key="/addrs/del" value="1,2" />
 		                 	<entry key="/addrs/setDefault" value="1,2" />
+		                 	<entry key="/mbr/img/upd" value="1,2" />
 		                 	
 		                 	<!-- 我的消息 -->
 		                 	<entry key="/message/list" value="1,2,3" />
+		                 	<entry key="/message/unRead" value="1,2" />
 		                 	<!-- 支付相关 -->
 		                 	<entry key="/pay/unifiedorder" value="1,2" />
 		                 	<!-- 提现相关 -->
@@ -142,8 +144,8 @@
 		                 	<!-- 需要登录的，不限制BC端谁登录 END -->
 		                 	
 		                 	<!-- 需要B登录的 -->
-		                 	<entry key="/product/index" value="1" />
-		                 	<entry key="/product/list" value="1" />
+		                 	<entry key="/product/index" value="1,2,3" />
+		                 	<entry key="/product/list" value="1,2,3" />
 		                 	<entry key="/shop/myShop" value="1" />
 		                 	<entry key="/shop/editShop" value="1" />
 		                 	<entry key="/shop/productStatus" value="1" />
@@ -157,9 +159,9 @@
 		                 	<entry key="/order/list_b" value="1" />
 		                 	<entry key="/myColl/list" value="1" />
 		                 	<entry key="/myColl/del" value="1" />
-		                 	<entry key="/member/memberRankApply/list" value="1" />
+		                 	<entry key="/member/memberRankApply/list" value="1,2" />
 		                 	<entry key="/member/memberRankApply/view" value="1" />
-		                 	<entry key="/member/memberRankApply/apply" value="1" />
+		                 	<entry key="/member/memberRankApply/apply" value="1,2" />
 		                 	<entry key="/shop/retire/view" value="1" />
 		                 	<entry key="/shop/retire/add" value="1" />
 		                 	<entry key="/custOrder/history" value="1" />
@@ -180,8 +182,25 @@
 		             		<entry key="/mbr/updpass" value="3" />
 		             		<entry key="/mbr/myinfo" value="3" />
 		             		<entry key="/mbr/myinfo/upd" value="3" />
-		             		<entry key="/message/unRead" value="3" />
+		             		<!-- <entry key="/message/unRead" value="3" /> -->
 		             		<entry key="/message/newMsg" value="3" />
+		             		
+		             		<entry key="/appmaterial/findMaterialTypesApp" value="3" />
+		             		<entry key="/appmaterial/findMaterialTypePage" value="3" />
+		             		<entry key="/appmaterial/addMaterialType" value="3" />
+		             		<entry key="/appmaterial/addMaterial" value="3" />
+		             		<entry key="/appmaterial/materialList" value="3" />
+		             		<entry key="/appmaterial/search" value="3" />
+		             		<entry key="/appwork/findGreetClientForDay" value="3" />
+		             		<entry key="/appwork/addGreetClient" value="3" /> 
+		             		
+		             		<entry key="/member/findPmSeachPage" value="3" />
+		             		<entry key="/member/findPmTypeIndex" value="3" />
+		             		<entry key="/member/findStIndexPage" value="3" />
+		             		<entry key="/member/findPmTypeIndexAll" value="3" /> 
+		             		<entry key="/member/changePmType" value="3" />
+		             		<entry key="/member/modifyMemberInfo" value="3" />
+		             		<entry key="/member/findPmInfo" value="3" /> 
 		             		<!-- 需要APP登录的END  -->
 		             	</map>
 	        		</property>

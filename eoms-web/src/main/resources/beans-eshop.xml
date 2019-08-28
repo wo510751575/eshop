@@ -334,5 +334,19 @@
 		<property name="serviceName" value="materialCmService" />
 		<property name="serviceInterface" value="com.lj.eshop.service.IMaterialCmService" />
 	</bean>
+	
+	<!-- 商品特权价服务 -->
+	<bean id="productRankPriceService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productRankPriceService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductRankPriceService" />
+	</bean>
+	
+	<!-- 商品素材图片服务 -->
+	<bean id="productMaterialService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productMaterialService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductMaterialService" />
+	</bean>
 </beans> 
 

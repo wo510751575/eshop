@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="${ctxStatic}/editor/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctxStatic}/editor/init.js"></script>
 	<script src="${ctxStatic}/common/plupload.full.min.js" type="text/javascript"></script>
-	<link href="${ctxStatic}/common/select2.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
     $(document).ready(function() {
     	
@@ -224,7 +223,7 @@
                 			<c:forEach items="${data.imgAddr.split(',') }" var="imgaddr">
 	                			<div class="img_info">
 	                			<span class="close-Icon"></span>
-	                			<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgaddr}"  height="120px" width="120px">
+	                			<img src="${fns:getUploadUrl()}${imgaddr}"  height="120px" width="120px">
 	                			</div>
                 			</c:forEach>
                 		</c:when>

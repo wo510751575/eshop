@@ -87,31 +87,25 @@
 		<where>
 			<if test="param!=null">
 				<!-- 查询条件根据业务需求自由添加 -->
-				<if test="param.code != null and param.code !='' ">
-					<![CDATA[and t.code =#{param.code}]]>
-				</if>
 				<if test="param.status != null and param.status !='' ">
-					<![CDATA[and t.status =#{param.status} and p.status =#{param.status}]]>
-				</if>
-				<if test="param.shopCode != null and param.shopCode !='' ">
-					<![CDATA[and t.shop_code =#{param.shopCode}]]>
+					<![CDATA[and p.status =#{param.status}]]>
 				</if>
 			</if>
 		</where>
 	</sql>
 	<select id="findIndexProductPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductPage">
 		<![CDATA[
-			SELECT t.code,t.status
-			,p.code product_code,p.name product_name,p.unit product_unit,p.product_icon product_icon,p.spe_img product_spe_img,p.product_key product_key
+			SELECT 
+			p.code product_code,p.name product_name,p.unit product_unit,p.product_icon product_icon,p.spe_img product_spe_img,p.product_key product_key
 			,p.cnt product_cnt
 			,s.sale_price sku_sale_price,s.price sku_price,
-			(((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) )
-			)  sku_gap_price
+			IF(s.sale_price-prp.rank_price < 0,0,s.sale_price-prp.rank_price) gap_price
 			,s.`code` sku_code,s.sku_desc sku_skuDesc,s.cnt sku_cnt
-			from t_shop_product t
-			JOIN t_product p ON p.code = t.product_code
+			from 
+			t_product p 
 			JOIN t_product_sku s on p.code=s.product_code and s.is_default='0' and s.del_flag='0'
-			JOIN t_supply y on p.supply_code=y.code   
+			JOIN t_supply y on p.supply_code=y.code  
+			JOIN t_product_rank_price prp ON s.`code` = prp.sku_code 
  		]]>
 		 <include refid="findIndexPage_condition" />
 		<if test="sortBy==null or sortBy=='' ">
@@ -126,8 +120,8 @@
 	<select id="findIndexProductPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindProductPage">
 		select count(*)
 		<![CDATA[
-			from t_shop_product t
-			JOIN t_product p ON p.code = t.product_code
+			from 
+			t_product p 
 			JOIN t_product_sku s on p.code=s.product_code and s.is_default='0' and s.del_flag='0'
 			JOIN t_supply y on p.supply_code=y.code   
  		]]>

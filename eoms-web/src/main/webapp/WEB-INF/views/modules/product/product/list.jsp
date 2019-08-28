@@ -15,7 +15,7 @@
 				var code = $(this).attr("data-code");
 				
 				// 正常打开	
-				top.$.jBox.open("iframe:${ctx}/product/product/form?code="+code+"&isView="+true,"商品详情", 680, 360,{//宽高
+				/* top.$.jBox.open("iframe:${ctx}/product/product/form?code="+code+"&isView="+true,"商品详情", 680, 360,{//宽高
 					id:9527,
 					draggable: true,
 					showClose: true,
@@ -26,8 +26,8 @@
 						top.$('.jbox-container .jbox-title').css('line-height','35px').css("color","#ffffff");
 					},
 					closed: function () { 
-					} /* 信息关闭后执行的函数 */
-				});
+					} // 信息关闭后执行的函数
+				}); */
 		    });
 		});
 		//跳页
@@ -38,6 +38,28 @@
 			return false;
 		}
 	</script>
+	
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -63,7 +85,7 @@
 			</li>
 			<li><label>商品类目：</label>
 			  <tags:treeselect id="catalog" name="param.catalogTypeCode" value="${productCatalog.code}" 
-                labelName="parentCatalogName" labelValue="${productCatalog.catalogName}"
+                labelName="parentCatalogName" allowClear="true" labelValue="${productCatalog.catalogName}"
 					title="商品分类" url="/product/catalog/treeData" extId="${productCatalog.code}" cssClass="required"/>
 			</li>
 			
@@ -105,7 +127,7 @@
 					<td title="${item.name}"><a class="view_btn" data-code="${item.code}">${item.name}</a></td>
 					<td>
 						<c:if test="${!empty item.productIcon }">
-							<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.productIcon } " width="60" height="60"/>
+							<img src="${fns:getUploadUrl()}${item.productIcon } " width="60" height="60"/>
 						</c:if>
 					</td>
 					<td>${item.supplyName}</td>

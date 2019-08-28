@@ -145,7 +145,7 @@
 				<div class="controls">
 				      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 					       <c:if test="${fn:contains(item.value,'/eoms')}">
-					       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.value}"/>
+					       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${item.value}"/>
 					       </c:if>
 					       <c:if test="${empty item.value}">
 					                                  选择图片
@@ -210,7 +210,7 @@
 					   	<div class="controls" style="width: 285px;">
 						      <div id="image_btn_${sta.index}" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center" class="image_btn" data-num="${sta.index}">
 							       <c:if test="${!empty item.value}">
-							       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.value}" alt="双击选择图片"/>
+							       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${item.value}" alt="双击选择图片"/>
 							       </c:if>
 							       <c:if test="${empty item.value}">
 							                                  双击选择图片
@@ -289,7 +289,7 @@
 				<div class="controls" style="width: 285px;">
 				      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center" class="image_btn" data-num="0">
 					       <c:if test="${!empty item.value}">
-					       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.value}"/>
+					       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${item.value}"/>
 					       </c:if>
 					       <c:if test="${empty item.value}">
 					                                  双击选择图片

@@ -16,7 +16,7 @@
     </bean>
 
 	<import resource="classpath*:beans/beans-*.xml"/>
-	<import resource="classpath*:spring-context-jedis.xml"/>
+<!-- 	<import resource="classpath*:spring-context-jedis.xml"/> -->
 	<!-- 激活annotation功能 -->
 	<context:annotation-config />
 	<!-- 激活annotation功能 -->
@@ -32,11 +32,5 @@
 		<!-- one of the properties available; the maximum file size in bytes -->
 		<property name="maxUploadSize" value="20000000"/><!-- 20m -->
 	</bean>
-	
-	<!-- 系统配置 -->
-	<bean id="sysConfig" class="com.lj.eshop.eis.config.SysConfig" >
-		<property name="wxPayNotifyUrl" value="${pay.wx_notify_url}"/>
-	</bean>
-	
 </beans> 
 

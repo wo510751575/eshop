@@ -8,7 +8,7 @@ import java.util.Date;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年9月18日
@@ -18,22 +18,34 @@ public class EisMaterialDto {
 
 	//素材
 	private String title;
+	
 	//内容
 	private String remarks;
+	
 	//图片
 	private String imgs;
+	
 	//产品code
 	private String productCode;
+	
 	//0卖家素材，1官方素材， 2精选素材
 	private String bizType;
+	
 	//素材code
 	private String code;
-	//素材关连表code
+	
+	//cm.material.code
 	private String materialCmCode;
-	//素材关连表code
 	private Date createTime;
-	//素材关连表code
+	
+	//t_merchant.code
 	private String merchantCode;
+	
+	//t_merchant.code
+	private String materialdimension;
+
+	//t_merchant.code
+	private String url;
 
 	public String getRemarks() {
 		return remarks;
@@ -105,6 +117,22 @@ public class EisMaterialDto {
 
 	public void setMerchantCode(String merchantCode) {
 		this.merchantCode = merchantCode;
+	}
+
+	public String getMaterialdimension() {
+		return materialdimension;
+	}
+
+	public void setMaterialdimension(String materialdimension) {
+		this.materialdimension = materialdimension;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	

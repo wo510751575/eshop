@@ -3,7 +3,7 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
@@ -49,7 +49,7 @@ import com.lj.cc.enums.SystemAliasName;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 邹磊
  *   
  * CreateDate: 2017年7月24日

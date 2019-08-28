@@ -349,5 +349,12 @@
 		<property name="serviceInterface" value="com.lj.eshop.service.IBankInfoService" />
 	</bean>
 	
+	<!-- 商品素材图片服务 -->
+	<bean id="productMaterialService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="eshop" />
+		<property name="serviceName" value="productMaterialService" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductMaterialService" />
+	</bean>
+	
 </beans> 
 

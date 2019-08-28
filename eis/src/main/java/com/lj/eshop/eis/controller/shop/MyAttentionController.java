@@ -28,7 +28,7 @@ import com.lj.eshop.service.IShopService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年8月31日

@@ -98,8 +98,8 @@
             <div class="control-group">
                 <label class="control-label">网址链接:</label>
                 <div class="controls">
-                    <input type="text" id="linkUrl" name="linkUrl"  maxlength="127" class=" input-xxlarge" value="${data.linkUrl}"/>
-<!--                     <span class="help-inline"><font color="red">*</font></span> -->
+                    <input type="text" id="linkUrl" name="linkUrl"  maxlength="127" class=" input-xxlarge required" value="${data.linkUrl}"/>
+                     <span class="help-inline"><font color="red">*</font></span> 
                 </div>
             </div>
             
@@ -115,7 +115,7 @@
                 			<c:forEach items="${data.imgAddr.split(',') }" var="imgaddr">
 	                			<div class="img_info">
 	                			<span class="close-Icon"></span>
-	                			<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgaddr}"  height="120px" width="120px">
+	                			<img src="${fns:getUploadUrl()}${imgaddr}"  height="120px" width="120px">
 	                			</div>
                 			</c:forEach>
                 		</c:when>
@@ -131,7 +131,7 @@
                 <div class="controls">
 					<div id="showImgAddr_btn" style="border: 1px solid #e0e6eb; width: 120px; height: 120px; line-height: 100px; text-align: center">
 						<c:if test="${!empty data.showImgAddr}">
-							<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.showImgAddr}" />
+							<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.showImgAddr}" />
 						</c:if>
 						<c:if test="${empty data.showImgAddr}">选择图片</c:if>
 					</div>

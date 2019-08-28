@@ -1,9 +1,13 @@
 package com.lj.eshop.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
@@ -14,13 +18,8 @@ import org.junit.Test;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.exception.TsfaServiceException;
 import com.lj.base.mvc.web.test.SpringTestCase;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.lj.eshop.dto.ProductSkuDto;
 import com.lj.eshop.dto.FindProductSkuPage;
+import com.lj.eshop.dto.ProductSkuDto;
 import com.lj.eshop.service.IProductSkuService;
 
 /**
@@ -33,14 +32,12 @@ import com.lj.eshop.service.IProductSkuService;
  * @author lhy
  * 
  * 
- * CreateDate: 2017-08-22
+ *         CreateDate: 2017-08-22
  */
-public class ProductSkuServiceImplTest extends SpringTestCase{
+public class ProductSkuServiceImplTest extends SpringTestCase {
 
 	@Resource
 	IProductSkuService productSkuService;
-
-
 
 	/**
 	 * 
@@ -53,9 +50,9 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void addProductSku() throws TsfaServiceException{
+	public void addProductSku() throws TsfaServiceException {
 		ProductSkuDto productSkuDto = new ProductSkuDto();
-		//add数据录入
+		// add数据录入
 		productSkuDto.setCode("Code");
 		productSkuDto.setCnt(1);
 		productSkuDto.setProductCode("ProductCode");
@@ -69,11 +66,11 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 		productSkuDto.setPrice(new BigDecimal(1));
 		productSkuDto.setIsDefault("IsDefault");
 		productSkuDto.setSkuDesc("SkuDesc");
-		
+
 		productSkuService.addProductSku(productSkuDto);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -85,9 +82,9 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void updateProductSku() throws TsfaServiceException{
+	public void updateProductSku() throws TsfaServiceException {
 		ProductSkuDto productSkuDto = new ProductSkuDto();
-		//update数据录入
+		// update数据录入
 		productSkuDto.setCode("Code");
 		productSkuDto.setCnt(1);
 		productSkuDto.setProductCode("ProductCode");
@@ -103,9 +100,9 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 		productSkuDto.setSkuDesc("SkuDesc");
 
 		productSkuService.updateProductSku(productSkuDto);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -117,12 +114,13 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findProductSku() throws TsfaServiceException{
+	public void findProductSku() throws TsfaServiceException {
 		ProductSkuDto findProductSku = new ProductSkuDto();
-		findProductSku.setCode("111");
-		productSkuService.findProductSku(findProductSku);
+		findProductSku.setCode("YE_0065183f27e241f0afafb9e635b22022");
+		ProductSkuDto productSkuDto = productSkuService.findProductSku(findProductSku);
+		System.out.println(productSkuDto);
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -134,18 +132,18 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findProductSkuPage() throws TsfaServiceException{
+	public void findProductSkuPage() throws TsfaServiceException {
 		FindProductSkuPage findProductSkuPage = new FindProductSkuPage();
 		List<String> codes = new ArrayList<>();
 		codes.add("LJ_30a149a70212427782a2fce1977bc290");
 		codes.add("LJ_33960089ac98485e89ceb0e7fdf4ec08");
 		findProductSkuPage.setInCodes(codes);
 		Page<ProductSkuDto> page = productSkuService.findProductSkuPage(findProductSkuPage);
-		
+
 		Assert.assertNotNull(page);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -157,11 +155,14 @@ public class ProductSkuServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findProductSkus() throws TsfaServiceException{
+	public void findProductSkus() throws TsfaServiceException {
 		FindProductSkuPage findProductSkuPage = new FindProductSkuPage();
+		ProductSkuDto param = new ProductSkuDto();
+		param.setProductCode("YE_bfd67436929a40b997c83869bb083691");
+		findProductSkuPage.setParam(param);
 		List<ProductSkuDto> page = productSkuService.findProductSkus(findProductSkuPage);
 		Assert.assertNotNull(page);
-		
+
 	}
-	
+
 }

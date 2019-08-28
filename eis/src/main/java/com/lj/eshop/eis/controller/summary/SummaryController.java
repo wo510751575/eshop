@@ -1,17 +1,17 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.controller.summary;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lj.base.core.pagination.Page;
 import com.lj.base.core.util.DateUtils;
 import com.lj.base.core.util.StringUtils;
+import com.lj.base.exception.TsfaServiceException;
+import com.lj.eshop.constant.ErrorCode;
+import com.lj.eshop.dto.CatalogSummaryDto;
 import com.lj.eshop.dto.FindMyAttentionPage;
 import com.lj.eshop.dto.FindOrderPage;
 import com.lj.eshop.dto.FindSummaryPage;
 import com.lj.eshop.dto.MyAttentionDto;
 import com.lj.eshop.dto.OrderDto;
 import com.lj.eshop.dto.SummaryDto;
+import com.lj.eshop.dto.SummaryShowDto;
 import com.lj.eshop.eis.controller.BaseController;
 import com.lj.eshop.eis.dto.ResponseCode;
 import com.lj.eshop.eis.dto.ResponseDto;
@@ -42,7 +45,7 @@ import com.lj.eshop.service.ISummaryService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 彭俊霖
  * 
  *         CreateDate: 2017年9月11日
@@ -97,7 +100,8 @@ public class SummaryController extends BaseController {
 		/*获取店铺销售排名*/
 		Integer rank;
 		try {
-			rank=orderService.findAmtRank(getLoginShopCode())==null?0:orderService.findAmtRank(getLoginShopCode());
+			rank=orderService.findAmtRank(findOrderPage);
+			rank=(rank==null?0:rank);
 		} catch (Exception e) {
 			logger.error("my_b 当日排名>>", e);
 			rank = 0;
@@ -129,6 +133,8 @@ public class SummaryController extends BaseController {
 			orderCount = 0;
 			returnsOrderCount = 0;
 		}
+		//商品销量统计 销售最优的商品
+		CatalogSummaryDto product= orderService.findTopProductCatalog(findOrderPage);
 		
 		Map<String,Object> data=new HashMap<>();
 		data.put("monthAmt", monthAmt);						//销售额
@@ -136,7 +142,9 @@ public class SummaryController extends BaseController {
 		data.put("attCount", attCount);						//客户量
 		data.put("orderCount", orderCount);					//订单数
 		data.put("returnsOrderCount", returnsOrderCount);	//退货订单数
-		
+		if(product!=null){
+			data.put("cataLogName", product.getParentCataLogCode());//销量最好的商品类目
+		}
 		logger.debug("SummaryController --> index(={}) - end");
 		return ResponseDto.successResp(data);
 	}
@@ -153,56 +161,42 @@ public class SummaryController extends BaseController {
 		FindSummaryPage findSummaryPage = new FindSummaryPage();
 		findSummaryPage.setParam(summaryDto);
 		logger.debug("SummaryController --> list() - start", findSummaryPage); 
-		
-		if(summaryDto==null||StringUtils.isEmpty(summaryDto.getDimensionSt())){
+		if(summaryDto==null||StringUtils.isEmpty(summaryDto.getDimensionSt())||summaryDto.getDays()==null){
 			return ResponseDto.createResp(false, ResponseCode.PARAM_ERROR.getCode(), ResponseCode.PARAM_ERROR.getMsg(), null);
 		}
-		if(pageNo!=null){
-			findSummaryPage.setStart((pageNo-1)*pageSize);
-		}
-		if(pageSize!=null){
-			findSummaryPage.setLimit(pageSize);
-		}
-		
-		Date now = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(now);
-		//时间推至一周前
-		calendar.add(Calendar.WEEK_OF_YEAR, -1);
-		//将小时至0  
-		calendar.set(Calendar.HOUR_OF_DAY, 0);  
-		//将分钟至0  
-		calendar.set(Calendar.MINUTE, 0);  
-		//将秒至0  
-		calendar.set(Calendar.SECOND,0);
-		Date startTime=calendar.getTime();
-		if (StringUtils.isEmpty(summaryDto.getStartTime())) {
-			summaryDto.setStartTime(DateUtils.formatDate(startTime, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
-		}
-		
-		calendar.setTime(now);
-		//将小时至23  
-		calendar.set(Calendar.HOUR_OF_DAY, 23);  
-		//将分钟至59  
-		calendar.set(Calendar.MINUTE, 59);  
-		//将秒至59  
-		calendar.set(Calendar.SECOND,59);  
-		Date endTime= calendar.getTime();
-		if (StringUtils.isEmpty(summaryDto.getEndTime())) {
-			summaryDto.setEndTime(DateUtils.formatDate(endTime, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
-		}
-		
+		summaryDto.setShopCode(getLoginShopCode());
 		findSummaryPage.setParam(summaryDto);
-		Page<SummaryDto> summarys=summaryService.findSummaryPage(findSummaryPage);
-		List<SummaryDto> list = new ArrayList<SummaryDto>();
-		list.addAll(summarys.getRows());
+		SummaryShowDto data=summaryService.findSummaryByType(findSummaryPage);
+		logger.debug("SummaryController --> list(={}) - end", data);
 		
-		if(summarys.getRows()==null || list.size()<=0){
-			return ResponseDto.createResp(false, ResponseCode.NO_DATA.getCode(), ResponseCode.NO_DATA.getMsg(), null);
+		return ResponseDto.successResp(data);
+	}
+	
+	/**
+	 *
+	 * 方法说明：获取指定日期后延的日期。
+	 *
+	 * @param start 日期源
+	 * @param i 加的天数
+	 * @return
+	 *
+	 * @author lhy  2017年9月28日
+	 *
+	 */
+	private  Date getDate(Date start,int i){
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+		Date beginDate = start;
+		Calendar date = Calendar.getInstance();
+		date.setTime(beginDate);
+		date.set(Calendar.DATE, date.get(Calendar.DATE) + i);
+		Date endDate;
+		try {
+			endDate = dft.parse(dft.format(date.getTime()));
+		} catch (ParseException e) {
+			logger.error("日期转换异常",e);
+			throw new TsfaServiceException(ErrorCode.SUMMARY_NOT_EXIST_ERROR,"统计信息信息不存在",e);
 		}
-		
-		logger.debug("SummaryController --> list(={}) - end", list);
-		return ResponseDto.successResp(summarys);
+		return endDate;
 	}
 	
 }

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.weixin.dao.IWxFriendsInfoDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.weixin.domain.WxFriendsInfo" >
+    <id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="MEMBER_NAME" jdbcType="VARCHAR" property="memberName" />
+    <result column="AUTHORID" jdbcType="VARCHAR" property="authorid" />
+    <result column="AUTHORNAME" jdbcType="VARCHAR" property="authorname" />
+    <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="ID_WX" jdbcType="VARCHAR" property="idWx" />
+    <result column="MEDIALIST" jdbcType="VARCHAR" property="medialist" />
+    <result column="TIMESTAMP" jdbcType="VARCHAR" property="timestamp" />
+    <result column="SOURCETYPE" jdbcType="CHAR" property="sourcetype" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="SHAREURL" jdbcType="VARCHAR" property="shareurl" />
+    <result column="SHARETITLE" jdbcType="VARCHAR" property="sharetitle" />
+    <result column="IMGPATH_LOCAL" jdbcType="VARCHAR" property="imgpathLocal" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+  </resultMap>
+  <resultMap id="findWxFriendsInfoPageResultMap" type="com.lj.business.weixin.dto.FindWxFriendsInfoPageReturn" >
+ 	 <id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="MEMBER_NAME" jdbcType="VARCHAR" property="memberName" />
+    <result column="AUTHORID" jdbcType="VARCHAR" property="authorid" />
+    <result column="AUTHORNAME" jdbcType="VARCHAR" property="authorname" />
+    <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="ID_WX" jdbcType="VARCHAR" property="idWx" />
+    <result column="MEDIALIST" jdbcType="VARCHAR" property="medialist" />
+    <result column="TIMESTAMP" jdbcType="VARCHAR" property="timestamp" />
+    <result column="SOURCETYPE" jdbcType="CHAR" property="sourcetype" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="SHAREURL" jdbcType="VARCHAR" property="shareurl" />
+    <result column="SHARETITLE" jdbcType="VARCHAR" property="sharetitle" />
+    <result column="IMGPATH_LOCAL" jdbcType="VARCHAR" property="imgpathLocal" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    CODE, MEMBER_NO, MEMBER_NAME, AUTHORID, AUTHORNAME, COMMENTS, CONTENT, ID_WX, MEDIALIST, 
+    TIMESTAMP, SOURCETYPE, TYPE, SHAREURL, SHARETITLE, IMGPATH_LOCAL, CREATE_DATE, REMARK, 
+    REMARK2, REMARK3, REMARK4
+  </sql>
+   <sql id="findWxFriendsInfoPage_condition" >
+  	 <where>
+      <if test="memberNo != null and memberNo !=''" >
+        and  MEMBER_NO = #{memberNo}
+      </if>
+      <if test="idWx != null and idWx !=''" >
+        and  ID_WX = #{idWx}
+      </if>
+      <if test="authorid != null and authorid !=''" >
+        and  AUTHORID = #{authorid}
+      </if>
+       <if test="memberName != null and memberName != ''" >
+        and  MEMBER_NAME like CONCAT('%',#{memberName},'%' )
+      </if>
+      <if test="startTime != null">
+		<![CDATA[and CREATE_DATE >= #{startTime}]]>
+	 </if>
+	 <if test="endTime != null"> 
+		<![CDATA[and CREATE_DATE <= #{endTime}]]>
+	 </if>
+      </where>
+  </sql>
+   <!-- 分页查询 -->
+   <select id="findWxFriendsInfoPage" resultMap="findWxFriendsInfoPageResultMap" parameterType="com.lj.business.weixin.dto.FindWxFriendsInfoPage" >
+  SELECT  <include refid="Base_Column_List" />
+  FROM wx_friends_info 
+ 	 <include refid="findWxFriendsInfoPage_condition" />
+   order by TIMESTAMP ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findWxFriendsInfoPageCount" resultType="int" parameterType="com.lj.business.weixin.dto.FindWxFriendsInfoPage" >
+    select  count(*)
+     FROM wx_friends_info 
+     <include refid="findWxFriendsInfoPage_condition" />
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wx_friends_info
+    where CODE = #{code}
+  </select>
+  
+<insert id="insertSelective" parameterType="com.lj.business.weixin.domain.WxFriendsInfo" >
+    insert into wx_friends_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="memberNo != null" >
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME,
+      </if>
+      <if test="authorid != null" >
+        AUTHORID,
+      </if>
+      <if test="authorname != null" >
+        AUTHORNAME,
+      </if>
+      <if test="comments != null" >
+        COMMENTS,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="idWx != null" >
+        ID_WX,
+      </if>
+      <if test="medialist != null" >
+        MEDIALIST,
+      </if>
+      <if test="timestamp != null" >
+        TIMESTAMP,
+      </if>
+      <if test="sourcetype != null" >
+        SOURCETYPE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="shareurl != null" >
+        SHAREURL,
+      </if>
+      <if test="sharetitle != null" >
+        SHARETITLE,
+      </if>
+      <if test="imgpathLocal != null" >
+        IMGPATH_LOCAL,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="remark2 != null" >
+        REMARK2,
+      </if>
+      <if test="remark3 != null" >
+        REMARK3,
+      </if>
+      <if test="remark4 != null" >
+        REMARK4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null" >
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="authorid != null" >
+        #{authorid,jdbcType=VARCHAR},
+      </if>
+      <if test="authorname != null" >
+        #{authorname,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="idWx != null" >
+        #{idWx,jdbcType=VARCHAR},
+      </if>
+      <if test="medialist != null" >
+        #{medialist,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null" >
+        #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="shareurl != null" >
+        #{shareurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sharetitle != null" >
+        #{sharetitle,jdbcType=VARCHAR},
+      </if>
+      <if test="imgpathLocal != null" >
+        #{imgpathLocal,jdbcType=VARCHAR},
+      </if>
+        NOW(),
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.weixin.domain.WxFriendsInfo" >
+    update wx_friends_info
+    <set >
+      <if test="memberNo != null" >
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null" >
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="authorid != null" >
+        AUTHORID = #{authorid,jdbcType=VARCHAR},
+      </if>
+      <if test="authorname != null" >
+        AUTHORNAME = #{authorname,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="idWx != null" >
+        ID_WX = #{idWx,jdbcType=VARCHAR},
+      </if>
+      <if test="medialist != null" >
+        MEDIALIST = #{medialist,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        TIMESTAMP = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null" >
+        SOURCETYPE = #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="shareurl != null" >
+        SHAREURL = #{shareurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sharetitle != null" >
+        SHARETITLE = #{sharetitle,jdbcType=VARCHAR},
+      </if>
+      <if test="imgpathLocal != null" >
+        IMGPATH_LOCAL = #{imgpathLocal,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

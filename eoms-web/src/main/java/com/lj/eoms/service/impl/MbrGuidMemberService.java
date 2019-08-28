@@ -1,20 +1,28 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.ape.common.config.Global;
 import com.lj.base.core.encryption.MD5;
 import com.lj.base.core.util.StringUtils;
 import com.lj.base.exception.TsfaServiceException;
+import com.lj.base.mvc.web.httpclient.HttpClientUtils;
 import com.lj.business.member.constant.ErrorCode;
 import com.lj.business.member.dto.AddGuidMember;
 import com.lj.business.member.dto.FindGuidMember;
@@ -25,6 +33,7 @@ import com.lj.business.member.dto.UpdateGuidMember;
 import com.lj.business.member.emus.Gender;
 import com.lj.business.member.emus.MemberStatus;
 import com.lj.business.member.service.IGuidMemberService;
+import com.lj.cc.clientintf.LocalCacheSystemParamsFromCC;
 import com.lj.eoms.dto.ResponseCode;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindMemberPage;
@@ -42,7 +51,7 @@ import com.lj.eshop.service.IShopService;
  * 
  * <p>
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月20日
@@ -57,6 +66,8 @@ public class MbrGuidMemberService {
 	private IMemberService memberService;
 	@Autowired
 	private com.lj.business.member.service.IShopService mbrShopService;//会员体系店铺信息
+	@Resource
+	private LocalCacheSystemParamsFromCC localCacheSystemParams;
 	
 	/**
 	 * 方法说明：新增导购。
@@ -66,6 +77,18 @@ public class MbrGuidMemberService {
 	 *
 	 */
 	public void addGuidMember(ShopDto shopDto,String from ){
+		/*try {
+			//把会员信息同步更新到热文会员
+			String url = localCacheSystemParams.getSystemParam("cc","rw", "rwRegistUrl");
+			Map map = new HashMap<>();
+			map.put("code", shopDto.getMbrCode());
+			map.put("name", shopDto.getShopName());
+			String result = HttpClientUtils.postToWeb(url, map);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}*/
+		
 		ShopDto ecfindShop=shopService.findShop(shopDto);
 		//1.根据店找到电商会员
 		MemberDto mbrParam=new MemberDto(); 

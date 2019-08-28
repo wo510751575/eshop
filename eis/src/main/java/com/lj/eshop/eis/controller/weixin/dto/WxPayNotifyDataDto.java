@@ -4,7 +4,7 @@ package com.lj.eshop.eis.controller.weixin.dto;
  * 类说明：支付提交Post数据给到API之后，API会返回XML格式的数据，这个类用来装这些数据.
  * <p>
  *  原样封装，不做特殊处理。
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月8日

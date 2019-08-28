@@ -34,7 +34,7 @@ public class SmsSenderServiceImplTest extends SpringTestCase{
 	public void sendTemplateSms() throws TsfaServiceException{
 		Map<String,String> contentMap = new HashMap<String,String>();
 		contentMap.put("validationCode", "test");
-		contentMap.put("senderName", "领居科技");
+		contentMap.put("senderName", "深圳扬恩科技");
 		smsSenderService.sendTemplateSms("18670275128", "test", contentMap, SmsBizType.LOGIN.getValue());
 	}
 }

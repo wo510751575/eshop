@@ -45,14 +45,14 @@
 			<li><label>商品名称：</label>
 				<input type="text" name="productName" class="input-medium" maxlength="100" placeholder="商品名称" value="${productName}">
 			</li>
-			<li><label style="width:110px">素材类型名称：</label>
+			<%-- <li><label style="width:110px">素材类型名称：</label>
 				<select name="param.materialTypeCode" id="materialTypeCode" >
 			 			<option value="">全部</option>
 			 			<c:forEach items="${materialType }" var="item">
-			 			<option value="${item.code}" <c:if test="${item.typeName eq findMaterialReturnPage.param.materialTypeCode}">selected="selected"</c:if> >${item.typeName}</option>
+			 			<option value="${item.code}" <c:if test="${item.code eq findMaterialReturnPage.param.materialTypeCode}">selected="selected"</c:if> >${item.typeName}</option>
 			 			</c:forEach>
 					 </select>
-			</li>
+			</li> --%>
 			
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -64,8 +64,8 @@
 			<tr>
 				<th>标题</th>
 <!--				<th>分享次数</th>
- 				<th>缩略图</th> -->
-				<th>素材类型名称</th>
+ 				<th>缩略图</th>
+				<th>素材类型名称</th> -->
 				<th>商品名称</th>
 <%--				<th>门店名称</th>
  				<th>门店类型</th>
@@ -83,10 +83,10 @@
 				</td>
 				<%--<td>
 					${item.respondNum}
-				</td> --%>
+				</td> 
 				<td>
 					${item.materialTypeName}
-				</td>
+				</td>--%>
 				<td>${item.productName}</td>
 				<%--<td>
 					<c:forEach items="${productList}" var="item2">
@@ -105,10 +105,10 @@
 				</td>--%>
 				<shiro:hasPermission name="marketing:materialcommon:edit">
 				<td>
-					<a href="${ctx}/marketing/materialcommon/form?code=${item.code}&&tempId=${item.tempId}&cmMaterialCode=${item.cmMaterialCode}">修改</a>
-					<%--<a href="${ctx}/marketing/materialcommon/del?code=${item.code}" onclick="return confirmx('确定删除吗？', this.href)">删除</a>
-					<a class="copyBtn" href="javascript:;" data-clipboard-text="" data-code="${item.code}">复制链接</a>--%>
-					<a href="${ctx}/marketing/materialcommon/view?cmMaterialCode=${item.cmMaterialCode}&materialCmCode=${item.code}" target="_black">预览</a>
+					<%--<a href="${ctx}/marketing/materialcommon/del?code=${item.code}" onclick="return confirmx('确定删除吗？', this.href)">删除</a>--%>
+					<a class="copyBtn" href="javascript:;" data-clipboard-text="" data-code="${item.code}">复制链接</a>
+					<a href="${ctx}/marketing/materialcommon/view?code=${item.code}" target="_black">预览</a>
+					<a href="${ctx}/marketing/materialcommon/form?code=${item.code}&&tempId=${item.tempId}">修改</a>
 				</td>
 				</shiro:hasPermission>
 			</tr>

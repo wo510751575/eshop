@@ -3,7 +3,7 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -61,7 +61,7 @@ public class MerchantServiceImplTest extends SpringTestCase{
 	public void addMerchant() throws TsfaServiceException{
 		AddMerchant addMerchant = new AddMerchant();
 		//add数据录入
-		addMerchant.setMerchantName("领居科技有限公司_2");
+		addMerchant.setMerchantName("深圳扬恩科技有限公司_2");
 		addMerchant.setStatus(Status.NORMAL);
 		addMerchant.setWebsiteUrl("www.ljkeji.com");
 		addMerchant.setBusinessType("businessType");
@@ -89,7 +89,7 @@ public class MerchantServiceImplTest extends SpringTestCase{
 		//update数据录入
 		updateMerchant.setCode(GUID.getPreUUID());
 		updateMerchant.setMerchantNo(GUID.getPreUUID());
-		updateMerchant.setMerchantName("领居科技有限公司");
+		updateMerchant.setMerchantName("深圳扬恩科技有限公司");
 		updateMerchant.setStatus(Status.NORMAL);
 		updateMerchant.setAddress("Address");
 		updateMerchant.setEmail("Email");

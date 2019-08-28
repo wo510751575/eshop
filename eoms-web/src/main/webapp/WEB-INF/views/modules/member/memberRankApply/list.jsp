@@ -38,6 +38,27 @@
 			return false;
 		}
 	</script>
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -50,8 +71,8 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>商户名称：</label>
-		    	<input type="text" name="param.shopName" value="${findMemberRankApplyPage.param.shopName}" class="input-medium" maxlength="100" placeholder="标题">
+			<li><label>会员名称：</label>
+		    	<input type="text" name="param.memberName" value="${findMemberRankApplyPage.param.memberName}" class="input-medium" maxlength="100" placeholder="标题">
 			</li>
 			
 		    <li><label>审核状态：</label>
@@ -70,9 +91,10 @@
 	</form>
 	<tags:message content="${message}"/>
 		<table id="treeTable" class="table table-striped table-bordered table-condensed hide">
-			<thead><tr>
-			<th>商户code</th>
-			<th>商户名称</th>
+			<thead>
+			<tr>
+			<th>会员code</th>
+			<th>会员名称</th>
 			<th>申请特权</th>
 			<th>申请时间</th>
 			<th>审核时间</th>
@@ -83,8 +105,8 @@
 			<tbody>
 			<c:forEach items="${page.list}" var="item">
 				<tr id="${item.code}">
-					<td title="${item.shopCode}">${item.shopCode}</td>
-					<td >${item.shopName}</td>
+					<td title="${item.memberCode}">${item.memberCode}</td>
+					<td >${item.memberName}</td>
 					<td >${item.memberRankName}</td>
 					<td> <fmt:formatDate value="${item.applyTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
 					<td> <fmt:formatDate value="${item.approveTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -97,15 +119,23 @@
 						</c:forEach>
 					</td>
 					<!--为空或者空才允许审核-->
-					<c:if test="${(empty item.status) or (item.status eq 0)}">
-						<shiro:hasPermission name="member:memberRankApply:edit"><td nowrap>
-							<a href="${ctx}/member/memberRankApply/status?code=${item.code}&status=1" onclick="return confirmx('确定已打款标记为审核通过吗？<br/>将无法修改，请谨慎操作', this.href)">审核通过</a>
-							<a href="${ctx}/member/memberRankApply/status?code=${item.code}&status=2" onclick="return confirmx('确定要审核不通过吗？将无法修改，请谨慎操作', this.href)">审核不通过</a>
-						</td>
+						<shiro:hasPermission name="member:memberRankApply:edit">
+							<c:choose> 
+									<c:when test="${(empty item.status) or (item.status eq 0)}">
+										<td nowrap>
+										<a href="${ctx}/member/memberRankApply/status?code=${item.code}&status=1" onclick="return confirmx('确定已打款标记为审核通过吗？<br/>将无法修改，请谨慎操作', this.href)">审核通过</a>
+										<a href="${ctx}/member/memberRankApply/status?code=${item.code}&status=2" onclick="return confirmx('确定要审核不通过吗？将无法修改，请谨慎操作', this.href)">审核不通过</a>
+										</td>
+									</c:when>
+									<c:otherwise>
+										<td nowrap>
+										</td>
+									</c:otherwise>
+							</c:choose>
 						</shiro:hasPermission>
-					</c:if>
 				</tr>
-			</c:forEach></tbody>
+			</c:forEach>
+			</tbody>
 		</table>
 		<div class="pagination">${page}</div>
 	

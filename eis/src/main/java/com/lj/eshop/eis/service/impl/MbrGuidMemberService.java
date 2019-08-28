@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.service.impl;
@@ -9,7 +9,8 @@ package com.lj.eshop.eis.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,14 +50,14 @@ import com.lj.eshop.service.IShopService;
  * 
  * <p>
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月20日
  */
 @Service
 public class MbrGuidMemberService {
-	private static Logger logger = Logger.getLogger(MbrGuidMemberService.class);	
+	private static Logger logger = LoggerFactory.getLogger(MbrGuidMemberService.class); 	
 	
 	@Autowired
 	private IShopService shopService;
@@ -188,38 +189,56 @@ public class MbrGuidMemberService {
 	 */
 	public void updateMember(UpdateGuidMemberDto updMbr) {
 		// 姓名  性别  邮箱  地区 头像
+		if(StringUtils.isEmpty(updMbr.getMemberName())
+			&& StringUtils.isEmpty(updMbr.getGender())
+			&& StringUtils.isEmpty(updMbr.getEmail())
+			&& StringUtils.isEmpty(updMbr.getProvinceCode())
+			&& StringUtils.isEmpty(updMbr.getCityCode())
+			&& StringUtils.isEmpty(updMbr.getCityAreaCode())
+			&& StringUtils.isEmpty(updMbr.getHeadAddress())
+			&& StringUtils.isEmpty(updMbr.getAddress())
+		){
+			throw new TsfaServiceException(ResponseCode.PARAM_ERROR.getCode(), ResponseCode.PARAM_ERROR.getMsg());
+		}
+		LoginUserDto user = UserTokenThreadLocal.get();
+		
 		String sex = null;
-		if (StringUtils.isNotEmpty(updMbr.getGender())) {
-			if (updMbr.getGender().equals(MemberSex.MALE.getValue())
-					|| updMbr.getGender().equals(MemberSex.FEMALE.getValue())) {
+		if (StringUtils.isNotEmpty(updMbr.getGender())
+				||StringUtils.isNotEmpty(updMbr.getMemberName())
+				|| StringUtils.isNotEmpty(updMbr.getHeadAddress())
+				) {
+			if (updMbr.getGender()!=null&&(updMbr.getGender().equals(MemberSex.MALE.getValue())
+					|| updMbr.getGender().equals(MemberSex.FEMALE.getValue()))
+					) {
 				sex = updMbr.getGender();
 			}
-			LoginUserDto user = UserTokenThreadLocal.get();
 			MemberDto member = new MemberDto();
 			member.setCode(user.getMember().getCode());
 			member.setSex(sex);
-//			member.setAvotor(updMbr.getHeadAddress()); 不同步修改电商的头像
+			member.setAvotor(updMbr.getHeadAddress()); 
 			member.setName(updMbr.getMemberName());
 			memberService.updateMember(member);// 1.修改电商数据
-			// 2.修改导购数据
-			if (user.getGuidMbr() != null) {
-				UpdateGuidMember updateGuidMbr = new UpdateGuidMember();
-				updateGuidMbr.setMemberName(updMbr.getMemberName());
-				updateGuidMbr.setCode(user.getGuidMbr().getCode());
-				updateGuidMbr.setNickName(updMbr.getMemberName());
-				updateGuidMbr.setGender(sex);
-				updateGuidMbr.setUpdateDate(new Date());
-				updateGuidMbr.setUpdateId(user.getMember().getCode());
-				updateGuidMbr.setProvinceCode(updMbr.getProvinceCode());
-				updateGuidMbr.setCityCode(updMbr.getCityCode());
-				updateGuidMbr.setCityAreaCode(updMbr.getCityAreaCode());
+		}
+		
+		// 2.修改导购数据
+		if (user.getGuidMbr() != null) {
+			UpdateGuidMember updateGuidMbr = new UpdateGuidMember();
+			updateGuidMbr.setMemberName(updMbr.getMemberName());
+			updateGuidMbr.setCode(user.getGuidMbr().getCode());
+			updateGuidMbr.setNickName(updMbr.getMemberName());
+			updateGuidMbr.setGender(sex);
+			updateGuidMbr.setUpdateDate(new Date());
+			updateGuidMbr.setUpdateId(user.getMember().getCode());
+			updateGuidMbr.setProvinceCode(updMbr.getProvinceCode());
+			updateGuidMbr.setCityCode(updMbr.getCityCode());
+			updateGuidMbr.setCityAreaCode(updMbr.getCityAreaCode());
 //				updateGuidMbr.setAreaCode(updMbr.getAreaCode());区域CODE 暂不处理
 //				updateGuidMbr.setAreaName(updMbr.);
-				updateGuidMbr.setAddress(updMbr.getAddress());
-				updateGuidMbr.setEmail(updMbr.getEmail());
-				updateGuidMbr.setHeadAddress(updMbr.getHeadAddress());
-				guidMemberService.updateGuidMember(updateGuidMbr);
-			}
+			updateGuidMbr.setAddress(updMbr.getAddress());
+			updateGuidMbr.setEmail(updMbr.getEmail());
+			updateGuidMbr.setHeadAddress(updMbr.getHeadAddress());
+			logger.info("getHeadAddress:"+updMbr.getHeadAddress());
+			guidMemberService.updateGuidMember(updateGuidMbr);
 		}
 	}
 

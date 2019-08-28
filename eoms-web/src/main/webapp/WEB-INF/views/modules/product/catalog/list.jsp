@@ -15,6 +15,28 @@
 	    	$("#listForm").submit();
     	}
 	</script>
+
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -32,7 +54,7 @@
 					<td title="${item.catalogName}"><a href="${ctx}/product/catalog/form?code=${item.code}">${item.catalogName}</a></td>
 					<td>
 						<c:if test="${item.parentCatalogCode ne '1'}">
-							<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.imageUrl}" width="40" height="40">
+							<img src="${fns:getUploadUrl()}${item.imageUrl}" width="40" height="40">
 						</c:if>
 					</td>
 					<td style="text-align:center;">${item.orderNo}</td>

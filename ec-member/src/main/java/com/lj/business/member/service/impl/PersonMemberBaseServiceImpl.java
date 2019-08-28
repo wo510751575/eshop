@@ -3,9 +3,10 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -199,10 +200,8 @@ public class PersonMemberBaseServiceImpl implements IPersonMemberBaseService {
 			personMemberBase.setHeadAddress(updatePersonMemberBase.getHeadAddress());
 			personMemberBase.setSubsribeTime(updatePersonMemberBase.getSubsribeTime());
 			personMemberBase.setCityAreaCode(updatePersonMemberBase.getCityAreaCode());
-			personMemberBase.setCreateId(updatePersonMemberBase.getCreateId());
-			personMemberBase.setCreateDate(updatePersonMemberBase.getCreateDate());
 			personMemberBase.setUpdateId(updatePersonMemberBase.getUpdateId());
-			personMemberBase.setUpdateDate(updatePersonMemberBase.getUpdateDate());
+			personMemberBase.setUpdateDate(new Date());
 			personMemberBase.setBirthday(updatePersonMemberBase.getBirthday());
 			personMemberBase.setAreaCode(updatePersonMemberBase.getAreaCode());
 			personMemberBase.setAreaName(updatePersonMemberBase.getAreaName());
@@ -211,7 +210,7 @@ public class PersonMemberBaseServiceImpl implements IPersonMemberBaseService {
 			personMemberBase.setCityCode(updatePersonMemberBase.getCityCode());
 			personMemberBase.setProvinceCode(updatePersonMemberBase.getProvinceCode());
 			personMemberBase.setRatioClientInfo(updatePersonMemberBase.getRatioClientInfo());
-			
+			personMemberBase.setInterest(updatePersonMemberBase.getInterest());
 			AssertUtils.notUpdateMoreThanOne(personMemberBaseDao.updateByPrimaryKeySelective(personMemberBase));
 			UpdatePersonMemberBaseReturn updatePersonMemberBaseReturn = new UpdatePersonMemberBaseReturn();
 
@@ -276,7 +275,7 @@ public class PersonMemberBaseServiceImpl implements IPersonMemberBaseService {
 			findPersonMemberBaseReturn.setUpdateDate(personMemberBase.getUpdateDate());
 			findPersonMemberBaseReturn.setBirthday(personMemberBase.getBirthday());
 			findPersonMemberBaseReturn.setRatioClientInfo(personMemberBase.getRatioClientInfo());
-			
+			findPersonMemberBaseReturn.setInterest(personMemberBase.getInterest());
 			logger.debug("findPersonMemberBase(FindPersonMemberBase) - end - return value={}", findPersonMemberBaseReturn); //$NON-NLS-1$
 			return findPersonMemberBaseReturn;
 		}catch (TsfaServiceException e) {

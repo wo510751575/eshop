@@ -38,6 +38,27 @@
 			return false;
 		}
 	</script>
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -51,7 +72,7 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 		    <li><label>名称：</label>
-		    	<input type="text" name="param.name" value="${findmemberRankPage.param.name}" class="input-medium" maxlength="100" placeholder="标题">
+		    	<input type="text" name="param.name" value="${name}" class="input-medium" maxlength="100" placeholder="名称">
 			</li>
 			
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>

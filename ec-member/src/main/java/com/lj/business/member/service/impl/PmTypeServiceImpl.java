@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -28,10 +28,8 @@ import com.lj.business.cf.dto.clientFollow.AddClientFollow;
 import com.lj.business.cf.dto.clientFollowSummary.FindClientFollowSummary;
 import com.lj.business.cf.dto.clientFollowSummary.FindClientFollowSummaryReturn;
 import com.lj.business.cf.dto.comTask.AddComTask;
-import com.lj.business.cf.dto.comTask.UpdateComTaskGroup;
 import com.lj.business.cf.dto.comTaskList.FindComTaskList;
 import com.lj.business.cf.dto.comTaskList.FindComTaskListReturn;
-import com.lj.business.cf.emus.ComTaskFinish;
 import com.lj.business.cf.emus.ComTaskType;
 import com.lj.business.cf.emus.FollowNoType;
 import com.lj.business.cf.emus.FollowType;
@@ -39,7 +37,6 @@ import com.lj.business.cf.service.IClientFollowService;
 import com.lj.business.cf.service.IClientFollowSummaryService;
 import com.lj.business.cf.service.IComTaskListService;
 import com.lj.business.cf.service.IComTaskService;
-import com.lj.business.common.CommonConstant;
 import com.lj.business.member.constant.ErrorCode;
 import com.lj.business.member.dao.IPersonMemberDao;
 import com.lj.business.member.dao.IPmTypeDao;
@@ -72,8 +69,6 @@ import com.lj.business.member.dto.FindPmTypeReturn;
 import com.lj.business.member.dto.UpdatePersonMember;
 import com.lj.business.member.dto.UpdatePmType;
 import com.lj.business.member.dto.UpdatePmTypeReturn;
-import com.lj.business.member.emus.FirstIntroduce;
-import com.lj.business.member.emus.PmTypeType;
 import com.lj.business.member.emus.UrgentFlagType;
 import com.lj.business.member.service.IGuidMemberIntegralService;
 import com.lj.business.member.service.IGuidMemberService;
@@ -510,25 +505,25 @@ public class PmTypeServiceImpl implements IPmTypeService {
 			}
 			PmType pmTypeOrg = pmTypeDao.selectByPrimaryKey(pmTypePm.getPmTypeCode());//原来的客户分类
 
-			if(PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
-				logger.debug("录入紧急分类关联");
-				FindPersonMember findPersonMember = new FindPersonMember();
-				findPersonMember.setMemberNo(memberNo);
-				findPersonMember.setMemberNoGm(memberNoGm);
-				findPersonMember.setMerchantNo(merchantNo);
-				FindPersonMemberReturn findPersonMemberReturn = personMemberService.findPersonMemberByMGM(findPersonMember );
-				PmTypePm record  = new PmTypePm();
-				record.setCode(GUID.generateCode());
-				record.setPmTypeCode(pmTypeCode);
-				record.setCodePm(findPersonMemberReturn.getCode());
-				pmTypePmDao.insert(record);
-			}else{
+//			if(PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
+//				logger.debug("录入紧急分类关联");
+//				FindPersonMember findPersonMember = new FindPersonMember();
+//				findPersonMember.setMemberNo(memberNo);
+//				findPersonMember.setMemberNoGm(memberNoGm);
+//				findPersonMember.setMerchantNo(merchantNo);
+//				FindPersonMemberReturn findPersonMemberReturn = personMemberService.findPersonMemberByMGM(findPersonMember );
+//				PmTypePm record  = new PmTypePm();
+//				record.setCode(GUID.generateCode());
+//				record.setPmTypeCode(pmTypeCode);
+//				record.setCodePm(findPersonMemberReturn.getCode());
+//				pmTypePmDao.insert(record);
+//			}else{
 				logger.debug("更新分类");
 				PmTypePm record  = new PmTypePm();
 				record.setCode(code);
 				record.setPmTypeCode(pmTypeCode);
 				pmTypePmDao.updateByPrimaryKeySelective(record);
-			}
+//			}
 
 			logger.debug(" 产生沟通任务");
 			AddComTask addComTask = new AddComTask();
@@ -548,59 +543,59 @@ public class PmTypeServiceImpl implements IPmTypeService {
 			}
 
 			//紧急处理
-			if(PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
-				logger.debug("紧急处理");
-				UpdatePersonMember updatePersonMember = new UpdatePersonMember();
-				updatePersonMember.setMemberNo(memberNo);
-				updatePersonMember.setMemberNoGm(memberNoGm);
-				updatePersonMember.setUrgencyPm(UrgentFlagType.Y.toString());
-				personMemberService.updatePersonMemberByMGM(updatePersonMember);
-			}
+//			if(PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
+//				logger.debug("紧急处理");
+//				UpdatePersonMember updatePersonMember = new UpdatePersonMember();
+//				updatePersonMember.setMemberNo(memberNo);
+//				updatePersonMember.setMemberNoGm(memberNoGm);
+//				updatePersonMember.setUrgencyPm(UrgentFlagType.Y.toString());
+//				personMemberService.updatePersonMemberByMGM(updatePersonMember);
+//			}
 
 			//未分组挪到其他分组产生跟进记录 初次介绍任务,并且不是挪到紧急
-			if(PmTypeType.UNGROUP.toString().equals(pmTypeOrg.getPmTypeType()) && !PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
-				logger.debug("未分组挪到其他分组产生跟进记录");
-				addCfOrder(merchantNo, memberNoGm, memberNo, pmType, addComTask,false,true);//产生跟进记录
-
-				if(PmTypeType.INTENTION_N.toString().equals(pmType.getPmTypeType()) || PmTypeType.INTENTION.toString().equals(pmType.getPmTypeType()) 
-						|| PmTypeType.OTHER.toString().equals(pmType.getPmTypeType())){
-					logger.debug("未分组挪到其他分组（意向到店客户/意向未到店客户/非意向(OTHER)） 产生 初次介绍");
-					UpdatePersonMember updatePersonMember = new UpdatePersonMember();
-					updatePersonMember.setMemberNo(memberNo);
-					updatePersonMember.setMemberNoGm(memberNoGm);
-					updatePersonMember.setFirstIntroduce(FirstIntroduce.Y.toString());
-					personMemberService.updatePersonMemberByMGM(updatePersonMember);
-
-					//产生初次介绍任务
-					if(StringUtils.isEmpty(pmType.getFreValue())){
-						pmType.setFreValue("0");
-					}
-
-					addComTask.setWorkDate(DateUtils.addHours(new Date(), Integer.valueOf(pmType.getFreValue())));
-					addComTask.setComTaskType(ComTaskType.FIRST_INTR);
-					addComTask.setRemarkCom(CommonConstant.REPLACE_REMARK_COM +"分组客户" );
-					addComTask.setLastResultDate(new Date());
-
-					FindComTaskList findComTaskList_temp = new FindComTaskList();
-					findComTaskList_temp.setMerchantNo(merchantNo);
-					findComTaskList_temp.setComTaskType(ComTaskType.FIRST_INTR);
-					FindComTaskListReturn findComTaskListReturn_temp = comTaskListService.findComTaskList(findComTaskList_temp);
-					if(findComTaskListReturn_temp != null){
-						addComTask.setCodeList(findComTaskListReturn_temp.getCode());
-						addComTask.setMemberNo(memberNo);
-						if(findClientFollowSummaryReturn != null)
-							addComTask.setMemberName(findClientFollowSummaryReturn.getMemberName());
-						comTaskService.addComTask(addComTask);
-					}else{
-						logger.error("初次介绍任务类型不存在！");
-					}
-
-					//关闭分组任务
-					UpdateComTaskGroup updateComTaskGroup = new UpdateComTaskGroup();
-					updateComTaskGroup.setMemberNo(memberNo);
-					updateComTaskGroup.setMemberNoGm(memberNoGm);
-					updateComTaskGroup.setFinish(ComTaskFinish.FINISH);
-					comTaskService.updateComTaskGroup(updateComTaskGroup);
+//			if(PmTypeType.UNGROUP.toString().equals(pmTypeOrg.getPmTypeType()) && !PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
+//				logger.debug("未分组挪到其他分组产生跟进记录");
+//				addCfOrder(merchantNo, memberNoGm, memberNo, pmType, addComTask,false,true);//产生跟进记录
+//
+//				if(PmTypeType.INTENTION_N.toString().equals(pmType.getPmTypeType()) || PmTypeType.INTENTION.toString().equals(pmType.getPmTypeType()) 
+//						|| PmTypeType.OTHER.toString().equals(pmType.getPmTypeType())){
+//					logger.debug("未分组挪到其他分组（意向到店客户/意向未到店客户/非意向(OTHER)） 产生 初次介绍");
+//					UpdatePersonMember updatePersonMember = new UpdatePersonMember();
+//					updatePersonMember.setMemberNo(memberNo);
+//					updatePersonMember.setMemberNoGm(memberNoGm);
+//					updatePersonMember.setFirstIntroduce(FirstIntroduce.Y.toString());
+//					personMemberService.updatePersonMemberByMGM(updatePersonMember);
+//
+//					//产生初次介绍任务
+//					if(StringUtils.isEmpty(pmType.getFreValue())){
+//						pmType.setFreValue("0");
+//					}
+//
+//					addComTask.setWorkDate(DateUtils.addHours(new Date(), Integer.valueOf(pmType.getFreValue())));
+//					addComTask.setComTaskType(ComTaskType.FIRST_INTR);
+//					addComTask.setRemarkCom(CommonConstant.REPLACE_REMARK_COM +"分组客户" );
+//					addComTask.setLastResultDate(new Date());
+//
+//					FindComTaskList findComTaskList_temp = new FindComTaskList();
+//					findComTaskList_temp.setMerchantNo(merchantNo);
+//					findComTaskList_temp.setComTaskType(ComTaskType.FIRST_INTR);
+//					FindComTaskListReturn findComTaskListReturn_temp = comTaskListService.findComTaskList(findComTaskList_temp);
+//					if(findComTaskListReturn_temp != null){
+//						addComTask.setCodeList(findComTaskListReturn_temp.getCode());
+//						addComTask.setMemberNo(memberNo);
+//						if(findClientFollowSummaryReturn != null)
+//							addComTask.setMemberName(findClientFollowSummaryReturn.getMemberName());
+//						comTaskService.addComTask(addComTask);
+//					}else{
+//						logger.error("初次介绍任务类型不存在！");
+//					}
+//
+//					//关闭分组任务
+//					UpdateComTaskGroup updateComTaskGroup = new UpdateComTaskGroup();
+//					updateComTaskGroup.setMemberNo(memberNo);
+//					updateComTaskGroup.setMemberNoGm(memberNoGm);
+//					updateComTaskGroup.setFinish(ComTaskFinish.FINISH);
+//					comTaskService.updateComTaskGroup(updateComTaskGroup);
 
 					//分组任务完成，添加积分
 					//					FindGuidMember findGuidMember = new FindGuidMember();
@@ -619,11 +614,11 @@ public class PmTypeServiceImpl implements IPmTypeService {
 					//					guidMemberIntegralService.doIntegral(guidMemberIntegralDto);
 
 
-				}
-			}else if(!PmTypeType.UNGROUP.toString().equals(pmTypeOrg.getPmTypeType()) && !PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
-				logger.debug("意向，非意向之间挪动产生跟进记录,并且不是挪到紧急");
-				addCfOrder(merchantNo, memberNoGm, memberNo, pmType, addComTask,true,false);//产生跟进记录
-			}
+//				}
+//			}else if(!PmTypeType.UNGROUP.toString().equals(pmTypeOrg.getPmTypeType()) && !PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
+//				logger.debug("意向，非意向之间挪动产生跟进记录,并且不是挪到紧急");
+//				addCfOrder(merchantNo, memberNoGm, memberNo, pmType, addComTask,true,false);//产生跟进记录
+//			}
 
 			//不是挪到紧急才产生沟通任务
 			/*if(!PmTypeType.URGENCY.toString().equals(pmType.getPmTypeType()) ){
@@ -690,14 +685,14 @@ public class PmTypeServiceImpl implements IPmTypeService {
 		FindComTaskList findComTaskList = new FindComTaskList();
 		findComTaskList.setMerchantNo(merchantNo);
 		//非意向产生沟通任务，意向产生邀约任务
-		if(PmTypeType.OTHER.toString().equals(pmType.getPmTypeType())){
-			findComTaskList.setComTaskType(ComTaskType.COM_TASK);
-			addClientFollow.setComTaskType(ComTaskType.COM_TASK.toString());
-			addClientFollow.setFinishAllComTask(true);//关闭所有任务
-		}else{
-			findComTaskList.setComTaskType(ComTaskType.INVITE);
-			addClientFollow.setComTaskType(ComTaskType.INVITE.toString());
-		}
+//		if(PmTypeType.OTHER.toString().equals(pmType.getPmTypeType())){
+//			findComTaskList.setComTaskType(ComTaskType.COM_TASK);
+//			addClientFollow.setComTaskType(ComTaskType.COM_TASK.toString());
+//			addClientFollow.setFinishAllComTask(true);//关闭所有任务
+//		}else{
+//			findComTaskList.setComTaskType(ComTaskType.INVITE);
+//			addClientFollow.setComTaskType(ComTaskType.INVITE.toString());
+//		}
 		FindComTaskListReturn findComTaskListReturn = comTaskListService.findComTaskList(findComTaskList);
 		if(findComTaskListReturn != null){
 			addClientFollow.setTaskCode(findComTaskListReturn.getCode());
@@ -729,15 +724,15 @@ public class PmTypeServiceImpl implements IPmTypeService {
 					personMemberQuery.setMemberNoGm(changeUrgency.getMemberNoGm());
 					PersonMember personMember = personMemberDao.selectByParamKey(personMemberQuery );
 
-					PmType pmTypeQuery = new PmType();
-					pmTypeQuery.setMerchantNo(personMember.getMerchantNo());
-					pmTypeQuery.setPmTypeType(PmTypeType.URGENCY.toString());
-					PmType pmType = pmTypeDao.selectByParamKey(pmTypeQuery);
+//					PmType pmTypeQuery = new PmType();
+//					pmTypeQuery.setMerchantNo(personMember.getMerchantNo());
+//					pmTypeQuery.setPmTypeType(PmTypeType.URGENCY.toString());
+//					PmType pmType = pmTypeDao.selectByParamKey(pmTypeQuery);
 
-					PmTypePm record = new PmTypePm();
-					record.setPmTypeCode(pmType.getCode());
-					record.setCodePm(personMember.getCode());
-					pmTypePmDao.deleteByParamKey(record );
+//					PmTypePm record = new PmTypePm();
+//					record.setPmTypeCode(pmType.getCode());
+//					record.setCodePm(personMember.getCode());
+//					pmTypePmDao.deleteByParamKey(record );
 
 					//紧急处理
 					UpdatePersonMember updatePersonMember = new UpdatePersonMember();
@@ -764,16 +759,16 @@ public class PmTypeServiceImpl implements IPmTypeService {
 				personMemberQuery.setMemberNoGm(changeUrgency.getMemberNoGm());
 				PersonMember personMember = personMemberDao.selectByParamKey(personMemberQuery );
 
-				PmType pmTypeQuery = new PmType();
-				pmTypeQuery.setMerchantNo(personMember.getMerchantNo());
-				pmTypeQuery.setPmTypeType(PmTypeType.URGENCY.toString());
-				PmType pmType = pmTypeDao.selectByParamKey(pmTypeQuery);
+//				PmType pmTypeQuery = new PmType();
+//				pmTypeQuery.setMerchantNo(personMember.getMerchantNo());
+//				pmTypeQuery.setPmTypeType(PmTypeType.URGENCY.toString());
+//				PmType pmType = pmTypeDao.selectByParamKey(pmTypeQuery);
 
-				PmTypePm record = new PmTypePm();
-				record.setCode(GUID.generateCode());
-				record.setPmTypeCode(pmType.getCode());
-				record.setCodePm(personMember.getCode());
-				pmTypePmDao.insert(record);
+//				PmTypePm record = new PmTypePm();
+//				record.setCode(GUID.generateCode());
+//				record.setPmTypeCode(pmType.getCode());
+//				record.setCodePm(personMember.getCode());
+//				pmTypePmDao.insert(record);
 
 				//紧急处理
 				UpdatePersonMember updatePersonMember = new UpdatePersonMember();
@@ -828,18 +823,18 @@ public class PmTypeServiceImpl implements IPmTypeService {
 						}
 						list = listtemp;
 					}*/
-					int countIntention = pmTypeDao.selectIntentionCount(map);
-					if(countIntention > 0){
-						//意向（到店）不能移动到意向（未到店）,去除意向（未到店）
-						List<PmType> listtemp = new ArrayList<>();
-						for(PmType pt:list){
-							if(!pt.getPmTypeType().equals(PmTypeType.INTENTION_N.toString())){
-								listtemp.add(pt);
-							}
-
-						}
-						list = listtemp;
-					}
+//					int countIntention = pmTypeDao.selectIntentionCount(map);
+//					if(countIntention > 0){
+//						//意向（到店）不能移动到意向（未到店）,去除意向（未到店）
+//						List<PmType> listtemp = new ArrayList<>();
+//						for(PmType pt:list){
+//							if(!pt.getPmTypeType().equals(PmTypeType.INTENTION_N.toString())){
+//								listtemp.add(pt);
+//							}
+//
+//						}
+//						list = listtemp;
+//					}
 				}
 			}
 		}
@@ -975,27 +970,27 @@ public class PmTypeServiceImpl implements IPmTypeService {
 				FindPmTypePmListByMGMDto findPmTypePmListByMGMDto = new FindPmTypePmListByMGMDto();
 				findPmTypePmListByMGMDto.setCodePm(findPersonMemberReturn.getCode());
 				List<FindPmTypePmListByMGMReturn> list = pmTypePmDao.findPmTypePmListByMGM(findPmTypePmListByMGMDto);
-				if(list != null && list.size() > 0){
+//				if(list != null && list.size() > 0){
 					//客户是否意向(到店)或者意向(非到店)
 					//客户是否非意向
 					//客户是否未分组
-					for(FindPmTypePmListByMGMReturn findPmTypePmListByMGMReturn : list){
-						if(PmTypeType.INTENTION.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
-							checkPmTypeReturn.setIntention(true);
-						}
-						if(PmTypeType.INTENTION_N.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
-							checkPmTypeReturn.setIntention(true);
-						}
-
-						if(PmTypeType.UNGROUP.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
-							checkPmTypeReturn.setUngroup(true);
-						}
-
-						if(PmTypeType.OTHER.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
-							checkPmTypeReturn.setOther(true);
-						}
-					}
-				}
+//					for(FindPmTypePmListByMGMReturn findPmTypePmListByMGMReturn : list){
+//						if(PmTypeType.INTENTION.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
+//							checkPmTypeReturn.setIntention(true);
+//						}
+//						if(PmTypeType.INTENTION_N.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
+//							checkPmTypeReturn.setIntention(true);
+//						}
+//
+//						if(PmTypeType.UNGROUP.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
+//							checkPmTypeReturn.setUngroup(true);
+//						}
+//
+//						if(PmTypeType.OTHER.toString().equals( findPmTypePmListByMGMReturn.getPmTypeType())){
+//							checkPmTypeReturn.setOther(true);
+//						}
+//					}
+//				}
 			}
 			return checkPmTypeReturn;
 		}catch (TsfaServiceException e) {

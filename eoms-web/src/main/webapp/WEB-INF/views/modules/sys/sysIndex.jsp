@@ -197,7 +197,7 @@ background:#3C8DBC;
 			<div class="container">
 							<a href="${ctx}/sys/user/info" target="mainFrame" id="logo" class="navbar-brand logotitle"> 
 								<c:if test="${!empty user_photo}">
-						      	 <img alt=""  src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${user_photo}"/>
+						      	 <img alt=""  src="${fns:getUploadUrl()}${user_photo}"/>
 						       </c:if>
 						       <c:if test="${empty user_photo}">   
 						             <img alt="" src="${ctxStatic}/admin/images/user-logo.jpg">
@@ -236,7 +236,7 @@ background:#3C8DBC;
 													<a class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span><i class="icon-${menu.icon}"></i>&nbsp;${menu.name}</span></a>
 												</c:if>
 												<c:if test="${not empty menu.href}">
-													<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span><i class="icon-${menu.icon}"></i>${menu.name}</span></a>
+													<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="${not empty menu.target?menu.target:'mainFrame'}"><span><i class="icon-${menu.icon}"></i>${menu.name}</span></a>
 												</c:if>
 											</li>
 											<c:set var="firstMenu" value="false" />
@@ -471,13 +471,11 @@ background:#3C8DBC;
 				choseId =$(".chose a").attr("data-id");
 				$('.menuHide').parent().hide();
 				 $("."+choseId).show();
-				 
 				//默认打开首个二级菜单
-					$(".nav-pills li:visible .menuHide:first")[0].click();
+				 	$(".nav-pills li:visible .menuHide:first")[0].click();
 					if($(".nav-pills li:visible .submenu a:first")[0]!=undefined){
 						$(".nav-pills li:visible .submenu a:first")[0].click();
-					}
-					
+					} 
 			});
 	
 				
@@ -490,6 +488,15 @@ background:#3C8DBC;
 						$(this).addClass("active");
 						$(this).parent().parent().parent().addClass("active").addClass("open");
 						$(this).parent().parent().show();
+						
+						var url=$(this).attr("href");
+					 	var u = window.location.href;
+					 	var end = u.indexOf("#");
+					  	var rurl = u.substring(0,end);
+					  	var choseId =$(".chose a").attr("data-id");
+					  	//设置新的锚点
+					  	window.location.href = rurl + "#" + url+"?"+choseId;
+						
 				});
 				
 				//无子级一级菜单
@@ -500,11 +507,32 @@ background:#3C8DBC;
 							
 							$('.menu2').removeClass("active")
 							$(this).parent().addClass("active");
+							
+							var url=$(this).attr("href");
+						 	var u = window.location.href;
+						 	var end = u.indexOf("#");
+						  	var rurl = u.substring(0,end);
+						  	var choseId =$(".chose a").attr("data-id");
+						  	//设置新的锚点
+						  	window.location.href = rurl + "#" + url+"?"+choseId;
 					});
 				
-				//初始化默认打开首页
-				$(".menu2:first")[0].click();
 		});
+		//刷新后打开最后点击的菜单
+		document.addEventListener('DOMContentLoaded', function () {
+		     var hash = location.hash;
+		     if(hash){
+		    	 var url = hash.substring(1,hash.length);
+		    	 var start = url.indexOf("?");
+		    	 var choseId = hash.substring(start+2,hash.length);
+		    	 $("a[data-id='"+choseId+"']").click(); 
+		    	 url = hash.substring(1,start+1);
+		    	 $("a[href='"+url+"']")[0].click();
+		     }else{
+		    	//无锚点,初始化默认打开首页
+				$(".menu2:first")[0].click();
+		     }
+		}, false);
 	</script>
 </body>
 </html>

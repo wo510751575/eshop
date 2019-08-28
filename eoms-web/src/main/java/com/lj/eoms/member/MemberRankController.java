@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.member;
@@ -30,7 +30,7 @@ import com.lj.eshop.service.IMemberRankService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月28日
@@ -73,6 +73,7 @@ public class MemberRankController extends BaseController {
 
 		model.addAttribute("page", page);
 		model.addAttribute("findMemberRankPage", findMemberRankPage);
+		model.addAttribute("name", param.getName());
 		return LIST;
 	}
 

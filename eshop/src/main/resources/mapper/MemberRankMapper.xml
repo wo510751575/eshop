@@ -12,12 +12,15 @@
     <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
     <result column="seq" property="seq" jdbcType="INTEGER" />
     <result column="img_src" property="imgSrc" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="VARCHAR" />
+    <result column="advance_payment" property="advancePayment" jdbcType="DECIMAL" />
   </resultMap>
   <resultMap id="FindResultMap" type="com.lj.eshop.dto.MemberRankDto"
 		extends="BaseResultMap"></resultMap>
 		
   <sql id="Base_Column_List" >
-    code, create_date, modify_date, amount, remark, name, scale, del_flag,seq, img_src
+    code, create_date, modify_date, amount, remark, name, scale, del_flag,seq,
+    img_src, discount, advance_payment
   </sql>
   
   <sql id="findPage_condition">
@@ -31,7 +34,7 @@
 					<![CDATA[and del_flag=#{param.delFlag}]]>
 				</if>
 				<if test="param.name != null and param.name !='' ">
-					<![CDATA[and name=#{param.name}]]>
+					and name like CONCAT('%',#{param.name},'%' )
 				</if>
 			</if>
 		</where>

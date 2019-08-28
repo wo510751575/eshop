@@ -126,12 +126,11 @@
 				<shiro:hasPermission name="marketing:material:edit">
 				<td>
 					<%-- <a href="${ctx}/marketing/material/form?code=${item.code}">修改</a> --%>
-					<%-- <a class="copyBtn" href="javascript:;" data-clipboard-text="" data-code="${item.code}">复制链接</a>
-					 --%>
+					<a class="copyBtn" href="javascript:;" data-clipboard-text="" data-code="${item.code}">复制链接</a>
+					<a href="${ctx}/marketing/material/view?code=${item.code}" target="_black">预览</a>
 					<c:if test="${empty item.choicenessCode}">
-						<a href="${ctx}/marketing/material/biztype?cmMaterialCode=${item.cmMaterialCode}&materialCmCode=${item.code}" onclick="return confirmx('确定要加入官方精选？', this.href)">加入官方精选</a>
+						<a href="${ctx}/marketing/material/biztype?code=${item.cmMaterialCode}" onclick="return confirmx('确定要加入官方精选？', this.href)">加入官方精选</a>
 					</c:if>
-					<a href="${ctx}/marketing/material/view?cmMaterialCode=${item.cmMaterialCode}&materialCmCode=${item.code}" target="_black">预览</a>
 				</td>
 				</shiro:hasPermission>
 			</tr>

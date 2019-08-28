@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.business.weixin.dao.IWxChatInfoDao" >
+  <resultMap id="BaseResultMap" type="com.lj.business.weixin.domain.WxChatInfo" >
+    <id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="MEMBER_NAME" jdbcType="VARCHAR" property="memberName" />
+    <result column="MSGSVRID" jdbcType="VARCHAR" property="msgsvrid" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="ISSEND" jdbcType="CHAR" property="issend" />
+    <result column="TALKER" jdbcType="VARCHAR" property="talker" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="TIMESTAMP" jdbcType="VARCHAR" property="timestamp" />
+    <result column="CHAT_DATE" jdbcType="TIMESTAMP" property="chatDate" />
+    <result column="RESOURCES_PATH" jdbcType="VARCHAR" property="resourcesPath" />
+    <result column="SHARE_TITLE" jdbcType="VARCHAR" property="shareTitle" />
+    <result column="SHARE_DES" jdbcType="VARCHAR" property="shareDes" />
+    <result column="SHARE_URL" jdbcType="VARCHAR" property="shareUrl" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+    
+  </resultMap>
+  
+  <resultMap type="com.lj.business.weixin.dto.FindWxChatInfoPageReturn" id="findWxChatInfoPageResultMap">
+  	<id column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="MEMBER_NO" jdbcType="VARCHAR" property="memberNo" />
+    <result column="MEMBER_NAME" jdbcType="VARCHAR" property="memberName" />
+    <result column="MSGSVRID" jdbcType="VARCHAR" property="msgsvrid" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="ISSEND" jdbcType="CHAR" property="issend" />
+    <result column="TALKER" jdbcType="VARCHAR" property="talker" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="TIMESTAMP" jdbcType="VARCHAR" property="timestamp" />
+    <result column="CHAT_DATE" jdbcType="TIMESTAMP" property="chatDate" />
+    <result column="RESOURCES_PATH" jdbcType="VARCHAR" property="resourcesPath" />
+    <result column="SHARE_TITLE" jdbcType="VARCHAR" property="shareTitle" />
+    <result column="SHARE_DES" jdbcType="VARCHAR" property="shareDes" />
+    <result column="SHARE_URL" jdbcType="VARCHAR" property="shareUrl" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+     CODE, MEMBER_NO, MEMBER_NAME, MSGSVRID, TYPE, ISSEND, TALKER, CONTENT,TIMESTAMP,  CHAT_DATE, 
+    RESOURCES_PATH, SHARE_TITLE, SHARE_DES, SHARE_URL, STATUS, CREATE_DATE, REMARK, REMARK2, 
+    REMARK3, REMARK4
+  </sql>
+  
+    <sql id="findWxChatInfoPage_condition" >
+  	 <where>
+	       <if test="memberNo != null and memberNo != ''" >
+	        and  MEMBER_NO  = #{memberNo,jdbcType=VARCHAR}
+	      </if>
+	         <if test="memberName != null and memberName != ''" >
+	        and  MEMBER_NAME like CONCAT('%',#{memberName,jdbcType=VARCHAR},'%' )
+	      </if>
+         <if test="type != null and type != ''" >
+	        and  TYPE = #{type}
+	      </if>
+	      <if test="talker != null and talker != ''" >
+	        and  TALKER = #{talker}
+	      </if>
+	      <if test="startTime != null">
+				<![CDATA[and CHAT_DATE >= #{startTime}]]>
+			</if>
+			<if test="endTime != null"> 
+				<![CDATA[and CHAT_DATE <= #{endTime}]]>
+			</if>
+			<if test="chatDate != null and chatDate != ''" >
+	        	and  DATE_FORMAT(CHAT_DATE, "%Y-%m-%d") = #{chatDate}
+	      </if>
+			
+      </where>
+  </sql>
+  
+  <sql id="findWxChatInfoCount">
+  <where>
+       <if test="memberNo != null and memberNo != ''" >
+	        and  MEMBER_NO = #{memberNo,jdbcType=VARCHAR}
+	    </if>
+	       <if test="startTime != null">
+				<![CDATA[and DATE_FORMAT(CHAT_DATE, '%H:%i') >= #{startTime}]]>
+			</if>
+			<if test="endTime != null"> 
+				<![CDATA[and  DATE_FORMAT(CHAT_DATE, '%H:%i') <= #{endTime}]]>
+			</if>
+  </where>
+  </sql>
+  
+   <select id="findWxChantInfoCountTime" resultType="int" parameterType="com.lj.business.weixin.dto.FindWxChatInfo" >
+    select  COUNT(MEMBER_NO)
+    from wx_chat_info
+    <include refid="findWxChatInfoCount" />
+  </select>
+  
+  <select id="findCountWxChat" resultType="integer">
+  	select count(*)
+  	from wx_chat_info
+  	<where>
+  		<if test="merchantCode != null and merchantCode != ''">
+			and MERCHANT_NO = #{merchantCode}
+		</if>
+		<if test="beginTime != null" >
+	        <![CDATA[
+	          and CHAT_DATE >= #{beginTime}
+	        ]]>
+	    </if>
+	    <if test="endTime != null" >
+	        <![CDATA[
+	          and CHAT_DATE <= #{endTime}
+	        ]]>
+	    </if>
+	    <if test="memberNoGms">
+	    and MEMBER_NO in
+	    	<foreach collection="memberNoGms" item="item" open="(" close=")" separator=",">
+	    		item
+	    	</foreach>
+	    </if>
+  	</where>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wx_chat_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 分页查询 -->
+   <select id="findWxChatInfoPage" resultMap="findWxChatInfoPageResultMap" parameterType="com.lj.business.weixin.dto.FindWxChatInfoPage" >
+  SELECT   
+  	<include refid="Base_Column_List" />
+  FROM wx_chat_info
+ 	 <include refid="findWxChatInfoPage_condition" />
+   order by TIMESTAMP ${sortDir}
+   limit ${start} , ${limit}
+  </select>
+  
+  <select id="findWxChatInfoPageCount" resultType="int" parameterType="com.lj.business.weixin.dto.FindWxChatInfoPage" >
+    select  count(*) FROM wx_chat_info
+     <include refid="findWxChatInfoPage_condition" />
+  </select>
+  
+  
+<!--   OMS所需分页查询 	duanzhipeng 2017-7-20 start-->
+	<select id="findWxChatInfoPageOMS" resultType="map" parameterType="map" >
+    SELECT DATE_FORMAT(CHAT_DATE, "%Y-%m-%d") dateFormat, COUNT(*) num,CONTENT
+	FROM wx_chat_info 
+	<where>
+       <if test="memberNo != null and memberNo != ''" >
+        and  MEMBER_NO  = #{memberNo,jdbcType=VARCHAR}
+      </if>
+      <if test="startTime != null">
+			<![CDATA[and CHAT_DATE >= #{startTime}]]>
+		</if>
+		<if test="endTime != null"> 
+			<![CDATA[and CHAT_DATE <= #{endTime}]]>
+		</if>
+		<if test="talker != null and talker !=''" >
+	        and  TALKER = #{talker}
+	      </if>
+      </where>
+		GROUP BY dateFormat
+		ORDER BY CHAT_DATE DESC
+		LIMIT ${start} , ${limit}
+  </select>
+  
+  <select id="findWxChatInfoPageCountOMS" resultType="map" parameterType="map" >
+  		SELECT *  from wx_chat_info
+		<where>
+	       <if test="memberNo != null and memberNo != ''" >
+	        and  MEMBER_NO  = #{memberNo,jdbcType=VARCHAR}
+	      </if>
+	      <if test="startTime != null">
+				<![CDATA[and CHAT_DATE >= #{startTime}]]>
+			</if>
+			<if test="endTime != null"> 
+				<![CDATA[and CHAT_DATE <= #{endTime}]]>
+			</if>
+			<if test="talker != null" >
+	        and  TALKER = #{talker}
+	      </if>
+      </where>
+		GROUP BY DATE_FORMAT(CHAT_DATE, "%Y-%m-%d")
+  </select>
+  <!--   OMS所需分页查询 	duanzhipeng 2017-7-20 end-->
+  
+  
+  <insert id="insertSelective" parameterType="com.lj.business.weixin.domain.WxChatInfo">
+    insert into wx_chat_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="memberNo != null">
+        MEMBER_NO,
+      </if>
+      <if test="memberName != null">
+        MEMBER_NAME,
+      </if>
+      <if test="msgsvrid != null">
+        MSGSVRID,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="issend != null">
+        ISSEND,
+      </if>
+      <if test="talker != null">
+        TALKER,
+      </if>
+      <if test="timestamp != null">
+        TIMESTAMP,
+      </if>
+      <if test="chatDate != null">
+        CHAT_DATE,
+      </if>
+      <if test="resourcesPath != null">
+        RESOURCES_PATH,
+      </if>
+      <if test="shareTitle != null">
+        SHARE_TITLE,
+      </if>
+      <if test="shareDes != null">
+        SHARE_DES,
+      </if>
+      <if test="shareUrl != null">
+        SHARE_URL,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+        CREATE_DATE,
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="remark2 != null">
+        REMARK2,
+      </if>
+      <if test="remark3 != null">
+        REMARK3,
+      </if>
+      <if test="remark4 != null">
+        REMARK4,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNo != null">
+        #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="msgsvrid != null">
+        #{msgsvrid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="issend != null">
+        #{issend,jdbcType=CHAR},
+      </if>
+      <if test="talker != null">
+        #{talker,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="chatDate != null">
+        #{chatDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourcesPath != null">
+        #{resourcesPath,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null">
+        #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareDes != null">
+        #{shareDes,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null">
+        #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+        NOW(),
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null">
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.business.weixin.domain.WxChatInfo">
+    update wx_chat_info
+    <set>
+      <if test="memberNo != null">
+        MEMBER_NO = #{memberNo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        MEMBER_NAME = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="msgsvrid != null">
+        MSGSVRID = #{msgsvrid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="issend != null">
+        ISSEND = #{issend,jdbcType=CHAR},
+      </if>
+      <if test="talker != null">
+        TALKER = #{talker,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null">
+        TIMESTAMP = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="chatDate != null">
+        CHAT_DATE = #{chatDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resourcesPath != null">
+        RESOURCES_PATH = #{resourcesPath,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null">
+        SHARE_TITLE = #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareDes != null">
+        SHARE_DES = #{shareDes,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null">
+        SHARE_URL = #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null">
+        REMARK4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

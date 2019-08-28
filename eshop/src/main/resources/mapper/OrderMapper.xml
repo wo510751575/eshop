@@ -7,6 +7,7 @@
     <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
     <result column="mbr_name" jdbcType="VARCHAR" property="mbrName" />
     <result column="mbr_phone" jdbcType="VARCHAR" property="mbrPhone" />
+    <result column="mbr_type" jdbcType="VARCHAR" property="mbrType" />
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="is_invoice" jdbcType="CHAR" property="isInvoice" />
@@ -46,7 +47,7 @@
 	</resultMap>
 	
   <sql id="Base_Column_List">
-    code, amt, mbr_code, mbr_name, mbr_phone,  
+    code, amt, mbr_code, mbr_name, mbr_phone, mbr_type, 
     status, remarks, is_invoice, invoice_title, invoice_info, create_time, update_time, 
     order_no, shop_code,express_no,express_name,pay_type,merchant_code,shop_name,pay_time,shipping_time,
     revicer_name, revice_phone,addr_info,area_name,reciver_zip
@@ -58,7 +59,7 @@
   
 <sql id="findPage_condition">
 		<where>
-			<if test="param!=null">
+			<if test="param	!=null">
 				<!-- 查询条件根据业务需求自由添加 -->
 				<if test="param.code != null and param.code !='' ">
 					<![CDATA[and code =#{param.code}]]>
@@ -71,6 +72,9 @@
 				</if>
 				<if test="param.mbrPhone != null and param.mbrPhone !='' ">
 					<![CDATA[and mbr_phone =#{param.mbrPhone}]]>
+				</if>
+				<if test="param.likeOrderNo != null and param.likeOrderNo !='' ">
+					and order_no like CONCAT('%',#{param.likeOrderNo},'%' )
 				</if>
 				<if test="param.orderNo != null and param.orderNo !='' ">
 					<![CDATA[and order_no =#{param.orderNo}]]>
@@ -93,6 +97,16 @@
 				<if test="param.status != null and param.status !='' ">
 					<![CDATA[and status =#{param.status}]]>
 				</if>
+				<if test="param.mbrCodes != null and param.mbrCodes.size > 0">
+					and mbr_code IN 
+					<foreach item="item" index="index" collection="param.mbrCodes" open="(" separator="," close=")">  
+					  	#{item}  
+					 </foreach>  
+			  	</if>
+			  	<if test="param.mbrType != null and param.mbrType !='' ">
+					<![CDATA[and mbr_type =#{param.mbrType}]]>
+				</if>
+				
 			</if>
 			
 			<if test="inStatuss != null and inStatuss.size > 0">
@@ -200,8 +214,23 @@
 	<!-- 获取店铺销售排名 -->
 	<select id="findAmtRank" resultType="Integer" parameterType="com.lj.eshop.dto.FindOrderPage">
 		SELECT n.rownum from 
-		(SELECT (@rownum := @rownum + 1)-1 AS rownum,obj.shop_code ,obj.sum FROM (SELECT shop_code,SUM(amt) sum FROM t_order GROUP BY shop_code ORDER BY sum asc) obj,(SELECT @rownum := 0) r ) n 
-		WHERE n.shop_code=#{loginShopCode}
+		(SELECT (@rownum := @rownum + 1)-1 AS rownum,obj.shop_code ,obj.sum FROM (SELECT shop_code,SUM(amt) sum FROM t_order 	
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.startTime != null and param.startTime !='' ">
+					<![CDATA[AND create_time>= #{param.startTime}]]>
+				</if>
+				<if test="param.endTime != null and param.endTime !='' ">
+					<![CDATA[AND create_time<= #{param.endTime}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				
+			</if>
+		</where> GROUP BY shop_code ORDER BY sum asc ) obj,(SELECT @rownum := 0) r ) n 
+		WHERE n.shop_code=#{param.shopCode}
 	</select>
 	
 	<!-- 商品分类 -->
@@ -229,6 +258,28 @@
 				and t2.product_code=t3.`code`
 				and t3.catalog_type_code=t4.`code`
 			GROUP BY catalog_type_code
+	</select>
+	
+	<!-- 销量最好的商品分类 -->
+	<select id="findTopProductCatalog" resultType="com.lj.eshop.dto.CatalogSummaryDto">
+		SELECT * from (
+			SELECT 
+				sum(t2.cnt) cnt,t4.parent_cataLog_name  as parentCataLogCode
+			FROM
+				(
+					SELECT order_no FROM t_order  WHERE shop_code=#{param.shopCode} 
+		   			AND create_time BETWEEN #{param.startTime} and #{param.endTime}
+					AND `status`=6
+				) t1, 
+				t_order_detail t2,
+				t_product t3, 
+				t_catalog t4
+			WHERE
+				t1.order_no = t2.order_no
+				and t2.product_code=t3.`code`
+				and t3.catalog_type_code=t4.`code`
+			GROUP BY t4.parent_cataLog_code
+		) n ORDER BY n.cnt desc LIMIT 0,1 
 	</select>
 	
 	<select id="findOrderGroupStatus" resultType="map" parameterType="com.lj.eshop.dto.FindOrderPage">
@@ -325,6 +376,9 @@
       <if test="reciverZip != null">
         reciver_zip,
       </if>
+      <if test="mbrType != null">
+        mbr_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="code != null">
@@ -404,6 +458,9 @@
       </if>
       <if test="reciverZip != null">
         #{reciverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrType != null">
+        #{mbrType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

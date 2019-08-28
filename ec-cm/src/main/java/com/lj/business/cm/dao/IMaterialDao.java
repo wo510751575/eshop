@@ -18,7 +18,7 @@ import com.lj.business.cm.dto.GeneratorMaterialTotalReturn;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 罗书明
  *   
  * CreateDate: 2017年6月21日
@@ -206,4 +206,18 @@ public interface IMaterialDao {
 	 * @author 梅宏博 CreateDate: 2017年8月17日
 	 */
 	long getMaterialResponseTotal(String merchantNo);
+	
+	/**
+	 * 返回素材列表
+	 * 方法说明：
+	 *
+	 * @param @param findMaterialPage
+	 * @param @return    设定文件 
+	 * @return List<FindMaterialPageReturn>    返回类型 
+	 * @throws Exception
+	 *
+	 * @author 林进权
+	 *         CreateDate: 2017年9月25日
+	 */
+	List<FindMaterialPageReturn> findMaterials(FindMaterialPage findMaterialPage);
 }

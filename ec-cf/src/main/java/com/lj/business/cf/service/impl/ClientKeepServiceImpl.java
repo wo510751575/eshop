@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -606,12 +606,12 @@ public class ClientKeepServiceImpl implements IClientKeepService {
 				}
 				
 				//客户分类变动
-				ChangePmType changePmType = new ChangePmType();
+				/*ChangePmType changePmType = new ChangePmType();
 				changePmType.setMemberNo(addClientKeep.getMemberNo());
 				changePmType.setMerchantNo(addClientKeep.getMerchantNo());
 				changePmType.setMemberNoGm(addClientKeep.getMemberNoGm());
 				changePmType.setPmTypeType(PmTypeType.INTENTION_N);
-				pmTypeService.changePmType(changePmType);
+				pmTypeService.changePmType(changePmType);*/
 				
 				//更新客户关联表的产品名称
 				UpdatePersonMember updatePersonMember = new UpdatePersonMember();

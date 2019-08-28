@@ -49,6 +49,7 @@
 		parameterType="com.lj.eshop.dto.FindShopCarPage">
 		SELECT
 		<include refid="Base_Column_List" />
+		<include refid="Join_Column_List" />
 		FROM t_shop_car c
 		<include refid="findPage_condition" />
 

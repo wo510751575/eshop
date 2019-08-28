@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月4日

@@ -31,12 +31,12 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-		    <li><label>客户反馈：</label>
-		    	<input type="text" name="param.suggestion" value="${param.suggestion}" class="input-medium" maxlength="100" placeholder="客户反馈">
-			</li>
 			<li>
 				<label>客户名称：</label> 
- 				<input type="text" name="param.mbrName" value="${param.mbrName}" class="input-medium" maxlength="100" placeholder="客户名称">
+ 				<input type="text" name="param.mbrName" value="${suggestionPage.param.mbrName}" class="input-medium" maxlength="100" placeholder="客户名称">
+			</li>
+		    <li><label>客户反馈：</label>
+		    	<input type="text" name="param.suggestion" value="${suggestionPage.param.suggestion}" class="input-medium" maxlength="100" placeholder="客户反馈">
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>

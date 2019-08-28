@@ -78,6 +78,15 @@
 	 <if test="merchantNo != null and merchantNo != ''" >
         and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
       </if>
+	 <if test="merchantNo != null and merchantNo != ''" >
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+      <if test="codes != null and codes.size > 0">
+			and code IN 
+			<foreach item="item" index="index" collection="codes" open="(" separator="," close=")">  
+			  	#{item}  
+			</foreach>  
+	  </if>
       </where>
   </sql>
     

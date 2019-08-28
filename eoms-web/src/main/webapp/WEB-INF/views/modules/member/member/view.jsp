@@ -31,30 +31,37 @@
 			<table class="table-form" style="width: 100%;">
 				<tbody>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;width: 90px;">客户名称 ：</td>
+						<td style="padding: 10px;font-weight: bold;width: 90px;text-align:right;">客户名称 ：</td>
 						<td  >${data.name}</td>
-						<td  style="padding: 10px;font-weight: bold;width: 80px;">头像 ：</td>
-						<td  > 
-						<c:choose>
+						<td  style="padding: 10px;font-weight: bold;width: 80px;text-align:right;">头像：</td>
+						<td>
+							<c:choose>
 								<c:when test="${!empty data.avotor }">
-									<img src="${data.avotor } " width="40" height="40" />
+									<c:choose>
+										<c:when test="${fn:startsWith(data.avotor, 'http')}">
+			   								<img  width="40" height="40"  src="${data.avotor}" alt="">
+										</c:when>
+										<c:otherwise>
+											<img width="40" height="40"  src="${fns:getUploadUrl()}${data.avotor}" alt="">
+										</c:otherwise>
+					    			</c:choose>
 								</c:when>
 								<c:otherwise>无头像</c:otherwise>
 							</c:choose>
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;">客户微信号 ：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">客户微信号 ：</td>
 						<td>${data.wxNo}</td>
-						<td style="padding: 10px;font-weight: bold;">手机号码 ：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">手机号码 ：</td>
 						<td> 
 						 	${data.phone}
 						</td>
 					</tr>
 					<tr>
-						<td  style="padding: 10px;font-weight: bold;">openId ：</td>
+						<td  style="padding: 10px;font-weight: bold;text-align:right;">openId ：</td>
 						<td>${data.openId}</td>
-						<td style="padding: 10px;font-weight: bold;">性别 ：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">性别 ：</td>
 						<td> 
 						 	 <c:forEach items="${sexs}" var="p">
 								<c:choose >
@@ -66,7 +73,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;">来源：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">来源：</td>
 						<td>
 							<c:forEach items="${sourceFroms}" var="p">
 								<c:choose >
@@ -76,7 +83,7 @@
 								</c:choose>
 							</c:forEach>
 						</td>
-						<td style="padding: 10px;font-weight: bold;"> 状态 ：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;"> 状态 ：</td>
 						<td> 
 						 	 <c:forEach items="${statuss}" var="p">
 								<c:choose >
@@ -88,7 +95,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;">客户类型：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">客户类型：</td>
 						<td>
 								<c:forEach items="${types}" var="p">
 									<c:choose >
@@ -98,17 +105,17 @@
 									</c:choose>
 								</c:forEach>
 						</td>
-						<td style="padding: 10px;font-weight: bold;">地区 ：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">地区 ：</td>
 						<td> 
 						 	 ${data.province} ${data.city} ${data.area}
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;">邀请人：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">邀请人：</td>
 						<td>
 								 ${data.myInvite}
 						</td>
-						<td style="padding: 10px;font-weight: bold;">评分等级：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">评分等级：</td>
 						<td> 
 						 	<c:forEach items="${grades}" var="p">
 								<c:choose >
@@ -120,7 +127,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 10px;font-weight: bold;">录入时间：</td>
+						<td style="padding: 10px;font-weight: bold;text-align:right;">录入时间：</td>
 						<td>
 								 <fmt:formatDate value="${data.createTime}" pattern="yyyy-MM-dd"/>
 						</td>

@@ -54,6 +54,7 @@ public class SuggestionController extends BaseController {
 		page.initialize();
 		
 		model.addAttribute("page",page);
+		model.addAttribute("suggestionPage",suggestionPage);
 		return LIST;
 	}
 }

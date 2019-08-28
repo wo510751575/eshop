@@ -3,7 +3,7 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
@@ -153,6 +153,9 @@ public class MemberRankServiceImplTest extends SpringTestCase{
 	@Test
 	public void findMemberRanks() throws TsfaServiceException{
 		FindMemberRankPage findMemberRankPage = new FindMemberRankPage();
+		MemberRankDto param = new MemberRankDto();
+		param.setName("黄金");
+		findMemberRankPage.setParam(param);
 		List<MemberRankDto>  ranksList = memberRankService.findMemberRanks(findMemberRankPage);
 		for (MemberRankDto memberRankDto : ranksList) {
 			System.out.println(memberRankDto.getSeq());

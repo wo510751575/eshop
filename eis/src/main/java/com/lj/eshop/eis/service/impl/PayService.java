@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.service.impl;
@@ -22,7 +22,6 @@ import com.lj.eshop.dto.AccountDto;
 import com.lj.eshop.dto.FindPaymentPage;
 import com.lj.eshop.dto.OrderDto;
 import com.lj.eshop.dto.PaymentDto;
-import com.lj.eshop.eis.constant.DevConfig;
 import com.lj.eshop.eis.constant.PayAccSourceConstant;
 import com.lj.eshop.eis.controller.weixin.dto.WxPayReqDto;
 import com.lj.eshop.eis.controller.weixin.dto.WxPayRespDto;
@@ -44,7 +43,7 @@ import com.lj.eshop.service.IShopService;
 /**
  * 类说明：支付业务处理。
  * <p>
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月8日
@@ -103,9 +102,9 @@ public class PayService {
 			throw new TsfaServiceException(ResponseCode.PAY_TYPE_NOT_EXIST.getCode(),ResponseCode.PAY_TYPE_NOT_EXIST.getMsg());
 		}
 		//3.0 模拟支付成功
-		if(DevConfig.isDevTest()){
+		/*if(DevConfig.isDevTest()){
 			paySuccess(payment);
-		}
+		}*/
 		//3.1非第三方支付，支付成功立即回写支付状态及回调通知订单结果
 		//3.2第三方支付，等待支付成功后回调再回写支付状态和通知支付结果
 		return resp;
@@ -148,7 +147,7 @@ public class PayService {
 				orderService.payment(payment);// 通知订单支付成功
 			} else if (AccWaterSource.DEPOSIT.getValue().equals(payment.getAccSource())) {
 				shopService.payment(payment);
-				// mbrGuidMemberService.addGuidMember(payment.getBizNo()); todo
+				mbrGuidMemberService.addGuidMember(payment.getBizNo()); 
 			} else if (AccWaterSource.VIP.getValue().equals(payment.getAccSource())) {
 				memberRankApplyService.payment(payment);
 			}

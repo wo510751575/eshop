@@ -9,15 +9,9 @@
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	
 	<bean id="guidMemberService" parent="systemHessianFactoryBean">   
-		<property name="systemAliasName">
-			<value>ec-ms</value>
-		</property>
-		<property name="serviceName">
-			<value>guidMemberService</value>
-		</property>
-		<property name="serviceInterface">   
-			<value>com.lj.business.member.service.IGuidMemberService</value>  
-		</property>
+		<property name="systemAliasName" value="ec-ms" />
+		<property name="serviceName" value="guidMemberService" />
+		<property name="serviceInterface" value="com.lj.business.member.service.IGuidMemberService" />   
     </bean>
     
     <bean id="personMemberService" parent="systemHessianFactoryBean">   

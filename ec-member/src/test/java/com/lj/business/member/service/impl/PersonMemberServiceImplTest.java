@@ -3,11 +3,9 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +46,6 @@ import com.lj.business.member.dto.FindPmWxInfo;
 import com.lj.business.member.dto.FindUrgentMbrPage;
 import com.lj.business.member.dto.FindUrgentMbrPageReturn;
 import com.lj.business.member.dto.UpdatePersonMember;
-import com.lj.business.member.emus.PmTypeType;
 import com.lj.business.member.emus.UrgentFlagType;
 import com.lj.business.member.service.IPersonMemberService;
 import com.lj.business.member.util.TestHelp;
@@ -209,7 +206,7 @@ public class PersonMemberServiceImplTest extends SpringTestCase{
 	public void getByCode() throws TsfaServiceException{
 		Map<String,String> map = new HashMap<>();
 		map.put("code", "LJ_8b0d65797b944a5fa486825e24d4aff6");
-		map.put("pmTypeType", PmTypeType.URGENCY.toString());
+//		map.put("pmTypeType", PmTypeType.URGENCY.toString());
 		FindPersonMemberPageReturn personMemberPageReturn= personMemberService.getByCond(map);
 		System.out.println(personMemberPageReturn.toString());
 	}
@@ -367,14 +364,14 @@ public class PersonMemberServiceImplTest extends SpringTestCase{
 	 */
 	@Test
 	public void addPersonMemberFromHook() throws TsfaServiceException{
-		String info = "{'noWxGM':'lingju20160523','data':[{'noWx':'lnxzbcp_2','nickNameWx':'包春平','nickNameRemarkWx':'昵称备注','longitude':'113.96102','latitude':'22.541582','scanAddress':'深圳市,南山区,750号','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/ICicnUMnTvHj2fvK5qHTciaXe0BM8KT959AibPSqHUibNxXBiaZRdpGXbrJrAlZa2jPosmA2zPkcWGvc6w11LYUGyxzyQAiaFsVicAOpBcXt0hglqE/0','subsribeTime':'2017-07-17 19:49:32'}"
-				+ "]}";
-		personMemberService.addPersonMemberFromHook(info);
-//		for (int i = 10; i < 20; i++) {
-//			String info = "{'noWxGM':'wxid_asobyw0oiu9022','data':[{'noWx':'lovejing577','nickNameWx':'柚子喝个毛的茶','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/ICicnUMnTvHj2fvK5qHTciaXe0BM8KT959AibPSqHUibNxXBiaZRdpGXbrJrAlZa2jPosmA2zPkcWGvc6w11LYUGyxzyQAiaFsVicAOpBcXt0hglqE/0','subsribeTime':'2017-07-17 19:49:32'},"
-//					+ "{'noWx':'K-ShiFu-"+ i +"','nickNameWx':'我shi康师傅-"+ i +"','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/mcF07WR66wS1vDUu9hWCrwuicMr8ibfLEryKuUwIDzX3ic4picc2Wp9c9EVvzACs4dmNs8oicn3M1g2s5QFpEu7ibJ3Q/0','subsribeTime':'2017-07-17 19:49:32'}]}";
-//			personMemberService.addPersonMemberFromHook(info);
-//		}
+//		String info = "{'noWxGM':'jiao11yu','data':[{'noWx':'lnxzbcp_2','nickNameWx':'包春平','nickNameRemarkWx':'昵称备注','longitude':'113.96102','latitude':'22.541582','scanAddress':'深圳市,南山区,750号','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/ICicnUMnTvHj2fvK5qHTciaXe0BM8KT959AibPSqHUibNxXBiaZRdpGXbrJrAlZa2jPosmA2zPkcWGvc6w11LYUGyxzyQAiaFsVicAOpBcXt0hglqE/0','subsribeTime':'2017-07-17 19:49:32'}"
+//				+ "]}";
+//		personMemberService.addPersonMemberFromHook(info);
+		for (int i = 10; i < 20; i++) {
+			String info = "{'noWxGM':'991763','data':[{'noWx':'lovejing577','nickNameWx':'柚子喝个毛的茶','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/ICicnUMnTvHj2fvK5qHTciaXe0BM8KT959AibPSqHUibNxXBiaZRdpGXbrJrAlZa2jPosmA2zPkcWGvc6w11LYUGyxzyQAiaFsVicAOpBcXt0hglqE/0','subsribeTime':'2017-07-17 19:49:32'},"
+					+ "{'noWx':'K-ShiFu-"+ i +"','nickNameWx':'我shi康师傅-"+ i +"','sex':'','cityWx':'','countryWx':'','headAddress':'http://wx.qlogo.cn/mmhead/ver_1/mcF07WR66wS1vDUu9hWCrwuicMr8ibfLEryKuUwIDzX3ic4picc2Wp9c9EVvzACs4dmNs8oicn3M1g2s5QFpEu7ibJ3Q/0','subsribeTime':'2017-07-17 19:49:32'}]}";
+			personMemberService.addPersonMemberFromHook(info);
+		}
 	}
 	
 	
@@ -526,6 +523,12 @@ public class PersonMemberServiceImplTest extends SpringTestCase{
 		int count=personMemberService.findPersonMemberCont(findPersonMember);
 		System.out.println(count);
 		
+	}
+	
+	@Test
+	public void uploadPs(){
+		String paramJson="{\"noWxGM\":\"jiao11yu\",\"memberNoGuid\":\"LJ_6a3c6db6863c4cf1bba88b173c59722e\",\"data\":[{\"noWx\":\"DYHILM\",\"nickNameWx\":\"杜胤涵\",\"nickNameRemarkWx\":\"\",\"sex\":\"\",\"cityWx\":\"\",\"countryWx\":\"\",\"longitude\":4.9E-324,\"latitude\":4.9E-324,\"scanAddress\":\"null,null,null,null,null\",\"headAddress\":\"http://wx.qlogo.cn/mmhead/ver_1/aiaPdaSDnrel5EloEyJibh0Jxk7OzLqtSHNGlJCH8HGgTzibWznXbayHb9xNibP2QQdHVAeRvs70Z2KE3GrjsnRoriaGZJFB9goqSuqb8S1ibxWPM/0\",\"subsribeTime\":\"2017-10-14 16:27:47\"}]}";
+		personMemberService.addPersonMemberFromHook(paramJson);
 	}
 	
 }

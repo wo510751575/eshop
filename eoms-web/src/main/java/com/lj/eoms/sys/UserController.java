@@ -1,8 +1,10 @@
 package com.lj.eoms.sys;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ape.common.config.Global;
 import com.ape.common.persistence.Page;
 import com.ape.common.utils.StringUtils;
 import com.ape.common.web.BaseController;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.lj.base.mvc.web.httpclient.HttpClientUtils;
+import com.lj.cc.clientintf.LocalCacheSystemParamsFromCC;
 import com.lj.eoms.entity.sys.Office;
 import com.lj.eoms.entity.sys.Role;
 import com.lj.eoms.entity.sys.User;
@@ -37,6 +43,8 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
+	@Resource
+	private LocalCacheSystemParamsFromCC localCacheSystemParams;
 //	@Resource
 //	private IMerchantService merchantService;
 	
@@ -89,6 +97,9 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:edit")
 	@RequestMapping(value = "save")
 	public String save(User user, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+		
+		
+		
 		// 修正引用赋值问题，不知道为何，Company和Office引用的一个实例地址，修改了一个，另外一个跟着修改。
 		user.setCompany(new Office(request.getParameter("company.id")));
 		user.setOffice(new Office(request.getParameter("office.id")));
@@ -118,6 +129,24 @@ public class UserController extends BaseController {
 		// 清除当前用户缓存
 		if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
 			UserUtils.clearCache();
+		}
+		
+		//把会员信息同步更新到热文会员
+		String url = localCacheSystemParams.getSystemParam("cc","rw", "rwRegistUrl");
+		Map map = new HashMap<>();
+		map.put("code", user.getId());
+		map.put("name", user.getLoginName());
+		String result = HttpClientUtils.postToWeb(url, map);
+		if(com.lj.base.core.util.StringUtils.isNotEmpty(result)){
+			JSONObject obj = (JSONObject) JSON.parse(result);
+			String rs = (String) obj.get("returnObject") ;
+			if(!"OK".equalsIgnoreCase(rs)){
+				addMessage(redirectAttributes, "同步客户'" + user.getLoginName()+ "'到热文失败");
+				return "redirect:" + adminPath + "/sys/user/list?repage";
+			}
+		}else{
+			addMessage(redirectAttributes, "同步客户'" + user.getLoginName()+ "'到热文失败");
+			return "redirect:" + adminPath + "/sys/user/list?repage";
 		}
 		
 		

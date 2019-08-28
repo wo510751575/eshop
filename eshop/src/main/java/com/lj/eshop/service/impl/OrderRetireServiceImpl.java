@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
@@ -31,6 +31,7 @@ import com.lj.eshop.dto.OrderDetailDto;
 import com.lj.eshop.dto.OrderDto;
 import com.lj.eshop.dto.OrderRetireDetailDto;
 import com.lj.eshop.dto.OrderRetireDto;
+import com.lj.eshop.dto.ShopDto;
 import com.lj.eshop.emus.MessageTemplate;
 import com.lj.eshop.emus.OrderStatus;
 import com.lj.eshop.service.IMessageService;
@@ -38,6 +39,7 @@ import com.lj.eshop.service.IOrderDetailService;
 import com.lj.eshop.service.IOrderRetireDetailService;
 import com.lj.eshop.service.IOrderRetireService;
 import com.lj.eshop.service.IOrderService;
+import com.lj.eshop.service.IShopService;
 /**
  * 类说明：实现类
  * 
@@ -71,6 +73,9 @@ public class OrderRetireServiceImpl implements IOrderRetireService {
 	
 	@Resource
 	private IMessageService messageService;
+	
+	@Resource
+	private IShopService shopService;
 	
 	
 	@Override
@@ -275,7 +280,7 @@ public class OrderRetireServiceImpl implements IOrderRetireService {
 				if(StringUtils.isEmpty(productName)) {
 					productName = rltOrderDetailDto.getProductName();
 				}
-
+				
 				if(retireDetailDto.getCnt().compareTo(rltOrderDetailDto.getCnt())>0) {
 					throw new TsfaServiceException(ErrorCode.ORDER_RETIRE_ADD_ERROR,"订单有误，退货数量大于订单数量！");
 				}
@@ -295,9 +300,13 @@ public class OrderRetireServiceImpl implements IOrderRetireService {
 			rOrderDto.setCode(orderRetireDto.getOrderCode());
 			rOrderDto = orderService.findOrder(orderDto);
 			
+			ShopDto paramShopDto = new ShopDto();
+			paramShopDto.setCode(rOrderDto.getShopCode());
+			ShopDto rltShopDto = shopService.findShop(paramShopDto);
+			
 			//发送消息通知
 			MessageDto messageDto = new MessageDto();
-			messageDto.setRecevier(rOrderDto.getMbrCode());
+			messageDto.setRecevier(rltShopDto.getMbrCode());
 			messageDto.setcClientName(rOrderDto.getMbrName());
 			messageDto.setcClientCommodity(productName);
 			messageDto.setcClientOrderNo(orderRetireDto.getRetireNo());

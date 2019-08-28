@@ -7,6 +7,7 @@
 	
 	<style>
 		.img-div > div{float:left;margin-left:3px;}
+		.warn{color:red}
 	</style>
 	<script type="text/javascript" src="${ctxStatic}/editor/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctxStatic}/editor/init.js"></script>
@@ -132,6 +133,7 @@
 			<div class="controls">
 				<input type="text" name="afterAmt" value="${data.afterAmt}" maxlength="50" class="input-xlarge number" /> 
 			</div>
+			<div  class="controls warn">请慎重填写，该值将会更新帐户的余额 </div>
 		</div>
 		
 		<div class="control-group">

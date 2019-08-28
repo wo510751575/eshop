@@ -3,7 +3,7 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import com.lj.base.core.encryption.MD5;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.core.util.AssertUtils;
 import com.lj.base.core.util.GUID;
+import com.lj.base.core.util.StringUtils;
 import com.lj.base.exception.TsfaServiceException;
 import com.lj.business.cf.dto.unfinishTaskSummary.AddUnfinishTaskSummary;
 import com.lj.business.cf.dto.workTaskList.FindWorkTaskListPageReturn;
@@ -313,14 +314,18 @@ public class GuidMemberServiceImpl implements IGuidMemberService {
 				"findGuidMember(FindGuidMember findGuidMember={}) - start", findGuidMember); //$NON-NLS-1$
 
 		AssertUtils.notNull(findGuidMember);
-		AssertUtils.notAllNullAndEmpty(findGuidMember.getCode(),
-				findGuidMember.getMemberNo(), "CODE,导购编号不能全部为空！");
+		if(StringUtils.isEmpty(findGuidMember.getCode()) && StringUtils.isEmpty(findGuidMember.getMemberNo()) 
+				&& StringUtils.isEmpty(findGuidMember.getMobile()) && StringUtils.isEmpty(findGuidMember.getNoWx())){
+			throw new IllegalArgumentException("参数不能全部为空！");
+		}
+		
 		try {
 			GuidMember guidMemberQuery = new GuidMember();
 			guidMemberQuery.setCode(findGuidMember.getCode());
 			guidMemberQuery.setMemberNo(findGuidMember.getMemberNo());
-			GuidMember guidMember = guidMemberDao
-					.selectByParams(guidMemberQuery);
+			guidMemberQuery.setMobile(findGuidMember.getMobile());
+			guidMemberQuery.setNoWx(findGuidMember.getNoWx());
+			GuidMember guidMember = guidMemberDao.selectByParams(guidMemberQuery);
 			if (guidMember == null) {
 				throw new TsfaServiceException(
 						ErrorCode.GUID_MEMBER_NOT_EXIST_ERROR, "导购表信息不存在");

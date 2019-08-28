@@ -3,7 +3,7 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.math.BigDecimal;
@@ -368,7 +368,7 @@ public class CustOrderServiceImpl implements ICustOrderService {
 			
 			/*记录账户流水*/
 			AccWaterDto accWaterDto = new AccWaterDto();
-			accWaterDto.setAccNo(NoUtil.generateNo(NoUtil.JY));
+			accWaterDto.setAccWaterNo(NoUtil.generateNo(NoUtil.JY));
 			accWaterDto.setAccDate(new Date());
 			accWaterDto.setAccSource(AccWaterSource.COMMISSION.getValue());
 			accWaterDto.setAccType(AccWaterAccType.AUTO.getValue());
@@ -458,7 +458,7 @@ public class CustOrderServiceImpl implements ICustOrderService {
 			
 			/*记录账户流水*/
 			AccWaterDto accWaterDto = new AccWaterDto();
-			accWaterDto.setAccNo(NoUtil.generateNo(NoUtil.JY));
+			accWaterDto.setAccWaterNo(NoUtil.generateNo(NoUtil.JY));
 			accWaterDto.setAccDate(new Date());
 			accWaterDto.setAccSource(AccWaterSource.CUSTORDER.getValue());
 			accWaterDto.setAccType(AccWaterAccType.AUTO.getValue());

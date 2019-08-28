@@ -405,18 +405,24 @@
         			</c:when>
         			<c:otherwise>
         				<div class="pro_detail">
-	        		<c:if test="${not empty data.imgAddr}">
+	        		<%-- <c:if test="${not empty data.imgAddr}">
 	        			<c:set var="imgAddr" value="${fn:split(data.imgAddr, ',')}" />
-		        		<c:forEach items="${imgAddr }" var="imgAddr">
-		        			<img alt="" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgAddr }">
+		        		<c:forEach items="${imgAddr}" var="imgAddr">
+		        			<img alt="" src="${fns:getUploadUrl()}${imgAddr}">
 		        		</c:forEach>
-        			</c:if>
+        			</c:if> --%>
+        			<c:if test="${not empty data.imgAddr}">
+		        		<c:set var="imgAddr" value="${fn:split(data.imgAddr, ',')}" />
+	        			<c:forEach items="${imgAddr}" var="img">
+							<img src="${fns:getUploadUrl()}${img}"> 	
+						</c:forEach>
+					</c:if>
 	        		${fns:unescapeHtml(data.content)}
         		</div>
         	
         		 <div class="info_title">
         		 <c:if test="${not empty companyLogo}">
-        			<div class="left logo"><img alt="" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${companyLogo}"></div>
+        			<div class="left logo"><img alt="" src="${fns:getUploadUrl()}${companyLogo}"></div>
 <%--         			<div class="left name">${companyName}</div> --%>
 				</c:if>
         		</div>

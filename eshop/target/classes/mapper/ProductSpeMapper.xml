@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IProductSpeDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ProductSpe">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="rule_detail" jdbcType="VARCHAR" property="ruleDetail" />
+    <result column="rule_code" jdbcType="VARCHAR" property="ruleCode" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="is_default" jdbcType="CHAR" property="isDefault" />
+    <result column="store_cnt" jdbcType="VARCHAR" property="storeCnt" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="order_no" jdbcType="INTEGER" property="orderNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, product_code, rule_detail, rule_code, sale_price, is_default, store_cnt, remarks, order_no
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductSpeDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					<![CDATA[and product_code =#{param.productCode}]]>
+				</if>
+				<if test="param.ruleCode != null and param.ruleCode !='' ">
+					<![CDATA[and rule_code =#{param.ruleCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findProductSpes" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindProductSpePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_spe
+		<include refid="findPage_condition" />
+		order by order_no
+	</select>
+	<!-- 分页查询 -->
+	<select id="findProductSpePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindProductSpePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_spe
+		<include refid="findPage_condition" />
+		order by order_no
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findProductSpePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindProductSpePage">
+		select count(*)
+		FROM t_product_spe
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_spe
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+   
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ProductSpe">
+    insert into t_product_spe
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="ruleDetail != null">
+        rule_detail,
+      </if>
+      <if test="ruleCode != null">
+        rule_code,
+      </if>
+      <if test="salePrice != null">
+        sale_price,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="storeCnt != null">
+        store_cnt,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+       <if test="orderNo != null">
+        order_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDetail != null">
+        #{ruleDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleCode != null">
+        #{ruleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null">
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="storeCnt != null">
+        #{storeCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+       <if test="orderNo != null">
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ProductSpe">
+    update t_product_spe
+    <set>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDetail != null">
+        rule_detail = #{ruleDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleCode != null">
+        rule_code = #{ruleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null">
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="storeCnt != null">
+        store_cnt = #{storeCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+       <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

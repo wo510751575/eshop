@@ -3,7 +3,7 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
@@ -24,6 +24,7 @@ import com.lj.business.cm.dto.FindMaterialType;
 import com.lj.business.cm.dto.FindMaterialTypePage;
 import com.lj.business.cm.dto.FindMaterialTypePageReturn;
 import com.lj.business.cm.dto.FindMaterialTypesApp;
+import com.lj.business.cm.dto.FindMaterialTypesAppReturn;
 import com.lj.business.cm.dto.UpdateMaterialType;
 import com.lj.business.cm.service.IMaterialTypeService;
 
@@ -187,7 +188,6 @@ public class MaterialTypeServiceImplTest extends SpringTestCase{
 		findMaterialTypesApp.setMerchantNo("e79d975846ee41ba8c3c55738fda66a9");
 		findMaterialTypesApp.setMemberNoGm("d7b963349b8f4bcbbed9a36fe41ae626");
 		Assert.assertNotNull(materialTypeService.findMaterialTypesApp(findMaterialTypesApp));
-		
 	}
 	
 	@Test
@@ -199,6 +199,27 @@ public class MaterialTypeServiceImplTest extends SpringTestCase{
 		for (FindMaterialTypePageReturn pageReturn : findMaterialTypeForMemberPage.getRows()) {
 			System.out.println(pageReturn);
 		}
+	}
+	
+	/**
+	 * 电商app
+	 * 方法说明：
+	 *
+	 * @param @throws TsfaServiceException    设定文件 
+	 * @return void    返回类型 
+	 * @throws Exception
+	 *
+	 * @author 林进权
+	 *         CreateDate: 2017年10月12日
+	 */
+	@Test
+	public void findMaterialTypesAppEc() throws TsfaServiceException{
+		FindMaterialTypesApp findMaterialTypesApp = new FindMaterialTypesApp();
+		findMaterialTypesApp.setMerchantNo("d2f71eb681d24f35899a43c8a021fc2a");
+		findMaterialTypesApp.setMemberNoGm("LJ_f933dfaeb3d94396a5908e60c6f1ffb0");
+		List<FindMaterialTypesAppReturn> list = materialTypeService.findMaterialTypesAppEc(findMaterialTypesApp);
+		Assert.assertNotNull(list);
+		System.out.println(list.size());
 	}
 	
 }

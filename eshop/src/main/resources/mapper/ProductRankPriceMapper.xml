@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IProductRankPriceDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ProductRankPrice">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="rank_code" jdbcType="VARCHAR" property="rankCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="rank_price" jdbcType="DECIMAL" property="rankPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, product_code, rank_code, sku_code, rank_price
+  </sql>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductRankPriceDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.rankCode != null and param.rankCode !='' ">
+					<![CDATA[and rank_code =#{param.rankCode}]]>
+				</if>
+		  		<if test="param.skuCode != null and param.skuCode !='' ">
+					<![CDATA[and sku_code =#{param.skuCode}]]>
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					<![CDATA[and product_code =#{param.productCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findProductRankPrices" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductRankPricePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_rank_price
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findProductRankPricePage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindProductRankPricePage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_product_rank_price
+		<include refid="findPage_condition" />
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findProductRankPricePageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindProductRankPricePage">
+		select count(*)
+		FROM t_product_rank_price
+		<include refid="findPage_condition" />
+	</select>
+	
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_rank_price
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_product_rank_price
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ProductRankPrice">
+    insert into t_product_rank_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="rankCode != null">
+        rank_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="rankPrice != null">
+        rank_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCode != null">
+        #{rankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rankPrice != null">
+        #{rankPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ProductRankPrice">
+    update t_product_rank_price
+    <set>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCode != null">
+        rank_code = #{rankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rankPrice != null">
+        rank_price = #{rankPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.shop;
@@ -21,12 +21,15 @@ import com.ape.common.web.BaseController;
 import com.google.common.collect.Lists;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.core.pagination.PageSortType;
+import com.lj.base.core.util.StringUtils;
 import com.lj.eoms.utils.UserUtils;
+import com.lj.eshop.constant.NoUtil;
 import com.lj.eshop.dto.FindShopRetirePage;
 import com.lj.eshop.dto.ShopRetireDto;
 import com.lj.eshop.emus.AuditStatus;
 import com.lj.eshop.emus.ExpressStatus;
 import com.lj.eshop.emus.RetireStatus;
+import com.lj.eshop.emus.ShopRetireViewStatus;
 import com.lj.eshop.service.IShopRetireService;
 
 /**
@@ -38,7 +41,7 @@ import com.lj.eshop.service.IShopRetireService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年8月26日
@@ -95,6 +98,14 @@ public class ShopRetireController extends BaseController {
 	@RequestMapping(value = "/status")
 	public String status(ShopRetireDto shopRetireDto,BigDecimal amount, RedirectAttributes redirectAttributes) {
 		try {
+			if(StringUtils.equals(shopRetireDto.getRetireStatus(), RetireStatus.SUCCESS.getValue())) {
+				if(amount.compareTo(NoUtil.DEFAULT_CASH_PLEDGE)>0) {
+					addMessage(redirectAttributes, "打款押金不能大于"+NoUtil.DEFAULT_CASH_PLEDGE);
+					return "redirect:" + adminPath + "/shop/retire/list";
+				}
+			}
+			
+			
 			/*审核人为当前登录人*/
 			shopRetireDto.setAuditor(UserUtils.getUser().getName());
 			shopRetireService.audit(shopRetireDto,amount);

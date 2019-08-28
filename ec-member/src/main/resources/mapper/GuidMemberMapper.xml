@@ -489,6 +489,9 @@
        <if test="noWx != null and noWx !=''" >
         and  NO_WX = #{noWx,jdbcType=VARCHAR}
       </if>
+      <if test="mobile != null and mobile !=''" >
+        and  MOBILE = #{mobile,jdbcType=VARCHAR}
+      </if>
       </where>
   </select>
   

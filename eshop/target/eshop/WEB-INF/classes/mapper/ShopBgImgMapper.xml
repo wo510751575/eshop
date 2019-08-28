@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IShopBgImgDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ShopBgImg" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="spe" property="spe" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    code, name, spe, status
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ShopBgImgDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.name != null and param.name !='' ">
+					and name like CONCAT('%',#{param.name},'%' )
+		  		</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findShopBgImgs" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopBgImgPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_bgimg
+		<include refid="findPage_condition" />
+		order by code
+	</select>
+	<!-- 分页查询 -->
+	<select id="findShopBgImgPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopBgImgPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_bgimg
+		<include refid="findPage_condition" />
+		order by ${sortBy} ${sortDir}
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findShopBgImgPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindShopBgImgPage">
+		select count(*)
+		FROM t_shop_bgimg
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_shop_bgimg
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ShopBgImg" >
+    insert into t_shop_bgimg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="spe != null" >
+        spe,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="spe != null" >
+        #{spe,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ShopBgImg" >
+    update t_shop_bgimg
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="spe != null" >
+        spe = #{spe,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

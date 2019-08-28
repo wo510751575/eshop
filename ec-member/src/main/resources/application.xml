@@ -27,7 +27,6 @@
 		<property name="sqlSessionFactoryBeanName"  value="sqlSessionFactory" />
 	</bean>
 	
-	
 	<!-- 激活annotation功能 -->
 	<context:annotation-config />
 	<!-- 激活annotation功能 -->

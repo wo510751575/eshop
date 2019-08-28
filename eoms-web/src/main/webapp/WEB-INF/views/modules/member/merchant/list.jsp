@@ -38,6 +38,25 @@
 .form-search .ul-form li label{
 	width: 110px;
 }
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
 </style>
 </head>
 <body>
@@ -50,11 +69,11 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 		    <li><label>商户名：</label>
-		    	<input type="text" name="param.merchantName" value="${param.merchantName}" class="input-medium" maxlength="100" placeholder="商户名">
+		    	<input type="text" name="param.merchantName" value="${findMerchantPage.param.merchantName}" class="input-medium" maxlength="100" placeholder="商户名">
 			</li>
 			<li>
 				<label>商户联系手机号：</label> 
- 				<input type="text" name="param.merchantPhone" value="${param.merchantPhone}" class="input-medium" maxlength="100" placeholder="商户联系手机号">
+ 				<input type="text" name="param.merchantPhone" value="${findMerchantPage.param.merchantPhone}" class="input-medium" maxlength="100" placeholder="商户联系手机号">
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>

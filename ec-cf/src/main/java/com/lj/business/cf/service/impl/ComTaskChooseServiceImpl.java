@@ -47,7 +47,7 @@ import com.lj.business.member.service.IPmTypeService;
  * @author 彭阳
  * 
  * CreateDate: 2017年6月30日s
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  */
 @Service
 public class ComTaskChooseServiceImpl implements IComTaskChooseService {

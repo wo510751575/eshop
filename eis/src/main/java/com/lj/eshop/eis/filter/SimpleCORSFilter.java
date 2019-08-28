@@ -21,16 +21,17 @@ import org.springframework.stereotype.Component;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 彭阳
  *   
  * CreateDate: 2017年7月14日
  */
 @Component
 public class SimpleCORSFilter  implements Filter{
-	    public void destroy() {
+	    @Override
+		public void destroy() {
 	    }
-
+	    @Override
 	    public void doFilter(ServletRequest req, ServletResponse res,
 	            FilterChain chain) throws IOException, ServletException {
 	        HttpServletResponse response = (HttpServletResponse) res;
@@ -40,7 +41,7 @@ public class SimpleCORSFilter  implements Filter{
 	        response.setHeader("Access-Control-Allow-Headers"," Origin, X-Requested-With, Content-Type, Accept,token,Authorization");
 	        chain.doFilter(req, res);
 	    }
-
+	    @Override
 	    public void init(FilterConfig arg0) throws ServletException {
 	    	
 	    }

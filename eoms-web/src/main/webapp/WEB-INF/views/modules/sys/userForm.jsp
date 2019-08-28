@@ -17,8 +17,11 @@
 					confirmNewPassword: {equalTo: "输入与上面相同的密码"}
 				},
 				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
+
+					//if(validMobile()){
+						loading('正在提交，请稍等...');
+						form.submit();
+					//}
 				},
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
@@ -31,7 +34,32 @@
 				}
 			});
 		});
+
+		function validMobile(){
+			var regBox = {
+			        regMobile : /^0?1\d{10}$/,//手机
+			        regTel : /^(0[\d]{2,3}-[\d]{7,8})$/
+			    }
+			 
+		    var mobile = $('#mobile').val();
+		    var phone = $('#phone').val();
+		    var mflag = regBox.regMobile.test(mobile);
+		    var pflag = regBox.regTel.test(phone);
+		    if (mobile!='' && !mflag) {
+		        alert("手机有误，11位数字！");
+		        return false;
+		    }
+
+		   if (phone!='' && !pflag) {
+		        alert("电话有误！区号(3-4位)-号码(7-8)");
+		        return false;
+		    }
+		    
+		    return true;
+		}
 	</script>
+	
+		
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -46,7 +74,7 @@
 			<div class="controls">
 			      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty user.photo}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${user.photo}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${user.photo}"/>
 				       </c:if>
 				       <c:if test="${empty user.photo}">
 				                                  选择头像
@@ -115,14 +143,16 @@
 		<div class="control-group">
 			<label class="control-label">电话:</label>
 			<div class="controls">
-				<form:input path="phone" htmlEscape="false" maxlength="11" type="number"/>
+				<form:input path="phone" htmlEscape="false" maxlength="18"  />
+				
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">手机:</label>
 			<div class="controls">
-				<form:input path="mobile" htmlEscape="false" maxlength="11" type="number"/>
+				<form:input path="mobile" htmlEscape="false" maxlength="11"  />
 			</div>
+			
 		</div>
 		<div class="control-group">
 			<label class="control-label">是否允许登录:</label>
@@ -216,5 +246,7 @@
 		});
 
     </script>
+    
+     
 </body>
 </html>

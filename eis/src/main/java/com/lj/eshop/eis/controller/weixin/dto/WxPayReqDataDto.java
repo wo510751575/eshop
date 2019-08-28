@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * <p>
  * 详细描述： 原样封装，不做特殊处理。
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月8日

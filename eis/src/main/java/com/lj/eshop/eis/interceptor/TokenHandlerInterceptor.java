@@ -19,69 +19,68 @@ import com.lj.eshop.eis.dto.ResponseCode;
 import com.lj.eshop.eis.dto.UserTokenThreadLocal;
 import com.lj.eshop.eis.service.IUserLoginService;
 
-
 /**
  * 
  * 类说明：鉴权拦截器。
- *  
+ * 
  * 
  * <p>
- *   
- * @Company: 领居科技有限公司
+ * 
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
- *   
- * CreateDate: 2017年9月2日
+ * 
+ *         CreateDate: 2017年9月2日
  */
 public class TokenHandlerInterceptor implements HandlerInterceptor {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TokenHandlerInterceptor.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(TokenHandlerInterceptor.class);
+
 	@Autowired
 	private IUserLoginService userLoginService;
-		
-	/** key =访问地址  ,value= 权限类型 */
-	private Map<String , String> permissions;
-	/**  1:仅B端登录访问 */
-	private static final String B_LOGIN="1";
-	/**  2:仅C端登录访问 */
-	private static final String C_LOGIN="2";
-	/**  3:仅APP登录 */
-	private static final String B_APP_LOGIN="3";
+
+	/** key =访问地址 ,value= 权限类型 */
+	private Map<String, String> permissions;
+	/** 1:仅B端登录访问 */
+	private static final String B_LOGIN = "1";
+	/** 2:仅C端登录访问 */
+	private static final String C_LOGIN = "2";
+	/** 3:仅APP登录 */
+	private static final String B_APP_LOGIN = "3";
+
 	/**
 	 * 前置拦截处理逻辑，验证用户是否登录
 	 */
 	@Override
-	public boolean preHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 		if (logger.isInfoEnabled()) {
-			logger.info(new StringBuilder("URL:")
-					.append(request.getRequestURL()).append(",servletURI:")
-					.append(request.getServletPath()).append(",method:")
-					.append(request.getMethod().toUpperCase()).toString());
+			logger.info(new StringBuilder("URL:").append(request.getRequestURL()).append(",servletURI:")
+					.append(request.getServletPath()).append(",method:").append(request.getMethod().toUpperCase())
+					.toString());
 		}
-		String method=request.getMethod().toUpperCase();
-		if("OPTIONS".equals(method)){//OPTIONS 不校验
+		String method = request.getMethod().toUpperCase();
+		if ("OPTIONS".equals(method)) {// OPTIONS 不校验
 			return true;
 		}
-		String url =request.getServletPath();
-		String token = request.getHeader("token");//从消息头里获取token
-		logger.info("登录token:"+token);
+		String url = request.getServletPath();
+		String token = request.getHeader("token");// 从消息头里获取token
+		logger.info("登录token:" + token);
 		// 鉴权及获取登录用户信息
-		checkUser(token,url);
+		checkUser(token, url);
 		return true;
 	}
-	
+
 	/**
-	 * 方法说明：检测权限 
-	 * @param url 访问的链接
+	 * 方法说明：检测权限
+	 * 
+	 * @param url             访问的链接
 	 * @param permissionTypes 接口访问权
-	 * @param role 当前用户登录角色
+	 * @param role            当前用户登录角色
 	 *
-	 * @author lhy  2017年9月20日
+	 * @author lhy 2017年9月20日
 	 *
 	 */
-	private static void checkPermission(String url,String permissionTypes,String role){
+	private static void checkPermission(String url, String permissionTypes, String role) {
 		String rolePermission = null;
 		if (LoginRoleConstant.IS_B.equals(role)) {
 			rolePermission = B_LOGIN;
@@ -97,39 +96,45 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
 			throw new TsfaServiceException(ResponseCode.NO_PERMISSION.getCode(), msg);
 		}
 	}
-	
-	private void checkUser(String token,String url){
-		LoginUserDto user=userLoginService.getCurrLoginUser(token);
-		String permissionType=permissions.get(url);
-		if(StringUtils.isNotBlank(permissionType)){
-			if(user==null){//需要登录未登录则提示(包含所有（B C 都需要登录的接口）)
+
+	private void checkUser(String token, String url) {
+		LoginUserDto user = userLoginService.getCurrLoginUser(token);
+		String permissionType = permissions.get(url);
+		if (StringUtils.isNotBlank(permissionType)) {
+			if (user == null) {// 需要登录未登录则提示(包含所有（B C 都需要登录的接口）)
 				throw new TsfaServiceException(ResponseCode.UN_LOGIN.getCode(), ResponseCode.UN_LOGIN.getMsg());
 			}
-			//检测权限
+			/*
+			 * if(user.getRole().equals(LoginRoleConstant.IS_B) && user.getGuidMbr()==
+			 * null){//兼容一期的token，小B没有导购则重新登录 userLoginService.logout();
+			 * logger.error("小B没有找到导购信息，退出登录,需要重新登录:"+user.getMember().getCode()); throw new
+			 * TsfaServiceException(ResponseCode.UN_LOGIN.getCode(),
+			 * ResponseCode.UN_LOGIN.getMsg()); }
+			 */
+			// 检测权限
 			checkPermission(url, permissionType, user.getRole());
-		}else{
-			//不需要登录验证的权限，则不作处理。
+		} else {
+			// 不需要登录验证的权限，则不作处理。
 		}
+		// 实时检测用户的状态
+		userLoginService.checkShopAndUserStatus(user);
 		UserTokenThreadLocal.set(user);
 		if (user != null) {
-			logger.info("已登录,用户登录信息:"+user.getMember().getCode());
+			logger.info("已登录,用户登录信息:" + user.getMember().getCode());
 		}
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler,
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 	}
 
 	@Override
-	public void afterCompletion(HttpServletRequest request,
-			HttpServletResponse response, Object handler, Exception ex)
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		// 请求线程完成之后，清空token本地线程变量
 		UserTokenThreadLocal.clean();
 	}
-
 
 	/**
 	 * @param permissions the permissions to set

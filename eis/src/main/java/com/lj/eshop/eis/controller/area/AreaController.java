@@ -1,13 +1,15 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.controller.area;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +30,7 @@ import com.lj.eshop.eis.dto.ResponseDto;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月1日
@@ -36,7 +38,7 @@ import com.lj.eshop.eis.dto.ResponseDto;
 @RestController
 @RequestMapping("/sys/area")
 public class AreaController {
-
+	private static Logger logger = LoggerFactory.getLogger(AreaController.class);
 	@Autowired
 	private AreaHessianService areaHessianService;
 	
@@ -74,5 +76,24 @@ public class AreaController {
 		}
 		List<Area> area = areaHessianService.selectAreaByParentId(parentId);
 		return ResponseDto.successResp(area);
+	}
+	
+	/**
+	 * 
+	 *
+	 * 方法说明：获取所有省市区
+	 *
+	 * @return
+	 *
+	 * @author 段志鹏 CreateDate: 2017年8月4日
+	 *
+	 */
+	@RequestMapping(value="findAllList",method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto findAllList() {
+		logger.debug("FindProvinceAndCityarea() - start"); //$NON-NLS-1$
+		List<Area> returnList = areaHessianService.findAllList();
+		logger.debug("cityarea(String parentId={}) - end"); //$NON-NLS-1$
+		return ResponseDto.successResp(returnList);
 	}
 }

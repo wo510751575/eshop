@@ -32,7 +32,27 @@
 		});
 	</script>
 	
-	
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>	
 </head>
 <body>
 <div class="container">
@@ -69,7 +89,7 @@
 				<div class="img-div">
 				      <div id="img_btn1" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 					       <c:if test="${!empty data.img1}">
-					       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.img1}"/>
+					       		<img style="max-weight:120px;max-height:120px;"  src="${fns:getUploadUrl()}${data.img1}"/>
 					       </c:if>
 					       <c:if test="${empty data.img1}">
 					                                  选择图片
@@ -79,7 +99,7 @@
 				      
 				      <%-- <div id="img_btn2" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.img2}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.img2}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.img2}"/>
 				       </c:if>
 				       <c:if test="${empty data.img2}">
 				                                  选择图片
@@ -89,7 +109,7 @@
 				      
 				       <div id="img_btn3" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.img3}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.img3}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.img3}"/>
 				       </c:if>
 				       <c:if test="${empty data.img3}">
 				                                  选择图片
@@ -99,7 +119,7 @@
 					
 					<div id="img_btn4" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.img4}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.img4}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.img4}"/>
 				       </c:if>
 				       <c:if test="${empty data.img4}">
 				                                  选择图片
@@ -109,7 +129,7 @@
 				
 					<div id="img_btn5" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.img5}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.img5}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.img5}"/>
 				       </c:if>
 				       <c:if test="${empty data.img5}">
 				                                  选择图片
@@ -150,14 +170,15 @@
 			</div>
 		</div>
 		
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">录入时间:</label>
 			<div class="controls">
-				 <input id="billStart" name="createTime" readonly="readonly" type="text"  maxlength="20" class="input-mini Wdate"
-				value="<fmt:formatDate value="${data.createTime}" pattern="yyyy-MM-dd"/>" />
-				<span class="help-inline"><font color="#555">*系统内容不可修改</font> </span>
+				<input id="createTime" name="createTime" type="text" readonly="readonly" maxlength="20" class="input-mini Wdate"
+ 					value="<fmt:formatDate value="${data.createTime}" pattern="yyyy-MM-dd"/>"  
+ 				onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
+				<!-- <span class="help-inline"><font color="#555">*系统内容不可修改</font> </span> -->
 			</div>
-		</div>
+		</div> --%>
 		 
 		<div class="form-actions">
 			<shiro:hasPermission name="content:wshopinfo:edit">
@@ -208,7 +229,7 @@
 			});
 			uploader.bind('FileUploaded',function(uploader,file,responseObject){
 					var response = $.parseJSON(responseObject.response);
-					$("#" + image_btn).html('<img width="120px" height="120px" src="'+uploadUrl+'/eoms'+response.url+'"/>');
+					$("#" + image_btn).html('<img style="max-weight:120px;max-height:120px;"  src="'+uploadUrl+'/eoms'+response.url+'"/>');
 					$("#" + input_image).val("/eoms" + response.url);
 			});
 		}

@@ -18,6 +18,7 @@ import com.lj.business.cm.dto.FindMaterialTypePage;
 import com.lj.business.cm.dto.FindMaterialTypePageReturn;
 import com.lj.business.cm.dto.FindMaterialTypeReturn;
 import com.lj.business.cm.dto.UpdateMaterialType;
+import com.lj.business.cm.emus.MaterialDimensionStatus;
 import com.lj.business.cm.service.IMaterialTypeService;
 import com.lj.eoms.utils.UserUtils;
 /**
@@ -29,7 +30,7 @@ import com.lj.eoms.utils.UserUtils;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  *   
  * CreateDate: 2017年7月14日
@@ -65,12 +66,13 @@ public class MaterialTypeController extends BaseController {
 				findMaterialTypePage.setLimit(pageSize);
 			}
 			
-			findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
+			findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
 			Page<FindMaterialTypePageReturn> pages = materialtypeService.findMaterialTypePage(findMaterialTypePage);
 		    List<FindMaterialTypePageReturn> list = Lists.newArrayList();
 		    list.addAll(pages.getRows());
 		    com.ape.common.persistence.Page<FindMaterialTypePageReturn> page=new com.ape.common.persistence.Page<FindMaterialTypePageReturn>(pageNo==null?1:pageNo, pages.getLimit(), pages.getTotal(), list);		
 			page.initialize();
+			model.addAttribute("materialDimensionStatuss", MaterialDimensionStatus.values());
 			model.addAttribute("page",page);
 		} catch (Exception e) {
 		  e.printStackTrace();
@@ -119,7 +121,8 @@ public class MaterialTypeController extends BaseController {
 	@RequestMapping(value = "save")
 	public String save(AddMaterialType addMaterialType, Model model, RedirectAttributes redirectAttributes) {
 		try {
-			addMaterialType.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
+			addMaterialType.setMaterialDimension(MaterialDimensionStatus.MERCHANT.getValue());
+			addMaterialType.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
 			addMaterialType.setCreateId(UserUtils.getUser().getName());
 			materialtypeService.addMaterialType(addMaterialType);
 			addMessage(redirectAttributes, "保存素材'" + addMaterialType.getTypeName() + "'成功");
@@ -145,6 +148,7 @@ public class MaterialTypeController extends BaseController {
 	@RequestMapping(value = "edit")
 	public String edit(UpdateMaterialType updateMaterialType, Model model, RedirectAttributes redirectAttributes) {
 		try {
+			
 			materialtypeService.updateMaterialType(updateMaterialType);
 			addMessage(redirectAttributes, "保存素材'" + updateMaterialType.getTypeName() + "'成功");
 		} catch (Exception e) {

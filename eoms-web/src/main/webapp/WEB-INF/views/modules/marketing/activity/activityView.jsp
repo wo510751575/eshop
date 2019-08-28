@@ -200,14 +200,14 @@
 	        		<c:if test="${not empty data.imgAddr}">
 		        		<c:set var="imgAddr" value="${fn:split(data.imgAddr, ',')}" />
 	        			<c:forEach items="${imgAddr}" var="img">
-							<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${img}"> 	
+							<img src="${fns:getUploadUrl()}${img}"> 	
 						</c:forEach>
 					</c:if>
 					${fns:unescapeHtml(data.content)}
         		</div>
         	
         		 <div class="info_title">
-        			<div class="left logo"><img alt="" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${companyLogo}"></div>
+        			<div class="left logo"><img alt="" src="${fns:getUploadUrl()}${companyLogo}"></div>
 <%--         			<div class="left name">${companyName}</div> --%>
         		</div>
         		<div class="introduce_cont">${companyRemarks }</div>

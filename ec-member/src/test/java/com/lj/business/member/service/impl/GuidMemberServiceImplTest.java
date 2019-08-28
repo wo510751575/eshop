@@ -3,11 +3,9 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
-import static org.junit.Assert.*;
-
 import java.util.Date;
 import java.util.List;
 
@@ -323,4 +321,12 @@ public class GuidMemberServiceImplTest extends SpringTestCase{
 		guidMemberService.updateGuidMember(member);
 	}
 	
+	@Test
+	public void myInfo(){
+		FindGuidMember find = new FindGuidMember();
+		find.setMemberNo("LJ_8ea04cc85fdd416eae675503d80d0ae0");
+		FindGuidMemberReturn mbrRt = guidMemberService.findGuidMember(find);
+		mbrRt.setPwd(null);//密码不返回到前端
+		System.out.println("会员信息："+mbrRt);
+	}
 }

@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
@@ -54,7 +56,6 @@ import com.lj.business.cf.service.IComTaskService;
 import com.lj.business.cf.service.IWorkTaskChooseService;
 import com.lj.business.cf.service.IWorkTaskService;
 import com.lj.business.common.CommonConstant;
-import com.lj.business.common.SystemParamConstant;
 import com.lj.business.member.common.MemberUtils;
 import com.lj.business.member.constant.ErrorCode;
 import com.lj.business.member.dao.IGuidMemberDao;
@@ -73,7 +74,6 @@ import com.lj.business.member.dto.AddPersonMemberBase;
 import com.lj.business.member.dto.AddPersonMemberReturn;
 import com.lj.business.member.dto.AddPmTypePmDto;
 import com.lj.business.member.dto.ChangePmTypeApp;
-import com.lj.business.member.dto.ChangeUrgency;
 import com.lj.business.member.dto.CountPersonMemberReturn;
 import com.lj.business.member.dto.DelPersonMember;
 import com.lj.business.member.dto.DelPersonMemberReturn;
@@ -151,7 +151,6 @@ import com.lj.business.member.service.IPersonMemberService;
 import com.lj.business.member.service.IPmTypeService;
 import com.lj.business.member.service.IShopService;
 import com.lj.cc.clientintf.LocalCacheSystemParamsFromCC;
-import com.lj.cc.enums.SystemAliasName;
 
 /**
  * 类说明：实现类
@@ -252,6 +251,7 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 
 	@Resource
 	private LocalCacheSystemParamsFromCC localCacheSystemParams;
+	private ExecutorService taskExecutor= Executors.newCachedThreadPool();
 
 	/*
 	 * (non-Javadoc)
@@ -298,10 +298,12 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 			findPmInfoAllReturn.setNickNameRemarkLocal(personMember.getNickNameRemarkLocal());
 			findPmInfoAllReturn.setBrandCompare(personMember.getBrandCompare());
 			findPmInfoAllReturn.setClientSpecial(personMember.getClientSpecial());
-
+			findPmInfoAllReturn.setRemark(personMember.getRemark());
 			findPmInfoAllReturn.setCodePmBase(personMemberBase.getCode());
 			findPmInfoAllReturn.setMobile(personMemberBase.getMobile());
 			findPmInfoAllReturn.setJob(personMemberBase.getJob());
+			
+			/*获取职业名称*/
 			if (!StringUtils.isEmpty(personMemberBase.getJob())) {
 				MemLineDto memLine = new MemLineDto();
 				memLine.setCode(personMemberBase.getJob());
@@ -324,7 +326,8 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 			findPmInfoAllReturn.setCityCode(personMemberBase.getCityCode());
 			findPmInfoAllReturn.setCityAreaCode(personMemberBase.getCityAreaCode());
 			findPmInfoAllReturn.setBirthday(personMemberBase.getBirthday());
-
+			
+			/*获取动态描述*/
 			FindBehaviorPm findBehaviorPm = new FindBehaviorPm();
 			findBehaviorPm.setMemberNo(findPmInfoAll.getMemberNo());
 			FindBehaviorPmReturn findBehaviorPmReturn = behaviorPmService.findBehaviorPm(findBehaviorPm);
@@ -604,10 +607,9 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 		AssertUtils.notNullAndEmpty(editPersonMember.getMerchantNo(), "商户号不能为空");
 		AssertUtils.notNullAndEmpty(editPersonMember.getMemberNo(), "客户号不能为空");
 		AssertUtils.notNullAndEmpty(editPersonMember.getMemberNoGm(), "导购号不能为空");
-		AssertUtils.notNullAndEmpty(editPersonMember.getUrgencyPm(), "是否紧急不能为空");
 		AssertUtils.notNullAndEmpty(editPersonMember.getPmTypeCode(), "客户分类code不能为空");
 		AssertUtils.notNullAndEmpty(editPersonMember.getPmTypePmCode(), "客户分类关联code不能为空");
-		AssertUtils.notNullAndEmpty(editPersonMember.getMemberSrc(), "客户来源不能为空");
+//		AssertUtils.notNullAndEmpty(editPersonMember.getMemberSrc(), "客户来源不能为空");
 		// AssertUtils.notNullAndEmpty(editPersonMember.getSex(), "客户性别不能为空");
 		try {
 			FindPersonMember findPersonMember = new FindPersonMember();
@@ -615,13 +617,13 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 			FindPersonMemberReturn findPersonMemberReturn = findPersonMember(findPersonMember);
 			if (findPersonMemberReturn != null) {
 				// 如果修改了紧急调用客户分类修改 参数只能这么传
-				if (!editPersonMember.getUrgencyPm().equals(findPersonMemberReturn.getUrgencyPm())) {
-					ChangeUrgency changeUrgency = new ChangeUrgency();
-					changeUrgency.setMemberNo(editPersonMember.getMemberNo());
-					changeUrgency.setMemberNoGm(editPersonMember.getMemberNoGm());
-					changeUrgency.setUrgentFlagType(UrgentFlagType.valueOf(editPersonMember.getUrgencyPm()));
-					pmTypeService.changeUrgency(changeUrgency);
-				}
+//				if (!editPersonMember.getUrgencyPm().equals(findPersonMemberReturn.getUrgencyPm())) {
+//					ChangeUrgency changeUrgency = new ChangeUrgency();
+//					changeUrgency.setMemberNo(editPersonMember.getMemberNo());
+//					changeUrgency.setMemberNoGm(editPersonMember.getMemberNoGm());
+//					changeUrgency.setUrgentFlagType(UrgentFlagType.valueOf(editPersonMember.getUrgencyPm()));
+//					pmTypeService.changeUrgency(changeUrgency);
+//				}
 
 				// 客户分组change
 				ChangePmTypeApp changePmTypeApp = new ChangePmTypeApp();
@@ -643,6 +645,7 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				updatePersonMemberBase.setMemberName(editPersonMember.getMemberName());
 				updatePersonMemberBase.setMobile(editPersonMember.getMobile());
 				updatePersonMemberBase.setJob(editPersonMember.getJob());
+				updatePersonMemberBase.setInterest(editPersonMember.getInterest());
 				updatePersonMemberBase.setAge(editPersonMember.getAge());
 				updatePersonMemberBase.setSex(editPersonMember.getSex());
 				updatePersonMemberBase.setHeadAddress(editPersonMember.getHeadAddress());
@@ -680,6 +683,7 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				updatePersonMember.setUpdateDate(new Date());
 				updatePersonMember.setBrandCompare(editPersonMember.getBrandCompare());
 				updatePersonMember.setClientSpecial(editPersonMember.getClientSpecial());
+				updatePersonMember.setRemark(editPersonMember.getRemark());
 
 				updatePersonMember(updatePersonMember, updatePersonMemberBase);
 
@@ -774,13 +778,13 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 					map.put("merchantNo", personMemberResult.getMerchantNo());
 					map.put("codePm", personMemberResult.getCode());
 					Map<String, String> mapResult = pmTypeDao.selectByParamKey_changePmType(map);
-					String PM_TYPE_TYPE = mapResult.get("PM_TYPE_TYPE");
-					logger.debug("客户所属分类：" + PM_TYPE_TYPE);
-					if (PmTypeType.OTHER.toString().equals(PM_TYPE_TYPE)) {
-						comTaskType = ComTaskType.COM_TASK;
-					} else {
-						comTaskType = ComTaskType.INVITE;
-					}
+//					String PM_TYPE_TYPE = mapResult.get("PM_TYPE_TYPE");
+//					logger.debug("客户所属分类：" + PM_TYPE_TYPE);
+//					if (PmTypeType.OTHER.toString().equals(PM_TYPE_TYPE)) {
+//						comTaskType = ComTaskType.COM_TASK;
+//					} else {
+//						comTaskType = ComTaskType.INVITE;
+//					}
 
 					addClientFollow.setMerchantNo(personMemberResult.getMerchantNo());
 					addClientFollow.setMemberNo(personMemberResult.getMemberNo());
@@ -1477,14 +1481,14 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				ptp.setCode(GUID.getPreUUID());
 				ptp.setCodePm(pm.getCode());
 
-				FindPmType findPmType = new FindPmType();
-				findPmType.setPmTypeType(PmTypeType.UNGROUP.toString());
-				findPmType.setMerchantNo(merchantNo);
-				FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
-				if (findPmTypeReturn != null) {
-					ptp.setPmTypeCode(findPmTypeReturn.getCode());
-					cnt = ipmTypePmDao.insert(ptp);
-				}
+//				FindPmType findPmType = new FindPmType();
+//				findPmType.setPmTypeType(PmTypeType.UNGROUP.toString());
+//				findPmType.setMerchantNo(merchantNo);
+//				FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
+//				if (findPmTypeReturn != null) {
+//					ptp.setPmTypeCode(findPmTypeReturn.getCode());
+//					cnt = ipmTypePmDao.insert(ptp);
+//				}
 			}
 
 			// 紧急 产生一条客户分类关联
@@ -1494,13 +1498,13 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				ptp2.setCode(GUID.getPreUUID());
 				ptp2.setCodePm(pm.getCode());
 				FindPmType findPmType = new FindPmType();
-				findPmType.setPmTypeType(PmTypeType.URGENCY.toString());
-				findPmType.setMerchantNo(merchantNo);
-				FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
-				if (findPmTypeReturn != null) {
-					ptp2.setPmTypeCode(findPmTypeReturn.getCode());
-					cnt = ipmTypePmDao.insert(ptp2);
-				}
+//				findPmType.setPmTypeType(PmTypeType.URGENCY.toString());
+//				findPmType.setMerchantNo(merchantNo);
+//				FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
+//				if (findPmTypeReturn != null) {
+//					ptp2.setPmTypeCode(findPmTypeReturn.getCode());
+//					cnt = ipmTypePmDao.insert(ptp2);
+//				}
 			}
 
 			// 产生跟进总表和第一条跟进明细记录
@@ -1517,16 +1521,16 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 			if (StringUtils.isEmpty(addPersonMemberBase.getPmTypeCode())) {
 				logger.debug("未分组则产生分组任务");
 				// 查询客户分类频率
-				FindPmType findPmType = new FindPmType();
-				findPmType.setMerchantNo(merchantNo);
-				findPmType.setPmTypeType(PmTypeType.UNGROUP.toString());
-				FindPmTypeReturn ptp = pmTypeService.findPmTypeByMP(findPmType);
-				int hour = 0;
-				if (ptp == null || StringUtils.isEmpty(ptp.getFreValue())) {
-					hour = 0;
-				} else {
-					hour = Integer.valueOf(ptp.getFreValue());
-				}
+//				FindPmType findPmType = new FindPmType();
+//				findPmType.setMerchantNo(merchantNo);
+//				findPmType.setPmTypeType(PmTypeType.UNGROUP.toString());
+//				FindPmTypeReturn ptp = pmTypeService.findPmTypeByMP(findPmType);
+//				int hour = 0;
+//				if (ptp == null || StringUtils.isEmpty(ptp.getFreValue())) {
+//					hour = 0;
+//				} else {
+//					hour = Integer.valueOf(ptp.getFreValue());
+//				}
 				AddComTask addComTask = new AddComTask();
 				addComTask.setMerchantNo(addPmClientFollowFirstDto.getMerchantNo());
 				addComTask.setMemberNoGm(addPmClientFollowFirstDto.getMemberNoGm());
@@ -1534,7 +1538,8 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				addComTask.setMemberName(pmb.getMemberName());
 				addComTask.setCfNo(cfNo);
 				addComTask.setNoType(FollowNoType.FOLLOW.toString());
-				addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+//				addComTask.setWorkDate(DateUtils.addHours(new Date(), hour));
+				addComTask.setWorkDate(new Date());
 				addComTask.setComTaskType(ComTaskType.GROUP);
 				addComTask.setRemarkCom(CommonConstant.REPLACE_REMARK_COM + "手工新增客户");
 				addComTask.setLastResultDate(new Date());
@@ -1553,13 +1558,13 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 				PmType pmType = pmTypeDao.selectByPrimaryKey(addPersonMemberBase.getPmTypeCode());
 
 				ComTaskType comTaskType = ComTaskType.INVITE;
-				if (PmTypeType.OTHER.toString().equals(pmType.getPmTypeType().toString())) {
-					logger.debug("非意向客户产生沟通任务");
-					comTaskType = ComTaskType.COM_TASK;
-				} else {
-					logger.debug("意向客户产生邀约任务");
-					comTaskType = ComTaskType.INVITE;
-				}
+//				if (PmTypeType.OTHER.toString().equals(pmType.getPmTypeType().toString())) {
+//					logger.debug("非意向客户产生沟通任务");
+//					comTaskType = ComTaskType.COM_TASK;
+//				} else {
+//					logger.debug("意向客户产生邀约任务");
+//					comTaskType = ComTaskType.INVITE;
+//				}
 
 				// 产生业务任务
 				AddComTask addComTask = new AddComTask();
@@ -1674,7 +1679,9 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 		personMemberRateDto.setNoWx(findPersonMemberBaseReturn.getNoWx());
 		personMemberRateDto.setSex(findPersonMemberBaseReturn.getSex());
 		personMemberRateDto.setSpruceUp(findPersonMemberReturn.getSpruceUp());
-
+		personMemberRateDto.setInterest(findPersonMemberBaseReturn.getInterest());
+		personMemberRateDto.setRemark(findPersonMemberReturn.getRemark());
+		
 		logger.debug("computeRate(==== personMemberRateDto={}", personMemberRateDto); //$NON-NLS-1$
 
 		// 计算完成度
@@ -1765,23 +1772,6 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 		try {
 			returnList = personMemberDao.findPmTypeIndexPage(findPmTypeIndexPage);
 			count = personMemberDao.findPmTypeIndexPageCount(findPmTypeIndexPage);
-
-			FindPmType findPmType = new FindPmType();
-			findPmType.setMerchantNo(findPmTypeIndexPage.getMerchantNo());
-			findPmType.setPmTypeType(PmTypeType.REPEAT.toString());
-			FindPmTypeReturn findPmTypeReturn = pmTypeService.findPmTypeByMP(findPmType);
-			if (findPmTypeReturn != null) {
-				if (findPmTypeIndexPage.getPmTypeCode()!=null&& findPmTypeReturn.getCode().equals(findPmTypeIndexPage.getPmTypeCode())) {
-					logger.debug("交叉客户数量查询！");
-					for (FindPmTypeIndexPageReturn findPmTypeIndexPageReturn : returnList) {
-						PersonMember record = new PersonMember();
-						record.setMemberNo(findPmTypeIndexPageReturn.getMemberNo());
-						record.setMerchantNo(findPmTypeIndexPage.getMerchantNo());
-						int repeatCount = personMemberDao.findPmTypeRepeatCount(record);
-						findPmTypeIndexPageReturn.setRepeatCount(repeatCount);
-					}
-				}
-			}
 		} catch (Exception e) {
 			logger.error("客户管理首页分页查询错误!", e);
 			throw new TsfaServiceException(ErrorCode.FIND_PMTYPE_INDEX_PAGE_ERROR, "客户管理首页分页查询错误!", e);
@@ -1875,206 +1865,199 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 	 * (java.lang.String)
 	 */
 	@Override
-	public void addPersonMemberFromHook(String infos) throws TsfaServiceException {
+	public void addPersonMemberFromHook(final String infos) throws TsfaServiceException {
 		logger.debug("addPersonMemberFromHook(String infos={}) - start", infos); //$NON-NLS-1$
+		
+//		taskExecutor.execute(new Runnable() {
+//			@Override
+//			public void run() {
+				try {
+					// 先插入客户基础表
+					JSONObject jsonObject = JSONObject.fromObject(infos);
+					String noWxGM = jsonObject.getString("noWxGM");
+					logger.debug("addPersonMemberFromHook(String noWxGM={})", noWxGM);
+					JSONArray ja = jsonObject.getJSONArray("data");
+					
+					// 根据导购微信查询导购和门店信息
+					GuidMember gm = new GuidMember();
+					gm.setNoWx(noWxGM);
+					GuidMember guidMember = iguidMemberDao.selectByParams(gm);
 
-		try {
-			// 先插入客户基础表
-			JSONObject jsonObject = JSONObject.fromObject(infos);
-			String noWxGM = jsonObject.getString("noWxGM");
-			logger.debug("addPersonMemberFromHook(String noWxGM={})", noWxGM);
-			JSONArray ja = jsonObject.getJSONArray("data");
-			// 根据导购微信查询导购和门店信息
-			GuidMember gm = new GuidMember();
-			gm.setNoWx(noWxGM);
-			GuidMember guidMember = iguidMemberDao.selectByParams(gm);
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+					PersonMemberBase personMemberBase = null;
+					
+					// 我的客户
+					FindPmType findPmType = new FindPmType();
+					findPmType.setMerchantNo(guidMember.getMerchantNo());
+					findPmType.setPmTypeType(PmTypeType.MY.toString());
+					FindPmTypeReturn ptp = pmTypeService.findPmTypeByMP(findPmType);
 
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			PersonMemberBase personMemberBase = null;
-			// 未分组
-			FindPmType findPmType = new FindPmType();
-			findPmType.setMerchantNo(guidMember.getMerchantNo());
-			findPmType.setPmTypeType(PmTypeType.UNGROUP.toString());
-			FindPmTypeReturn ptp = pmTypeService.findPmTypeByMP(findPmType);
-			// 意向(到店)
-			FindPmType findPmType2 = new FindPmType();
-			findPmType2.setMerchantNo(guidMember.getMerchantNo());
-			findPmType2.setPmTypeType(PmTypeType.INTENTION.toString());
-			FindPmTypeReturn ptp2 = pmTypeService.findPmTypeByMP(findPmType2);
+					// 获取店铺
+					FindShop findShop = new FindShop();
+					findShop.setShopNo(guidMember.getShopNo());
+					FindShopReturn findShopReturn = shopService.findShopByShopNo(findShop);
+					
+					Date now = new Date();
+					for (int i = 0; i < ja.size(); i++) {
+						
+						FindPersonMemberBase fmb = new FindPersonMemberBase();
+						PersonMember addPersonMember = new PersonMember();
 
-			// 获取店铺经度纬度
-			FindShop findShop = new FindShop();
-			findShop.setShopNo(guidMember.getShopNo());
-			FindShopReturn findShopReturn = shopService.findShopByShopNo(findShop);
-			// 获取距离范围
-			String distance = localCacheSystemParams.getSystemParam(SystemAliasName.cf.toString(), SystemParamConstant.DISTANCE, SystemParamConstant.DISTANCE_RANGE);
+						JSONObject jObj = ja.getJSONObject(i);
+						
+						String noWx = jObj.containsKey("noWx") ? jObj.getString("noWx") : "";
+						logger.debug("addPersonMemberFromHook(String noWx={})", noWx);
+						String nickNameWx = jObj.containsKey("nickNameWx") ? jObj.getString("nickNameWx") : "";
 
-			logger.info("$$$$$$$$$$$$$$$$$$$$:distance=" + distance);
 
-			for (int i = 0; i < ja.size(); i++) {
-				Date now = new Date();
-				FindPersonMemberBase fmb = new FindPersonMemberBase();
-				PersonMember addPersonMember = new PersonMember();
+						/* 扩展表参数 */
+						String nickNameRemarkWx = jObj.containsKey("nickNameRemarkWx") ? jObj.getString("nickNameRemarkWx") : "";
+						String longitude = jObj.containsKey("longitude") ? jObj.getString("longitude") : "";
+						String latitude = jObj.containsKey("latitude") ? jObj.getString("latitude") : "";
+						String scanAddress = jObj.containsKey("scanAddress") ? jObj.getString("scanAddress") : "";
+						addPersonMember.setNickNameRemarkWx(nickNameRemarkWx);
+						addPersonMember.setLatitude(latitude);
+						addPersonMember.setLongitude(longitude);
+						addPersonMember.setScanAddress(scanAddress);
+						/* 扩展表参数 */
 
-				JSONObject jObj = ja.getJSONObject(i);
-				String noWx = jObj.containsKey("noWx") ? jObj.getString("noWx") : "";
-				logger.debug("addPersonMemberFromHook(String noWx={})", noWx);
-				String nickNameWx = jObj.containsKey("nickNameWx") ? jObj.getString("nickNameWx") : "";
+						fmb.setNoWx(noWx);
+						personMemberBase = personMemberBaseDao.selectByParams(fmb);
 
-				/* emoji标签转码 */
-				// String base64Str =
-				// Base64.encodeBase64String(nickNameWx.getBytes());
-				// nickNameWx = base64Str;
+						/* 客户基础数据存在 */
+						if (personMemberBase != null) {
+							logger.debug("基础数据存在");
 
-				/* 扩展表参数 */
-				String nickNameRemarkWx = jObj.containsKey("nickNameRemarkWx") ? jObj.getString("nickNameRemarkWx") : "";
-				String longitude = jObj.containsKey("longitude") ? jObj.getString("longitude") : "";
-				String latitude = jObj.containsKey("latitude") ? jObj.getString("latitude") : "";
-				String scanAddress = jObj.containsKey("scanAddress") ? jObj.getString("scanAddress") : "";
-				addPersonMember.setNickNameRemarkWx(nickNameRemarkWx);
-				addPersonMember.setLatitude(latitude);
-				addPersonMember.setLongitude(longitude);
-				addPersonMember.setScanAddress(scanAddress);
-				/* 扩展表参数 */
+							/* 修改客户微信昵称 */
+							logger.debug("修改客户微信昵称--code={}--nickNameWx={}--start", personMemberBase.getCode(), nickNameWx);
+							UpdatePersonMemberBase updatePersonMemberBase = new UpdatePersonMemberBase();
+							updatePersonMemberBase.setCode(personMemberBase.getCode());
+							updatePersonMemberBase.setNickNameWx(nickNameWx);
+							personMemberBaseService.updatePersonMemberBase(updatePersonMemberBase);
+							/* 修改客户微信昵称 */
 
-				// 是否到店
-				boolean toShopFlag = false;
+							// 客户扩展表数据是否存在
+							PersonMember personMember = new PersonMember();
+							personMember.setMemberNo(personMemberBase.getMemberNo());
+							personMember.setMemberNoGm(guidMember.getMemberNo());
+							PersonMember personMemberTemp = personMemberDao.selectByParamKey(personMember);
+							// update by 杨杰 2017-09-05 begin
+							String nickNameRemarkLocal = "";
+							if (StringUtils.isNotEmpty(personMemberBase.getMemberName())) {
+								nickNameRemarkLocal += personMemberBase.getMemberName();
+							}
+							if (StringUtils.isNotEmpty(personMemberBase.getMobile())) {
+								nickNameRemarkLocal += ("-" + personMemberBase.getMobile());
+							}
+							// update by 杨杰 2017-09-05 end
+							if (personMemberTemp != null) {// 数据已存在
+								logger.debug("客户扩展表数据已存在");
 
-				// 判断是否到店
-				if (findShopReturn != null) {
-					toShopFlag = isToShop(findShopReturn.getLongitude(), findShopReturn.getLatitude(), longitude, latitude, distance);
-				}
+								logger.debug("修改客户微信昵称备注--code={}--nickNameRemarkWx={}--start", personMemberTemp.getCode(), nickNameRemarkWx);
+								UpdatePersonMember updatePersonMember = new UpdatePersonMember();
+								updatePersonMember.setCode(personMemberTemp.getCode());
+								updatePersonMember.setNickNameRemarkWx(nickNameRemarkWx);
+								// update by 杨杰 2017-09-05 begin
+								if (StringUtils.isNotEmpty(personMemberTemp.getBomName())) {
+									nickNameRemarkLocal += ("-" + personMemberTemp.getBomName());
+								}
+								updatePersonMember.setNickNameRemarkLocal(nickNameRemarkLocal);
+								// update by 杨杰 2017-09-05 end
+								personMemberService.updatePersonMember(updatePersonMember);
+								continue;
+							} else {
+								logger.debug("插入客户扩展表数据");
+								insertPm(guidMember, personMemberBase, addPersonMember);
 
-				fmb.setNoWx(noWx);
-				personMemberBase = personMemberBaseDao.selectByParams(fmb);
+								// 插入客户分类关联表 我的客户
+								AddPmTypePmDto addPmTypePmDto = new AddPmTypePmDto();
+								addPmTypePmDto.setCodePm(addPersonMember.getCode());
+								addPmTypePmDto.setPmTypeCode(ptp.getCode());
+								logger.debug("插入客户分类关联表！");
+								pmTypeService.addPmTypePm(addPmTypePmDto);
+							}
+						} else {
+							logger.debug("基础数据不存在");
+							personMemberBase = new PersonMemberBase();
+							personMemberBase.setCode(GUID.generateCode());
+							personMemberBase.setMemberNo(GUID.generateByUUID());
+							
+							String mn = "";
+							if(!StringUtils.isEmpty(nickNameRemarkWx)){
+								mn = nickNameRemarkWx;
+							}else if(!StringUtils.isEmpty(nickNameWx)){
+								mn = nickNameWx;
+							}
+							personMemberBase.setMemberName(mn);
+							
+							personMemberBase.setSex(jObj.containsKey("sex") ? jObj.getString("sex") : "");
+							personMemberBase.setCityWx(jObj.containsKey("cityWx") ? jObj.getString("cityWx") : "");
+							personMemberBase.setCountryWx(jObj.containsKey("countryWx") ? jObj.getString("countryWx") : "");
+							personMemberBase.setHeadAddress(jObj.getString("headAddress"));
+							personMemberBase.setNickNameWx(nickNameWx);
 
-				/* 客户基础数据存在 */
-				if (personMemberBase != null) {
-					logger.debug("基础数据存在");
+							personMemberBase.setMemberSrc(MemerSourceType.NO_SHOP_SACN.toString());
+							personMemberBase.setNoWx(jObj.getString("noWx"));
+							try {
+								personMemberBase.setSubsribeTime(df.parse(jObj.getString("subsribeTime")));
+							} catch (ParseException e) {
+								logger.error("addPersonMemberFromHook(String)", e); //$NON-NLS-1$
+								throw new TsfaServiceException(ErrorCode.DATA_TRANS_ERROR, "时间转换错误!", e);
+							}
 
-					/* 修改客户微信昵称 */
-					logger.debug("修改客户微信昵称--code={}--nickNameWx={}--start", personMemberBase.getCode(), nickNameWx);
-					UpdatePersonMemberBase updatePersonMemberBase = new UpdatePersonMemberBase();
-					updatePersonMemberBase.setCode(personMemberBase.getCode());
-					updatePersonMemberBase.setNickNameWx(nickNameWx);
-					personMemberBaseService.updatePersonMemberBase(updatePersonMemberBase);
-					/* 修改客户微信昵称 */
+							personMemberBase.setCreateDate(now);
+							personMemberBase.setCreateId(guidMember.getMemberNo());
+							personMemberBase.setUpdateDate(now);
+							personMemberBase.setUpdateId(guidMember.getMemberNo());
+							personMemberBase.setNameAuthFlag(NameAuthFlag.N.toString());
+							personMemberBase.setStatus(MemberStatus.NORMAL.toString());
+							personMemberBase.setRatioClientInfo(MemberUtils.completeRate(personMemberBase));
 
-					// 客户扩展表数据是否存在
-					PersonMember personMember = new PersonMember();
-					personMember.setMemberNo(personMemberBase.getMemberNo());
-					personMember.setMemberNoGm(guidMember.getMemberNo());
-					PersonMember personMemberTemp = personMemberDao.selectByParamKey(personMember);
-					// update by 杨杰 2017-09-05 begin
-					String nickNameRemarkLocal = "";
-					if (StringUtils.isNotEmpty(personMemberBase.getMemberName())) {
-						nickNameRemarkLocal += personMemberBase.getMemberName();
-					}
-					if (StringUtils.isNotEmpty(personMemberBase.getMobile())) {
-						nickNameRemarkLocal += ("-" + personMemberBase.getMobile());
-					}
-					// update by 杨杰 2017-09-05 end
-					if (personMemberTemp != null) {// 数据已存在
-						logger.debug("客户扩展表数据已存在");
+							personMemberBase.setAreaCode(findShopReturn.getAreaCode());
+							personMemberBase.setAreaName(findShopReturn.getAreaName());
+							personMemberBase.setProvinceCode(findShopReturn.getProvinceCode());
+							personMemberBase.setCityCode(findShopReturn.getCityCode());
+							personMemberBase.setCityAreaCode(findShopReturn.getCityAreaCode());
+							personMemberBaseDao.insertSelective(personMemberBase);
 
-						logger.debug("修改客户微信昵称备注--code={}--nickNameRemarkWx={}--start", personMemberTemp.getCode(), nickNameRemarkWx);
-						UpdatePersonMember updatePersonMember = new UpdatePersonMember();
-						updatePersonMember.setCode(personMemberTemp.getCode());
-						updatePersonMember.setNickNameRemarkWx(nickNameRemarkWx);
-						// update by 杨杰 2017-09-05 begin
-						if (StringUtils.isNotEmpty(personMemberTemp.getBomName())) {
-							nickNameRemarkLocal += ("-" + personMemberTemp.getBomName());
+							logger.debug("插入客户扩展表数据");
+							insertPm(guidMember, personMemberBase, addPersonMember);
+							
+							// 插入客户分类关联表 我的客户
+							AddPmTypePmDto addPmTypePmDto = new AddPmTypePmDto();
+							addPmTypePmDto.setCodePm(addPersonMember.getCode());
+							addPmTypePmDto.setPmTypeCode(ptp.getCode());
+							logger.debug("插入客户分类关联表！");
+							pmTypeService.addPmTypePm(addPmTypePmDto);
+
+							// 添加客户动态
+							AddBehaviorPm addBehaviorPm = new AddBehaviorPm();
+							addBehaviorPm.setMemberNo(personMemberBase.getMemberNo());
+							addBehaviorPm.setMemberName(personMemberBase.getMemberName());
+							addBehaviorPm.setBehaviorDesc("");
+							addBehaviorPm.setBehaviorDate(now);
+							behaviorPmService.addBehaviorPm(addBehaviorPm);
 						}
-						updatePersonMember.setNickNameRemarkLocal(nickNameRemarkLocal);
-						// update by 杨杰 2017-09-05 end
-						personMemberService.updatePersonMember(updatePersonMember);
-						continue;
-					} else {
-						logger.debug("插入客户扩展表数据");
-						insertPm(guidMember, personMemberBase, addPersonMember);
-						innerProcess(toShopFlag, guidMember, personMemberBase, addPersonMember, ptp, ptp2);
+
+						// 修改资料完成度
+						FindPersonMemberBase findNowx = new FindPersonMemberBase();
+						findNowx.setNoWx(personMemberBase.getNoWx());
+						FindPersonMemberBaseReturn findPersonMemberBaseReturn = personMemberBaseService.findPersonMemberBase(findNowx);
+
+						FindPersonMember findPm = new FindPersonMember();
+						findPm.setMemberNo(personMemberBase.getMemberNo());
+						findPm.setMemberNoGm(guidMember.getMemberNo());
+						FindPersonMemberReturn findPmReturn = findPersonMemberByMGM(findPm);
+
+						computeRate(findPersonMemberBaseReturn, findPmReturn);
 					}
-				} else {
-					logger.debug("基础数据不存在");
-					personMemberBase = new PersonMemberBase();
-					personMemberBase.setCode(GUID.generateCode());
-					personMemberBase.setMemberNo(GUID.generateByUUID());
-					//personMemberBase.setMemberName(nickNameWx);// 名称暂时用微信昵称
-					
-					String mn = "";
-					if(!StringUtils.isEmpty(nickNameRemarkWx)){
-						mn = nickNameRemarkWx;
-					}else if(!StringUtils.isEmpty(nickNameWx)){
-						mn = nickNameWx;
-					}
-					personMemberBase.setMemberName(mn);
-					
-					personMemberBase.setSex(ja.getJSONObject(i).getString("sex"));
-					personMemberBase.setCityWx(ja.getJSONObject(i).getString("cityWx"));
-					personMemberBase.setCountryWx(ja.getJSONObject(i).getString("countryWx"));
-					personMemberBase.setHeadAddress(ja.getJSONObject(i).getString("headAddress"));
-					personMemberBase.setNickNameWx(nickNameWx);
-
-					if (toShopFlag) {
-						personMemberBase.setMemberSrc(MemerSourceType.SHOP_SACN.toString());
-					} else {
-						personMemberBase.setMemberSrc(MemerSourceType.NO_SHOP_SACN.toString());
-					}
-
-					personMemberBase.setNoWx(ja.getJSONObject(i).getString("noWx"));
-					try {
-						personMemberBase.setSubsribeTime(df.parse(ja.getJSONObject(i).getString("subsribeTime")));
-					} catch (ParseException e) {
-						logger.error("addPersonMemberFromHook(String)", e); //$NON-NLS-1$
-						throw new TsfaServiceException(ErrorCode.DATA_TRANS_ERROR, "时间转换错误!", e);
-					}
-
-					personMemberBase.setCreateDate(now);
-					personMemberBase.setCreateId(guidMember.getMemberNo());
-					personMemberBase.setUpdateDate(now);
-					personMemberBase.setUpdateId(guidMember.getMemberNo());
-					personMemberBase.setNameAuthFlag(NameAuthFlag.N.toString());
-					personMemberBase.setStatus(MemberStatus.NORMAL.toString());
-					personMemberBase.setRatioClientInfo(MemberUtils.completeRate(personMemberBase));
-
-					personMemberBase.setAreaCode(findShopReturn.getAreaCode());
-					personMemberBase.setAreaName(findShopReturn.getAreaName());
-					personMemberBase.setProvinceCode(findShopReturn.getProvinceCode());
-					personMemberBase.setCityCode(findShopReturn.getCityCode());
-					personMemberBase.setCityAreaCode(findShopReturn.getCityAreaCode());
-					personMemberBaseDao.insertSelective(personMemberBase);
-
-					logger.debug("插入客户扩展表数据");
-					insertPm(guidMember, personMemberBase, addPersonMember);
-
-					innerProcess(toShopFlag, guidMember, personMemberBase, addPersonMember, ptp, ptp2);
-
-					// 添加客户动态
-					AddBehaviorPm addBehaviorPm = new AddBehaviorPm();
-					addBehaviorPm.setMemberNo(personMemberBase.getMemberNo());
-					addBehaviorPm.setMemberName(personMemberBase.getMemberName());
-					addBehaviorPm.setBehaviorDesc("暂无动态");
-					addBehaviorPm.setBehaviorDate(now);
-					behaviorPmService.addBehaviorPm(addBehaviorPm);
+					logger.debug("addPersonMemberFromHook(String) - end"); //$NON-NLS-1$
+				} catch (Exception e) {
+					logger.error("同步客户信息出错！", e);
+					throw new TsfaServiceException(ErrorCode.PERSON_MEMBER_FIND_ERROR, "同步客户信息出错！", e);
 				}
-
-				// 修改资料完成度
-				FindPersonMemberBase findNowx = new FindPersonMemberBase();
-				findNowx.setNoWx(personMemberBase.getNoWx());
-				FindPersonMemberBaseReturn findPersonMemberBaseReturn = personMemberBaseService.findPersonMemberBase(findNowx);
-
-				FindPersonMember findPm = new FindPersonMember();
-				findPm.setMemberNo(personMemberBase.getMemberNo());
-				findPm.setMemberNoGm(guidMember.getMemberNo());
-				FindPersonMemberReturn findPmReturn = findPersonMemberByMGM(findPm);
-
-				computeRate(findPersonMemberBaseReturn, findPmReturn);
-			}
-			logger.debug("addPersonMemberFromHook(String) - end"); //$NON-NLS-1$
-		} catch (Exception e) {
-			logger.error("同步客户信息出错！", e);
-			throw new TsfaServiceException(ErrorCode.PERSON_MEMBER_FIND_ERROR, "同步客户信息出错！", e);
-		}
+//			}
+//		});
 
 	}
 
@@ -2564,25 +2547,25 @@ public class PersonMemberServiceImpl implements IPersonMemberService {
 		fp.setMerchantNo(doRepeatMemberDto.getMerchantNo());
 		int count = findCountByMemberNo(fp);
 
-		if (count > 1) {
-			logger.debug("如果是交叉用户则插入客户分类");
-			FindPmType fpt = new FindPmType();
-			fpt.setPmTypeType(PmTypeType.REPEAT.toString());
-			fpt.setMerchantNo(doRepeatMemberDto.getMerchantNo());
-			FindPmTypeReturn fptr = pmTypeService.findPmTypeByMP(fpt);
+//		if (count > 1) {
+//			logger.debug("如果是交叉用户则插入客户分类");
+//			FindPmType fpt = new FindPmType();
+//			fpt.setPmTypeType(PmTypeType.REPEAT.toString());
+//			fpt.setMerchantNo(doRepeatMemberDto.getMerchantNo());
+//			FindPmTypeReturn fptr = pmTypeService.findPmTypeByMP(fpt);
 
-			List<FindPersonMemberReturn> list = findList(doRepeatMemberDto);
-			if (list != null && list.size() > 0) {
-				for (FindPersonMemberReturn pm : list) {
-					if (fptr != null) {
-						AddPmTypePmDto addPmTypePmDto = new AddPmTypePmDto();
-						addPmTypePmDto.setCodePm(pm.getCode());
-						addPmTypePmDto.setPmTypeCode(fptr.getCode());
-						pmTypeService.addPmTypePmRepeat(addPmTypePmDto);
-					}
-				}
-			}
-		}
+//			List<FindPersonMemberReturn> list = findList(doRepeatMemberDto);
+//			if (list != null && list.size() > 0) {
+//				for (FindPersonMemberReturn pm : list) {
+//					if (fptr != null) {
+//						AddPmTypePmDto addPmTypePmDto = new AddPmTypePmDto();
+//						addPmTypePmDto.setCodePm(pm.getCode());
+//						addPmTypePmDto.setPmTypeCode(fptr.getCode());
+//						pmTypeService.addPmTypePmRepeat(addPmTypePmDto);
+//					}
+//				}
+//			}
+//		}
 
 	}
 

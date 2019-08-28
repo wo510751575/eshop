@@ -10,8 +10,12 @@
 		$("#amtbtn").click(function(){
 			 var code=$(this).attr("data-code");
 			 var retireNo = $(this).attr("data-retireNo");
-			 promptx2("请输入打款金额", "打款金额：", "扣除金额原因：", function(){
+			 promptx2("请输入打款金额", "打款金额：", "扣除原因：", function(){
 		    	  var txt=top.$("#ptxt").val();
+		    	  if(txt>2000) {
+			    	  alert('金额不能大于2000.00元');
+ 						return;
+				  }
 		    	  var txt2=top.$("#ptxt2").val();
 		    	  confirmx("金额将打入会员账户中，是否确认打款？", "${ctx}/shop/retire/status?code="+code+"&retireStatus=1&retireNo="+retireNo+"&amount="+txt+"&remarks="+txt2);
 			 });

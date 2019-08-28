@@ -38,6 +38,8 @@
     width: 18%;
 }
 
+.text-right{text-align:right;font-weight: bold;}
+
 </style>
 </head>
 <body>
@@ -46,19 +48,19 @@
 		<table class="table-form" style="width: 100%;">
 			<tbody>
 				<tr>
-					<td width="10%">店铺名称 ：</td>
+					<td width="10%" class="text-right">店铺名称 ：</td>
 					<td>${data.shopName}</td>
-					<td>访问量 ：</td>
+					<td class="text-right">访问量 ：</td>
 					<td>${data.readNum}</td>
 				</tr>
 				<tr>
-					<td>店铺状态 ：</td>
+					<td class="text-right">店铺状态 ：</td>
 					<td>
 						<c:forEach items="${shopStatus}" var="status">
 							<c:if test="${status.value eq data.status}">${status.chName}</c:if>
 						</c:forEach>
 					</td>
-					<td>店铺等级 ：</td>
+					<td class="text-right">店铺等级 ：</td>
 					<td>
 						<c:forEach items="${shopGrades}" var="grade">
 							<c:if test="${grade.value eq data.shopGarde}">${grade.chName}</c:if>
@@ -66,40 +68,54 @@
 					</td>
 				</tr>
 				<tr>
-					<td>开店申请日期：</td>
+					<td class="text-right">开店申请日期：</td>
 					<td><fmt:formatDate value="${data.createTime}" pattern="yyyy-MM-dd"/></td>
-					<td>开店日期 ：</td>
+					<td class="text-right">开店日期 ：</td>
 					<td colspan="2"><fmt:formatDate value="${data.openTime }" pattern="yyyy-MM-dd"/></td>
 				</tr>
 				<tr>
-					<td>关店日期：</td>
+					<td class="text-right">关店日期：</td>
 					<td><fmt:formatDate value="${data.closeTime }" pattern="yyyy-MM-dd"/></td>
-					<td>关店原因 ：</td>
+					<td class="text-right">关店原因 ：</td>
 					<td colspan="2">${data.closeReason}</td>
 				</tr>
 				<tr>
-					<td style="vertical-align: middle">店铺头像图片：</td>
+					<td style="vertical-align: middle" class="text-right">店铺头像图片：</td>
 					<td colspan="2">
 						<div class="upImg">
-							<img width="100px" height="100px" src="${data.img}" alt="">
+							<c:choose>
+			    				<c:when test="${fn:startsWith(data.img, 'http')}">
+			    					<img width="100px" height="100px" src="${data.img}" alt="">
+			    				</c:when>
+			    				<c:otherwise>
+			    					<img width="100px" height="100px" src="${fns:getUploadUrl()}${data.img}" alt="">
+			    				</c:otherwise>
+			    			</c:choose>
 						</div>
 					</td>
 				</tr>
 				<tr class="mt30">
-					<td>地 区 ：</td>
+					<td class="text-right">地 区 ：</td>
 					<td >${fns:getAreaName(data.shopProvide)}${fns:getAreaName(data.shopCity)}${fns:getAreaName(data.shopArea)}</td>
-					<td>设备 ：</td>
+					<td class="text-right">设备 ：</td>
 					<td >${data.mimeCode}</td>
 				</tr>
 				<tr>
-					<td>详细地址 ：</td>
-					<td colspan="2">${data.shopAddinfo}</td>
+					<td class="text-right">详细地址 ：</td>
+					<td colspan="2">${fns:getAreaName(data.shopProvide)}${fns:getAreaName(data.shopCity)}${fns:getAreaName(data.shopArea)}${data.shopAddinfo}</td>
 				</tr>
 				<tr>
-					<td>店铺背景图片 ：</td>
+					<td class="text-right">店铺背景图片 ：</td>
 					<td colspan="2">
 						<div class="upImg">
-							<img width="100px" height="100px" src="${data.img}" alt="">
+							<c:choose>
+			    				<c:when test="${fn:startsWith(data.bgUrl, 'http')}">
+			    					<img width="100px" height="100px" src="${data.bgUrl}" alt="">
+			    				</c:when>
+			    				<c:otherwise>
+			    					<img width="100px" height="100px" src="${fns:getUploadUrl()}${data.bgUrl}" alt="">
+			    				</c:otherwise>
+			    			</c:choose>
 						</div>
 					</td>
 				</tr>

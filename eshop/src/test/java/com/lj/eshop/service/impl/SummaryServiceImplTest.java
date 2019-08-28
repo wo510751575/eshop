@@ -3,27 +3,28 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.core.util.GUID;
 import com.lj.base.exception.TsfaServiceException;
+import com.lj.base.mvc.base.json.JsonUtils;
 import com.lj.base.mvc.web.test.SpringTestCase;
 import com.lj.eshop.dao.ISummaryDao;
 import com.lj.eshop.domain.Summary;
-import com.lj.eshop.dto.CatalogDto;
 import com.lj.eshop.dto.FindSummaryPage;
 import com.lj.eshop.dto.SummaryDto;
+import com.lj.eshop.dto.SummaryShowDto;
 import com.lj.eshop.emus.DimensionSt;
 import com.lj.eshop.service.ISummaryService;
 
@@ -182,4 +183,17 @@ public class SummaryServiceImplTest extends SpringTestCase {
 		/* 商品类别统计 */
 		summaryService.productCatalogSummary();
 	}
+	@Test
+	public void findSummaryByType() throws TsfaServiceException {
+		FindSummaryPage findSummaryPage = new FindSummaryPage();
+		SummaryDto d = new SummaryDto();
+		findSummaryPage.setParam(d);
+		d.setDays(7);
+		d.setDimensionSt("0");
+		d.setShopCode("LJ_71011bdb03d149659061d03606488f81");
+		SummaryShowDto data = summaryService.findSummaryByType(findSummaryPage);
+		System.out.println(JsonUtils.jsonFromObject(data));
+	}
+	
+	
 }

@@ -93,15 +93,15 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 		    <li><label>提现人姓名：</label>
-		    	<input type="text" name="mbrName" value="${param.shopName}" class="input-medium" maxlength="100" placeholder="提现人姓名">
+		    	<input type="text" name="param.mbrName" value="${findWithdrawPage.param.mbrName}" class="input-medium" maxlength="100" placeholder="提现人姓名">
 			</li>
 			<li><label>状态：</label>
-				<select style="width: 177px;" name="status">
+				<select style="width: 177px;" name="param.status">
                     <option value="">全部</option>
-						<option value="0">申请中</option>
-						<option value="1">提现成功</option>
-						<option value="2">提现失败</option>
-						<option value="3">取消提现</option>
+						<option value="0" <c:if test="${'0' eq findWithdrawPage.param.status}">selected="selected"</c:if>>申请中</option>
+						<option value="1" <c:if test="${'1' eq findWithdrawPage.param.status}">selected="selected"</c:if>>提现成功</option>
+						<option value="2" <c:if test="${'2' eq findWithdrawPage.param.status}">selected="selected"</c:if>>提现失败</option>
+						<option value="3" <c:if test="${'3' eq findWithdrawPage.param.status}">selected="selected"</c:if>>取消提现</option>
                 </select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>

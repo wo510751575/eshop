@@ -25,6 +25,28 @@
 			});
 		});
 	</script>
+	
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -56,7 +78,7 @@
 			<div class="controls">
 			      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.imageUrl}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.imageUrl}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.imageUrl}"/>
 				       </c:if>
 				       <c:if test="${empty data.imageUrl}">
 				                                  选择图片
@@ -68,8 +90,8 @@
 		<div class="control-group">
 			<label class="control-label">排序:</label>
 			<div class="controls">
-				<input type="text" name="orderNo" value="${data.orderNo}" maxlength="50" class="required input-xlarge" />
-				<span class="help-inline"><font color="red">*</font> </span>
+				<input type="text" name="orderNo" value="${data.orderNo}" onkeyup="this.value=this.value.replace(/\D/g, '')"  maxlength="50" class="required input-xlarge" />
+				<span class="help-inline"><font color="red">*只允许纯数字</font> </span>
 				<span class="help-inline">排列顺序，升序（数值越大越后）。</span>
 			</div>
 		</div>

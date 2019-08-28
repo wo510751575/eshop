@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="${ctxStatic}/editor/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctxStatic}/editor/init.js"></script>
 	<script src="${ctxStatic}/common/plupload.full.min.js" type="text/javascript"></script>
-	<link href="${ctxStatic}/common/select2.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
    
     </script>
@@ -75,7 +74,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container"  style="height:950px;overflow-x:visible;overflow-y:scroll;">
     <ul class="nav nav-tabs">
     	<li ><a href="${ctx}/marketing/materialcommon/">公用素材列表</a></li>
 		<shiro:hasPermission name="marketing:materialcommon:edit">
@@ -96,7 +95,7 @@
            
         <div id="base_div" class="tab_div">
          
-          <div class="control-group">
+          <%-- <div class="control-group">
                 <label class="control-label">素材类型名称:</label>
                 <div class="controls">
                      <select name="materialTypeCode" id="materialTypeCode" class="required" >
@@ -107,7 +106,7 @@
 					 </select>
 					 <span class="help-inline"><font color="red">*</font></span>
                 </div>
-            </div> 
+            </div>  --%>
             
              <div class="control-group">
                 <label class="control-label">商品名称:</label>
@@ -191,7 +190,7 @@
                 			<c:forEach items="${data.imgAddr.split(',') }" var="imgaddr">
 	                			<div class="img_info">
 	                			<span class="close-Icon"></span>
-	                			<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgaddr}"  height="120px" width="120px">
+	                			<img src="${fns:getUploadUrl()}${imgaddr}"  height="120px" width="120px">
 	                			</div>
                 			</c:forEach>
                 		</c:when>

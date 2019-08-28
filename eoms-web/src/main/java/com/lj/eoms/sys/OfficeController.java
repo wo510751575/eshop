@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.ape.common.config.Global;
 import com.ape.common.utils.StringUtils;
 import com.ape.common.web.BaseController;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.lj.business.member.dto.AddMerchant;
+import com.lj.business.member.emus.Status;
 import com.lj.eoms.entity.sys.Office;
 import com.lj.eoms.entity.sys.User;
 import com.lj.eoms.service.sys.OfficeService;
@@ -40,6 +42,8 @@ public class OfficeController extends BaseController {
 	private OfficeService officeService;
 	@Autowired
 	private IMerchantService merchantService;//电商商户信息 2017-8-25 hy
+	@Autowired
+	private com.lj.business.member.service.IMerchantService mbrMerchantService;//会员体系商户信息 2017-09-18 hy
 	
 	@ModelAttribute("office")
 	public Office get(@RequestParam(required=false) String id) {
@@ -102,14 +106,30 @@ public class OfficeController extends BaseController {
 		}
 		officeService.save(office);
 		//如果是公司则给其在电商平台开一个商户  2017-8-25 by hy
-		if("1".equals(office.getType())){
+		if ("1".equals(office.getType()) && office.getParent().getId() != null
+				&& "1".equals(office.getParent().getId())) {
+			//1.电商商户
 			MerchantDto merchantDto=new MerchantDto();
 			merchantDto.setCreateTime(new Date());
 			merchantDto.setMerchantAddr(office.getAddress());
 			merchantDto.setMerchantName(office.getName());
 			merchantDto.setMerchantPhone(office.getPhone());
 			merchantDto.setOfficeId(office.getId());//用户公司的ID和商电商平台的商户信息作关联
+			//2.会员体系的商户
 			merchantService.addMerchant(merchantDto);
+			AddMerchant addMerchant=new AddMerchant();
+			addMerchant.setMerchantNo(office.getId());//兼容OMS同步数据
+			addMerchant.setMerchantName(office.getName());
+			addMerchant.setStatus(Status.NORMAL);
+			addMerchant.setAddress(office.getAddress());
+			addMerchant.setEmail(office.getEmail());
+//			addMerchant.setBusinessType(office.getBusinessType());行业，无数据不填
+			addMerchant.setLogoAddr(office.getLogo());
+//			addMerchant.setWebsiteUrl(office.);网址，无数据不填
+			addMerchant.setTelephone(office.getPhone());
+			addMerchant.setCreateId(UserUtils.getUser().getId());
+//			addMerchant.setRemark(office.getRemark());备注，无数据不填
+			mbrMerchantService.addMerchant_ec(addMerchant);
 		}//end
 		
 		if(office.getChildDeptList()!=null){

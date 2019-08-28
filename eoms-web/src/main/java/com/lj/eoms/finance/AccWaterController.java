@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.finance;
@@ -28,7 +28,9 @@ import com.lj.eoms.dto.AccWaterExportDto;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eoms.utils.excel.ExportExcel;
 import com.lj.eshop.dto.AccWaterDto;
+import com.lj.eshop.dto.AccountDto;
 import com.lj.eshop.dto.FindAccWaterPage;
+import com.lj.eshop.dto.FindAccountPage;
 import com.lj.eshop.emus.AccWaterAccType;
 import com.lj.eshop.emus.AccWaterBizType;
 import com.lj.eshop.emus.AccWaterPayType;
@@ -37,6 +39,7 @@ import com.lj.eshop.emus.AccWaterStatus;
 import com.lj.eshop.emus.AccWaterType;
 import com.lj.eshop.emus.Status;
 import com.lj.eshop.service.IAccWaterService;
+import com.lj.eshop.service.IAccountService;
 
 /**
  * 
@@ -44,7 +47,7 @@ import com.lj.eshop.service.IAccWaterService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月28日
@@ -61,6 +64,8 @@ public class AccWaterController extends BaseController {
 
 	@Autowired
 	private IAccWaterService accWaterService;
+	@Autowired
+	private IAccountService accountService;
 
 	/** 列表 */
 	@RequiresPermissions("finance:accwater:view")
@@ -101,11 +106,31 @@ public class AccWaterController extends BaseController {
 	@RequiresPermissions("content:wshopinfo:edit")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(AccWaterDto accWaterDto, RedirectAttributes redirectAttributes) {
+		
+		FindAccountPage findAccountPage = new FindAccountPage();
+		AccountDto findAccountPageParam = new AccountDto();
+		findAccountPageParam.setAccNo(accWaterDto.getAccNo());
+		findAccountPage.setParam(findAccountPageParam);
+		List<AccountDto> accountList = accountService.findAccounts(findAccountPage);
+		if(accountList.size()==0) {
+			addMessage(redirectAttributes, "查询不到帐户");
+			return "redirect:" + adminPath + "/finance/accwater/";
+		}
 		accWaterDto.setAccType(AccWaterAccType.MANUAL.getValue());
-		accWaterDto.setOpCode(UserUtils.getUser().getId());// 这里设置用户
+		accWaterDto.setOpCode(UserUtils.getUser().getName());// 这里设置用户
 		accWaterDto.setUpdateTime(new Date());
 		accWaterDto.setAccDate(new Date());
 		accWaterService.addAccWater(accWaterDto);
+		
+		AccountDto rltAccountDto = accountList.get(0);
+		if(StringUtils.equals(accWaterDto.getAccSource(), AccWaterSource.VIP.getValue())) {
+			rltAccountDto.setRankCashAmt(accWaterDto.getAfterAmt());
+		} else {
+			rltAccountDto.setCashAmt(accWaterDto.getAfterAmt());
+		}
+		
+		accountService.addAccount(rltAccountDto);
+		
 		addMessage(redirectAttributes, "保存成功");
 		return "redirect:" + adminPath + "/finance/accwater/";
 	}

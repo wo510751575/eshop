@@ -20,4 +20,4 @@
 <link href="${ctxStatic}/common/common.css" type="text/css" rel="stylesheet" />
 <script src="${ctxStatic}/common/common.js" type="text/javascript"></script>
 <!-- <script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}',uploadUrl ="${fns:getConfig('uploadUrl')}";</script> -->
-<script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}',uploadUrl ="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}";</script>
+<script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}',uploadUrl ="${fns:getUploadUrl()}";</script>

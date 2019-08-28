@@ -7,15 +7,17 @@ import com.lj.eshop.dto.FindMemberPage;
 import com.lj.eshop.dto.MemberDto;
 
 public interface IMemberDao {
-    int insertSelective(Member record);
+	int insertSelective(Member record);
 
-    Member selectByPrimaryKey(String code);
+	Member selectByPrimaryKey(String code);
 
-    int updateByPrimaryKeySelective(Member record);
+	int updateByPrimaryKeySelective(Member record);
 
-    List<MemberDto> findMemberPage(FindMemberPage findMemberPage);
+	List<MemberDto> findMemberPage(FindMemberPage findMemberPage);
 
-   	int findMemberPageCount(FindMemberPage findMemberPage);
-   	
-   	List<MemberDto> findMembers(FindMemberPage findMemberPage);
+	int findMemberPageCount(FindMemberPage findMemberPage);
+
+	List<MemberDto> findMembers(FindMemberPage findMemberPage);
+
+	List<String> findMemberCodesByInvite(String myInvite);
 }

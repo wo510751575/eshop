@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IMyAttentionDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.MyAttention">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="mbr_name" jdbcType="VARCHAR" property="mbrName" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="shop_img" jdbcType="VARCHAR" property="shopImg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, mbr_code, mbr_name, shop_code, shop_name, status, create_time, update_time, 
+    shop_img
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.MyAttentionDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and mbr_code =#{param.mbrCode}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and shop_code =#{param.shopCode}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.startTime != null and param.startTime !='' ">
+					<![CDATA[AND create_time>= #{param.startTime}]]>
+				</if>
+				<if test="param.endTime != null and param.endTime !='' ">
+					<![CDATA[AND create_time<= #{param.endTime}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMyAttentions" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMyAttentionPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_my_attention
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMyAttentionPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMyAttentionPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_my_attention
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMyAttentionPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMyAttentionPage">
+		select count(*)
+		FROM t_my_attention
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_my_attention
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.MyAttention">
+    insert into t_my_attention
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="mbrName != null">
+        mbr_name,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="shopImg != null">
+        shop_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrName != null">
+        #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopImg != null">
+        #{shopImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MyAttention">
+    update t_my_attention
+    <set>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrName != null">
+        mbr_name = #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopImg != null">
+        shop_img = #{shopImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

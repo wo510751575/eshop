@@ -72,9 +72,9 @@
 				<td>
 <%-- 					<c:set var="imgAddr" value="${fn:split(item.imgAddr, ',')}" /> --%>
 <%-- 					<c:forEach items="${imgAddr}" var="img"> --%>
-<%-- 						<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${img}" width="40" height="40"> 	 --%>
+<%-- 						<img src="${fns:getUploadUrl()}${img}" width="40" height="40"> 	 --%>
 <%-- 					</c:forEach> --%>
-					<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.showImgAddr}" width="40" height="40">
+					<img src="${fns:getUploadUrl()}${item.showImgAddr}" width="40" height="40">
 				</td>
 				<td>
 					${item.readCount}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IShopCarDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ShopCar" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_sku_code" property="productSkuCode" jdbcType="VARCHAR" />
+    <result column="cnt" property="cnt" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="mbr_code" property="mbrCode" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="skuDesc" property="skuDesc" jdbcType="VARCHAR" />
+    <result column="salePrice" property="salePrice" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    c.code, c.product_code, c.product_name, c.product_sku_code, c.cnt, c.create_time, c.mbr_code, c.img,c.shop_code
+  </sql>
+  
+  <sql id="Join_Column_List" >
+    ,(SELECT p.sku_desc FROM t_product_sku p WHERE p.`code` = c.product_sku_code) skuDesc
+	,(SELECT p.sale_price FROM t_product_sku p WHERE p.`code` = c.product_sku_code) salePrice
+  </sql>
+  
+  
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ShopCarDto" extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and c.code =#{param.code}]]>
+				</if>
+				<if test="param.productSkuCode != null and param.productSkuCode !='' ">
+					<![CDATA[and c.product_sku_code =#{param.productSkuCode}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and c.mbr_code =#{param.mbrCode}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and c.shop_code =#{param.shopCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findShopCars" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindShopCarPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_shop_car c
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findShopCarPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindShopCarPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="Join_Column_List" />
+		FROM t_shop_car c
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY c.create_time desc
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, c.create_time desc
+		</if>	
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findShopCarPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindShopCarPage">
+		select count(*)
+		FROM t_shop_car c
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY c.create_time desc
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, c.create_time desc
+		</if>	
+	</select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_shop_car c
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ShopCar" >
+    insert into t_shop_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productSkuCode != null" >
+        product_sku_code,
+      </if>
+      <if test="cnt != null" >
+        cnt,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="mbrCode != null" >
+        mbr_code,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuCode != null" >
+        #{productSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null" >
+        #{cnt,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mbrCode != null" >
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ShopCar" >
+    update t_shop_car
+    <set >
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuCode != null" >
+        product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null" >
+        cnt = #{cnt,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mbrCode != null" >
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_shop_car
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+</mapper>

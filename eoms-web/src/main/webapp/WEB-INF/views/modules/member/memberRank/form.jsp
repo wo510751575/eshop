@@ -32,7 +32,30 @@
 		});
 	</script>
 	
-	
+<style type="text/css">
+.form-search .ul-form li label{
+	width: 110px;
+}
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -61,7 +84,7 @@
 			<label class="control-label">穿戴次数:</label>
 			<div class="controls">
 				<input type="text" name="scale" value="${data.scale}" maxlength="10" class="input-xlarge number" />
-				<span class="help-inline"><font color="#7b7b7b">0为无数次, 请谨慎修改</font> </span>
+				<span class="help-inline"><font color="#7b7b7b">0 为无数次, 请谨慎修改</font> </span>
 			</div>
 		</div>
 		
@@ -71,7 +94,7 @@
 				<div class="img-div">
 				      <div id="img_btn1" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 					       <c:if test="${!empty data.imgSrc}">
-					       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.imgSrc}"/>
+					       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.imgSrc}"/>
 					       </c:if>
 					       <c:if test="${empty data.imgSrc}">
 					                                  选择图片

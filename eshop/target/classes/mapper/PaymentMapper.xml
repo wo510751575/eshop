@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IPaymentDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Payment">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+    <result column="acc_code" jdbcType="VARCHAR" property="accCode" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="expire" jdbcType="TIMESTAMP" property="expire" />
+    <result column="fee" jdbcType="DECIMAL" property="fee" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="payer" jdbcType="VARCHAR" property="payer" />
+    <result column="payment_date" jdbcType="TIMESTAMP" property="paymentDate" />
+    <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="biz_no" jdbcType="VARCHAR" property="bizNo" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+    <result column="thirdparty_trade_no" jdbcType="VARCHAR" property="thirdpartyTradeNo" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="fail_reason" jdbcType="VARCHAR" property="failReason" />
+    <result column="acc_source" jdbcType="CHAR" property="accSource" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, create_date, modify_date, acc_code, bank, expire, fee, memo, operator, payer, 
+    payment_date, payment_method, sn, status, type, mbr_code, biz_no, del_flag, thirdparty_trade_no, 
+    amount, fail_reason, acc_source
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.PaymentDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<!-- 查询条件根据业务需求自由添加 -->
+			<if test="param">
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.bizNo != null and param.bizNo !='' ">
+					<![CDATA[and biz_no =#{param.bizNo}]]>
+				</if>
+				<if test="param.thirdpartyTradeNo != null and param.thirdpartyTradeNo !='' ">
+					<![CDATA[and thirdparty_trade_no =#{param.thirdpartyTradeNo}]]>
+				</if>
+				<if test="param.status != null ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<if test="param.accSource != null  and param.accSource !='' ">
+					<![CDATA[and acc_source =#{param.accSource}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findPayments" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindPaymentPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_payment
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findPaymentPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindPaymentPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_payment
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findPaymentPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindPaymentPage">
+		select count(*)
+		FROM t_payment
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+ 
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Payment">
+    insert into t_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifyDate != null">
+        modify_date,
+      </if>
+      <if test="accCode != null">
+        acc_code,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="expire != null">
+        expire,
+      </if>
+      <if test="fee != null">
+        fee,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="payer != null">
+        payer,
+      </if>
+      <if test="paymentDate != null">
+        payment_date,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="sn != null">
+        sn,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="bizNo != null">
+        biz_no,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+      <if test="thirdpartyTradeNo != null">
+        thirdparty_trade_no,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="failReason != null">
+        fail_reason,
+      </if>
+      <if test="accSource != null">
+        acc_source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null">
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accCode != null">
+        #{accCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="expire != null">
+        #{expire,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fee != null">
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="payer != null">
+        #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bizNo != null">
+        #{bizNo,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdpartyTradeNo != null">
+        #{thirdpartyTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="failReason != null">
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="accSource != null">
+        #{accSource,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Payment">
+    update t_payment
+    <set>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null">
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accCode != null">
+        acc_code = #{accCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="expire != null">
+        expire = #{expire,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fee != null">
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="payer != null">
+        payer = #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        payment_date = #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bizNo != null">
+        biz_no = #{bizNo,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdpartyTradeNo != null">
+        thirdparty_trade_no = #{thirdpartyTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="failReason != null">
+        fail_reason = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="accSource != null">
+        acc_source = #{accSource,jdbcType=CHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

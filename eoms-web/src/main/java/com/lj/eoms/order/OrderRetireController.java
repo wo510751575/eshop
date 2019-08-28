@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.order;
@@ -23,9 +23,13 @@ import com.lj.base.core.pagination.Page;
 import com.lj.base.core.pagination.PageSortType;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindOrderRetirePage;
+import com.lj.eshop.dto.OrderDto;
 import com.lj.eshop.dto.OrderRetireDto;
+import com.lj.eshop.emus.AccWaterPayType;
 import com.lj.eshop.emus.AuditStatus;
+import com.lj.eshop.emus.OrderInvoice;
 import com.lj.eshop.emus.OrderRetireType;
+import com.lj.eshop.emus.OrderStatus;
 import com.lj.eshop.emus.RetireStatus;
 import com.lj.eshop.service.IOrderRetireService;
 import com.lj.eshop.service.IOrderService;
@@ -39,7 +43,7 @@ import com.lj.eshop.service.IOrderService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年8月29日
@@ -88,7 +92,7 @@ public class OrderRetireController extends BaseController {
 			model.addAttribute("auditStatus", AuditStatus.values());
 			model.addAttribute("orderRetireTypes", OrderRetireType.values());
 			model.addAttribute("retireStatus", RetireStatus.values());
-			model.addAttribute("param", orderRetire);
+			model.addAttribute("orderRetireParam", orderRetire);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,6 +100,21 @@ public class OrderRetireController extends BaseController {
 		return LIST;
 	}
 
+	/** 视图 */
+	@RequiresPermissions("order:order:view")
+	@RequestMapping(value = {"form", "view"}, method = {RequestMethod.GET,RequestMethod.POST})
+	public String form(String code, Model model) {
+		try {
+			OrderRetireDto param = new OrderRetireDto();
+			param.setCode(code);
+			OrderRetireDto dto = orderRetireService.findOrderRetire(param);
+			model.addAttribute("data", dto);
+			model.addAttribute("auditStatus", AuditStatus.values());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return VIEW;
+	}
 
 	/** 审核*/
 	@RequiresPermissions("order:retire:edit")

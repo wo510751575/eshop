@@ -3,7 +3,7 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
@@ -304,5 +304,51 @@ public class GreetClientServiceImpl implements IGreetClientService {
 			throw new TsfaServiceException(ErrorCode.GREET_CLIENT_FIND_ERROR,"问候客户表信息查询错误.！",e);
 		}
 
+	}
+	
+	
+	/**
+	 * 方法说明：添加问候客户表信息.
+	 *
+	 * @param addGreetClient the add greet client
+	 * @return the adds the greet client return
+	 * @throws TsfaServiceException the tsfa service exception
+	 * @author 林进权 CreateDate: 2017年9月22日
+	 */
+	@Override
+	public AddGreetClientReturn addGreetClientEc(AddGreetClient addGreetClient) throws TsfaServiceException {
+		logger.debug("addGreetClient(AddGreetClient addGreetClient={}) - start", addGreetClient); 
+		AssertUtils.notNull(addGreetClient);
+		AssertUtils.notNull(addGreetClient.getMemberNoGm(),"导购编号不能为空");
+		try {
+			GreetClient greetClient = new GreetClient();
+			//add数据录入
+			greetClient.setCode(GUID.generateCode());
+			greetClient.setMerchantNo(addGreetClient.getMerchantNo());
+			greetClient.setMemberNo(addGreetClient.getMemberNo());
+			greetClient.setMemberNoGm(addGreetClient.getMemberNoGm());
+			greetClient.setMemberNameGm(addGreetClient.getMemberNameGm());
+			greetClient.setTitle(addGreetClient.getTitle());
+			greetClient.setContent(addGreetClient.getContent());
+			greetClient.setSendType(addGreetClient.getSendType());
+			greetClient.setCreateId(addGreetClient.getCreateId());
+			greetClient.setCreateDate(new Date());
+			greetClient.setRemark(addGreetClient.getRemark());
+			greetClient.setRemark2(addGreetClient.getRemark2());
+			greetClient.setRemark3(addGreetClient.getRemark3());
+			greetClient.setRemark4(addGreetClient.getRemark4());
+			greetClientDao.insertSelective(greetClient);
+			
+			AddGreetClientReturn addGreetClientReturn = new AddGreetClientReturn();
+			
+			logger.debug("addGreetClient(AddGreetClient) - end - return value={}", addGreetClientReturn); 
+			return addGreetClientReturn;
+		}catch (TsfaServiceException e) {
+			logger.error(e.getMessage(),e);
+			throw e;
+		}  catch (Exception e) {
+			logger.error("新增问候客户表信息错误！",e);
+			throw new TsfaServiceException(ErrorCode.GREET_CLIENT_ADD_ERROR,"新增问候客户表信息错误！",e);
+		}
 	}
 }

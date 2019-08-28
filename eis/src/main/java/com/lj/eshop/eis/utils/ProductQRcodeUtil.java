@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.utils;
@@ -31,7 +31,7 @@ import com.swetake.util.Qrcode;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年8月31日
@@ -74,12 +74,12 @@ public class ProductQRcodeUtil {
 
 	private static String graphicsGeneration(String url ,String imgurl,String name,String price) throws Exception {
 		int imageWidth = 300; // 图片的宽度
-		int imageHeight = 600; // 图片的高度
+		int imageHeight = 700; // 图片的高度
 		
 	    int picImgHeight=300;//商品图片的高
         int picImgWidth=300;
-        int qcImgHeight=200;//二维码图片的高
-        int qcImgWidth=200;
+        int qcImgHeight=300;//二维码图片的高
+        int qcImgWidth=300;
         
         int lineHeight=3;
         int headHeight =10;

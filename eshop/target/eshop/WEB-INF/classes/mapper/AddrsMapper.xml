@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IAddrsDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Addrs">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="reciver_name" jdbcType="VARCHAR" property="reciverName" />
+    <result column="reciver_phone" jdbcType="VARCHAR" property="reciverPhone" />
+    <result column="reciver_zip" jdbcType="VARCHAR" property="reciverZip" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="addr_info" jdbcType="VARCHAR" property="addrInfo" />
+    <result column="is_default" jdbcType="CHAR" property="isDefault" />
+    <result column="province_code" jdbcType="VARCHAR" property="provinceCode" />
+    <result column="city_code" jdbcType="VARCHAR" property="cityCode" />
+    <result column="are_code" jdbcType="VARCHAR" property="areCode" />
+    <result column="addr_detail" jdbcType="VARCHAR" property="addrDetail" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.AddrsDto" extends="BaseResultMap">
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    code, reciver_name, reciver_phone, reciver_zip, mbr_code, addr_info, is_default, 
+    province_code, city_code, are_code, addr_detail, create_time, del_flag
+  </sql>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.delFlag != null and param.delFlag !='' ">
+					<![CDATA[and del_flag =#{param.delFlag}]]>
+				</if>
+				<if test="param.isDefault != null and param.isDefault !='' ">
+					<![CDATA[and is_default =#{param.isDefault}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and mbr_code =#{param.mbrCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findAddrss" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAddrsPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_addrs
+		<include refid="findPage_condition" />
+		ORDER BY is_default,create_time desc
+	</select>
+	<!-- 分页查询 -->
+	<select id="findAddrsPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindAddrsPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_addrs
+		<include refid="findPage_condition" />
+		ORDER BY is_default,create_time desc
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findAddrsPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindAddrsPage">
+		select count(*)
+		FROM t_addrs
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_addrs
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Addrs">
+    insert into t_addrs
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="reciverName != null">
+        reciver_name,
+      </if>
+      <if test="reciverPhone != null">
+        reciver_phone,
+      </if>
+      <if test="reciverZip != null">
+        reciver_zip,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="addrInfo != null">
+        addr_info,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="provinceCode != null">
+        province_code,
+      </if>
+      <if test="cityCode != null">
+        city_code,
+      </if>
+      <if test="areCode != null">
+        are_code,
+      </if>
+      <if test="addrDetail != null">
+        addr_detail,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverName != null">
+        #{reciverName,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverPhone != null">
+        #{reciverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverZip != null">
+        #{reciverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrInfo != null">
+        #{addrInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="provinceCode != null">
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null">
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areCode != null">
+        #{areCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrDetail != null">
+        #{addrDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Addrs">
+    update t_addrs
+    <set>
+      <if test="reciverName != null">
+        reciver_name = #{reciverName,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverPhone != null">
+        reciver_phone = #{reciverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverZip != null">
+        reciver_zip = #{reciverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrInfo != null">
+        addr_info = #{addrInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="provinceCode != null">
+        province_code = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null">
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areCode != null">
+        are_code = #{areCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrDetail != null">
+        addr_detail = #{addrDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag, jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByMbrcode" parameterType="com.lj.eshop.domain.Addrs">
+    update t_addrs
+    <set>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag, jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mbr_code = #{mbrCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

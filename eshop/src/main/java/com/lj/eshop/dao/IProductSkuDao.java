@@ -7,32 +7,31 @@ import com.lj.eshop.dto.FindProductSkuPage;
 import com.lj.eshop.dto.ProductSkuDto;
 
 public interface IProductSkuDao {
-    int insertSelective(ProductSku record);
+	int insertSelective(ProductSku record);
 
-    ProductSku selectByPrimaryKey(String code);
+	ProductSkuDto selectByPrimaryKey(String code);
 
-    int updateByPrimaryKeySelective(ProductSku record);
+	int updateByPrimaryKeySelective(ProductSku record);
 
-    List<ProductSkuDto> findProductSkuPage(FindProductSkuPage findProductSkuPage);
+	List<ProductSkuDto> findProductSkuPage(FindProductSkuPage findProductSkuPage);
 
-   	int findProductSkuPageCount(FindProductSkuPage findProductSkuPage);
-   	
-   	List<ProductSkuDto> findProductSkus(FindProductSkuPage findProductSkuPage);
-   	
-   	int  updateProductSkuByProductCode(ProductSku record);
-   	
-   	/**
-   	 * 
-   	 *
-   	 * 方法说明：按供应商设置的 折扣比例计算提出，仅查需要的数据，比如成本价不查。
-   	 *
-   	 * @param findProductSkuPage
-   	 * @return
-   	 *
-   	 * @author lhy  2017年8月31日
-   	 *
-   	 */
+	int findProductSkuPageCount(FindProductSkuPage findProductSkuPage);
+
+	List<ProductSkuDto> findProductSkus(FindProductSkuPage findProductSkuPage);
+
+	int updateProductSkuByProductCode(ProductSku record);
+
+	/**
+	 * 
+	 *
+	 * 方法说明：按供应商设置的 折扣比例计算提出，仅查需要的数据，比如成本价不查。
+	 *
+	 * @param findProductSkuPage
+	 * @return
+	 *
+	 * @author lhy 2017年8月31日
+	 *
+	 */
 	List<ProductSkuDto> findMinProductSkus(FindProductSkuPage findProductSkuPage);
-   	
 
 }

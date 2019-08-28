@@ -3,10 +3,11 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -239,6 +240,17 @@ public class MaterialServiceImplTest extends SpringTestCase{
 	public void getMaterialResponseTotal() throws Exception {
 		long i = materialService.getMaterialResponseTotal("LJ_1c279c8b1b594c0eb1dd09205ecc9ead");
 		System.out.println(i);
+	}
+	
+	
+	@Test
+	public void findMaterials() throws Exception {
+		FindMaterialPage findMaterialPage = new FindMaterialPage(); 
+		List<String> codes = new ArrayList<String>();
+		codes.add("LJ_797272b478fe4d838f1ca54e67622387");
+		findMaterialPage.setCodes(codes);
+		List<FindMaterialPageReturn> list = materialService.findMaterials(findMaterialPage);
+		System.out.println(list.size() + "\r\n" + list);
 	}
 	
 }

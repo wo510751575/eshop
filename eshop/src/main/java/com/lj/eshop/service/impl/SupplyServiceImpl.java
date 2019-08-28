@@ -3,7 +3,7 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
@@ -21,6 +21,7 @@ import com.lj.base.core.util.AssertUtils;
 import com.lj.base.core.util.GUID;
 import com.lj.base.exception.TsfaServiceException;
 import com.lj.eshop.constant.ErrorCode;
+import com.lj.eshop.constant.NoUtil;
 import com.lj.eshop.dao.IAccountDao;
 import com.lj.eshop.dao.IMemberDao;
 import com.lj.eshop.dao.ISupplyDao;
@@ -100,7 +101,7 @@ public class SupplyServiceImpl implements ISupplyService {
 			member.setStatus(MemberStatus.NORMAL.getValue());
 			member.setOpenId(supply.getCode());
 			member.setCreateTime(new Date());
-			member.setType(MemberType.SUPPLY.getValue());
+			member.setType(MemberType.SHOP.getValue());
 			member.setMerchantCode(supply.getMerchantCode());
 			memberDao.insertSelective(member);
 			//三：开虚拟账户
@@ -112,7 +113,7 @@ public class SupplyServiceImpl implements ISupplyService {
 			account.setType(AccountType.ACC.getValue());
 			account.setUpdateTime(new Date());
 			//账号accNo生成规则，供应商虚拟账户不用，暂时不存
-			
+			account.setAccNo(NoUtil.generateNo(NoUtil.JY));
 			accountDao.insertSelective(account);
 			logger.debug("addSupply(SupplyDto) - end - return"); 
 			

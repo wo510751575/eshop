@@ -45,11 +45,18 @@
 			<label class="control-label">头像:</label>
 			<div class="controls">
 				<c:choose>
-					<c:when test="${!empty data.avotor }">
-						<img src="${data.avotor } " width="40" height="40"/>
-					</c:when>
-					<c:otherwise>无头像</c:otherwise>
-				</c:choose>
+						<c:when test="${!empty data.avotor }">
+							<c:choose>
+								<c:when test="${fn:startsWith(data.avotor, 'http')}">
+	   								<img  width="40" height="40"  src="${data.avotor}" alt="">
+								</c:when>
+								<c:otherwise>
+									<img width="40" height="40"  src="${fns:getUploadUrl()}${data.avotor}" alt="">
+								</c:otherwise>
+			    			</c:choose>
+						</c:when>
+						<c:otherwise>无头像</c:otherwise>
+					</c:choose>
 				
 				<%-- <input type="text" name="avotor" value="${data.avotor}" maxlength="50" class="input-xlarge" /> --%>
 			</div>
@@ -57,7 +64,14 @@
 		<div class="control-group">
 			<label class="control-label">客户微信号:</label>
 			<div class="controls">
-				<input type="text" name="wxNo" value="${data.wxNo}" maxlength="50" class="input-xlarge" />
+				<c:choose>
+					<c:when test="${empty data.wxNo}">
+						<input type="text" name="wxNo" value="${data.wxNo}" maxlength="50" class="input-xlarge" /> 
+					</c:when>
+					<c:otherwise>
+						<input type="text" readonly="readonly" value="${data.wxNo}" maxlength="50" class="input-xlarge" /> *不可修改
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	 	<div class="control-group">

@@ -34,5 +34,12 @@
 		<property name="serviceName" value="activityService" />
 		<property name="serviceInterface" value="com.lj.business.cm.service.IActivityService" />   
     </bean>
+	<!-- 问候信息 -->
+	<bean id="greetClientService" parent="systemHessianFactoryBean">
+		<property name="systemAliasName" value="ec-cm" />
+		<property name="serviceName" value="greetClientService" />
+		<property name="serviceInterface" value="com.lj.business.cm.service.IGreetClientService" />
+	</bean>
+
     
 </beans> 

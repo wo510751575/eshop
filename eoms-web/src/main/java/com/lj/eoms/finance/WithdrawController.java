@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.finance;
@@ -41,7 +41,7 @@ import com.lj.eshop.service.IWithdrawService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年8月30日
@@ -88,7 +88,7 @@ public class WithdrawController extends BaseController {
 		com.ape.common.persistence.Page<WithdrawDto> page = new com.ape.common.persistence.Page<WithdrawDto>(
 				pageNo == null ? 1 : pageNo, pageDto.getLimit(), pageDto.getTotal(), list);
 		page.initialize();
-
+		model.addAttribute("findWithdrawPage",findWithdrawPage);
 		model.addAttribute("page", page);
 		return LIST;
 	}

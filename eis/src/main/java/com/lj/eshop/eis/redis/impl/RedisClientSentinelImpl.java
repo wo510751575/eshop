@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月2日
@@ -38,7 +38,7 @@ public class RedisClientSentinelImpl extends RedisCommands<JedisSentinelPool, Je
 		this.setRedisPool(pool);
 		
 	}
-	
+	@Override
     public Jedis getJedis(){
     	if(getRedisPool()==null) {
     		initPool();

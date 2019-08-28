@@ -2,7 +2,7 @@ package com.lj.business.cf.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.ArrayList;
@@ -347,12 +347,12 @@ public class ClientExpServiceImpl implements IClientExpService {
 				returnData = addClientExp(clientExpDto);
 				
 				//分类变动
-				ChangePmType changePmType = new ChangePmType();
+				/*ChangePmType changePmType = new ChangePmType();
 				changePmType.setMemberNo(clientExpDto.getMemberNo());
 				changePmType.setMerchantNo(clientExpDto.getMerchantNo());
 				changePmType.setMemberNoGm(clientExpDto.getMemberNoGm());
 				changePmType.setPmTypeType(PmTypeType.INTENTION);
-				pmTypeService.changePmType(changePmType);
+				pmTypeService.changePmType(changePmType);*/
 				
 			}else if("N".equals(clientExpDto.getExpResult())){
 				 //到店失败

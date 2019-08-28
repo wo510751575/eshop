@@ -48,6 +48,28 @@
 			return false;
 		}
 	</script>
+	
+	<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -59,7 +81,7 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 			<li><label>订单号：</label>
-		    	<input type="text" name="orderNo" value="${param.orderNo}" class="input-medium" maxlength="100" placeholder="订单号">
+		    	<input type="text" name="likeOrderNo" value="${param.likeOrderNo}" class="input-medium" maxlength="100" placeholder="订单号">
 			</li>
 		    <li><label>会员姓名：</label>
 		    	<input type="text" name="mbrName" value="${param.mbrName}" class="input-medium" maxlength="100" placeholder="会员姓名">
@@ -72,7 +94,7 @@
                     <option value="">全部</option>
                     <c:forEach items="${orderStatus}" var="item">
 						<option value="${item.value}"
-							<c:if test="${item.value eq param.orderStatus}">selected="selected"</c:if>>${item.chName}</option>
+							<c:if test="${item.value eq param.status}">selected="selected"</c:if>>${item.chName}</option>
 					</c:forEach>
                 </select>
 			</li>
@@ -133,7 +155,7 @@
 					</c:forEach>
 				</td>
 				<td>
-					<fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd"/>
+					<fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="order:order:edit"><td nowrap>
 						<!--待发货状态 -->

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IBillDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Bill">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" />
+    <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="bill_addr" jdbcType="VARCHAR" property="billAddr" />
+    <result column="pay_type" jdbcType="CHAR" property="payType" />
+    <result column="account_days" jdbcType="VARCHAR" property="accountDays" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="bill_date" jdbcType="TIMESTAMP" property="billDate" />
+    <result column="pay_date" jdbcType="TIMESTAMP" property="payDate" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="retire_amt" jdbcType="DECIMAL" property="retireAmt" />
+    <result column="bill_file_addrs" jdbcType="VARCHAR" property="billFileAddrs" />
+    <result column="cnt" jdbcType="INTEGER" property="cnt" />
+    <result column="rt_cnt" jdbcType="INTEGER" property="rtCnt" />
+  </resultMap>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.BillDto" extends="BaseResultMap">
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, supply_name, supply_code, phone, bill_addr, pay_type, account_days, status, 
+    bill_date, pay_date, amt, start_date, end_date, retire_amt, bill_file_addrs, cnt, 
+    rt_cnt
+  </sql>
+
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+						<![CDATA[and code =#{param.code}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findBills" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindBillPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_bill
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findBillPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindBillPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_bill
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findBillPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindBillPage">
+		select count(*)
+		FROM t_bill
+		<include refid="findPage_condition" />
+	</select>
+
+  
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_bill
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Bill">
+    insert into t_bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="billAddr != null">
+        bill_addr,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="accountDays != null">
+        account_days,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="billDate != null">
+        bill_date,
+      </if>
+      <if test="payDate != null">
+        pay_date,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="retireAmt != null">
+        retire_amt,
+      </if>
+      <if test="billFileAddrs != null">
+        bill_file_addrs,
+      </if>
+      <if test="cnt != null">
+        cnt,
+      </if>
+      <if test="rtCnt != null">
+        rt_cnt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="billAddr != null">
+        #{billAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="accountDays != null">
+        #{accountDays,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null">
+        #{billDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null">
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retireAmt != null">
+        #{retireAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="billFileAddrs != null">
+        #{billFileAddrs,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null">
+        #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="rtCnt != null">
+        #{rtCnt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Bill">
+    update t_bill
+    <set>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="billAddr != null">
+        bill_addr = #{billAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="accountDays != null">
+        account_days = #{accountDays,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null">
+        bill_date = #{billDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null">
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="retireAmt != null">
+        retire_amt = #{retireAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="billFileAddrs != null">
+        bill_file_addrs = #{billFileAddrs,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null">
+        cnt = #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="rtCnt != null">
+        rt_cnt = #{rtCnt,jdbcType=INTEGER},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

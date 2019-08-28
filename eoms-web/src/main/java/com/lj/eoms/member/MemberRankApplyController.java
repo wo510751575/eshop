@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.member;
@@ -21,7 +21,6 @@ import com.google.common.collect.Lists;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.core.util.StringUtils;
 import com.lj.base.exception.TsfaServiceException;
-import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindMemberRankApplyPage;
 import com.lj.eshop.dto.MemberRankApplyDto;
 import com.lj.eshop.emus.MemberRankApplyStatus;
@@ -33,7 +32,7 @@ import com.lj.eshop.service.IMemberRankApplyService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月28日
@@ -112,9 +111,9 @@ public class MemberRankApplyController extends BaseController {
 			//状态为空或者待审核的才可以修改状态
 			if(StringUtils.isEmpty(rtDto.getStatus()) || StringUtils.equal(rtDto.getStatus(),MemberRankApplyStatus.WAIT.getValue())) {
 				try {
-					memberRankApplyDto.setApproveTime(new Date());
+					rtDto.setApproveTime(new Date());
 					rtDto.setStatus(memberRankApplyDto.getStatus());
-					memberRankApplyService.updateByPkAndStatus(memberRankApplyDto);
+					memberRankApplyService.updateByPkAndStatus(rtDto);
 					addMessage(redirectAttributes, "特权申请审核操作成功");
 				} catch (TsfaServiceException e) {
 					addMessage(redirectAttributes, "特权申请审核操作失败："+ e.getMessage());

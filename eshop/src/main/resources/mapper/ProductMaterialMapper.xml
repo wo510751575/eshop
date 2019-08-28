@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IProductMaterialDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.ProductMaterial" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="adv_code" property="advCode" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    code, adv_code, product_code, status, img, order_no, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_material
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_product_material
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.eshop.domain.ProductMaterial" >
+    insert into t_product_material (code, adv_code, product_code, 
+      status, img, order_no, 
+      remark)
+    values (#{code,jdbcType=VARCHAR}, #{advCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{img,jdbcType=VARCHAR}, #{orderNo,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.ProductMaterial" >
+    insert into t_product_material
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="advCode != null" >
+        adv_code,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="advCode != null" >
+        #{advCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.ProductMaterial" >
+    update t_product_material
+    <set >
+      <if test="advCode != null" >
+        adv_code = #{advCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.eshop.domain.ProductMaterial" >
+    update t_product_material
+    set adv_code = #{advCode,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      img = #{img,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductMaterialDto" extends="BaseResultMap"></resultMap>
+  
+  <sql id="findPage_condition">
+	<where>
+	<!-- 查询条件根据业务需求自由添加  -->
+	<if test="param!=null">
+		<if test="param.code != null and param.code !='' ">
+		<![CDATA[and code =#{param.code}]]>
+		</if>
+		<if test="param.status != null and param.status !='' ">
+		<![CDATA[and status =#{param.status}]]>
+		</if>
+		<if test="param.productCode != null and param.productCode !='' ">
+		<![CDATA[and product_code =#{param.productCode}]]>
+		</if>
+	</if>
+	</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findProductMaterials" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductMaterialPage">
+	SELECT
+	<include refid="Base_Column_List" />
+	FROM t_product_material
+	<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findProductMaterialPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductMaterialPage">
+	SELECT
+	<include refid="Base_Column_List" />
+	FROM t_product_material
+	<include refid="findPage_condition" />
+
+	limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findProductMaterialPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindProductMaterialPage">
+	select count(*)
+	FROM t_product_material
+	<include refid="findPage_condition" />
+	</select>
+	
+	<update id="updateByProductCode" parameterType="java.lang.String">
+		update t_product_material
+		set status = '1'
+		where product_code = #{code,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateStatusOpon" parameterType="java.lang.String">
+		update t_product_material
+		set status = '0'
+		where product_code = #{productCode,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

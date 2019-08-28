@@ -1,11 +1,12 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.marketing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,11 +27,11 @@ import com.lj.business.cm.service.IMaterialTypeService;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindMaterialEcmPage;
 import com.lj.eshop.dto.FindProductPage;
-import com.lj.eshop.dto.FindShopPage;
-import com.lj.eshop.dto.MaterialCmDto;
 import com.lj.eshop.dto.MateriaEcmDto;
+import com.lj.eshop.dto.MaterialCmDto;
 import com.lj.eshop.dto.ProductDto;
 import com.lj.eshop.dto.ShopDto;
+import com.lj.eshop.emus.MaterialCmType;
 import com.lj.eshop.service.IMaterialCmService;
 import com.lj.eshop.service.IProductService;
 import com.lj.eshop.service.IShopService;
@@ -41,7 +42,7 @@ import com.lj.eshop.service.IShopService;
  * 
  * <p>
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 林进权
  * 
  *         CreateDate: 2017年8月28日
@@ -84,10 +85,19 @@ public class MaterialController extends BaseController {
 			pageSize = pageSize==null || pageSize>500?10:pageSize;
 			findMaterialReturnPage.setStart((pageNo - 1) * pageSize);
 			findMaterialReturnPage.setLimit(pageSize);
-			findMaterialReturnPage.setMerchantCode(UserUtils.getUser().getMerchant().getCode());
-			MaterialCmDto materialCmDto = new MaterialCmDto();
+			
+			MaterialCmDto materialCmDto = findMaterialReturnPage.getParam();
+			if(null==findMaterialReturnPage.getParam()) {
+				materialCmDto = new MaterialCmDto();
+				findMaterialReturnPage.setParam(materialCmDto);
+			}
 			materialCmDto.setProductName(productName);
-			findMaterialReturnPage.setParam(materialCmDto);
+			materialCmDto.setMerchantCode(UserUtils.getUser().getMerchant().getCode());
+			List<String> inTypes = new ArrayList<String>();
+			inTypes.add(MaterialCmType.SALE.getValue());
+			inTypes.add(MaterialCmType.PRIVATE.getValue());
+			materialCmDto.setInTypes(inTypes);
+			
 			Page<MateriaEcmDto> page = materialCmService.findCmMaterialPgae(findMaterialReturnPage);
 			
 			if(page.getRows().size()>0) {
@@ -101,7 +111,7 @@ public class MaterialController extends BaseController {
 				
 				/* 获取素材类型下拉数据 */
 				FindMaterialTypePage findMaterialTypePage = new FindMaterialTypePage();
-				findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getCode());
+				findMaterialTypePage.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
 				findMaterialTypePage.setIsPublic(true);
 				model.addAttribute("materialType", materialTypeService.findMaterialTypes(findMaterialTypePage));
 
@@ -115,6 +125,8 @@ public class MaterialController extends BaseController {
 				List<ProductDto> productList = productService.findProducts(productPage);
 				model.addAttribute("productList", productList);
 			}
+			
+			model.addAttribute("materialCmTypes", MaterialCmType.values());
 			model.addAttribute("productName", productName);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,27 +139,23 @@ public class MaterialController extends BaseController {
 	/** 引用为官方精选 */
 	@RequiresPermissions("marketing:material:edit")
 	@RequestMapping(value = "/biztype")
-	public String biztype(MateriaEcmDto materialEcDto, RedirectAttributes redirectAttributes, String materialCmCode) {
+	public String biztype(MateriaEcmDto findMaterialEcDto, RedirectAttributes redirectAttributes) {
 
-		FindMaterialEcmPage findMaterialReturnPage = new FindMaterialEcmPage();
-		findMaterialReturnPage.setCmMaterialCode(materialEcDto.getCmMaterialCode());
-		findMaterialReturnPage.setMaterialCmCode(materialEcDto.getMaterialCmCode());
-		MateriaEcmDto materialReturnDto = materialCmService.findMaterialSale(findMaterialReturnPage);
-		if (null != materialReturnDto) {
-			if(StringUtils.isNotEmpty(materialReturnDto.getChoicenessCode())) {
+		MateriaEcmDto addMateriaEcmDto = materialCmService.findMaterialEcm(findMaterialEcDto);
+		if (null != addMateriaEcmDto) {
+			if(StringUtils.isNotEmpty(addMateriaEcmDto.getChoicenessCode())) {
 				addMessage(redirectAttributes, "引用为官方精选失败，已经添加为官方精选");
 			} else {
 				// 商店
-				FindShopPage findShopPage = new FindShopPage();
 				ShopDto shopDto = new ShopDto();
-				shopDto.setMbrCode(materialReturnDto.getMemberNoGm());
-				findShopPage.setParam(shopDto);
-				List<ShopDto> shopDtos = shopService.findShops(findShopPage);
-				if (shopDtos.size() == 0) {
+				shopDto.setCode(addMateriaEcmDto.getShopCode());
+				ShopDto rltShopDto = shopService.findShop(shopDto);
+				if (rltShopDto == null) {
 					addMessage(redirectAttributes, "引用为官方精选失败，查找不到相关商店");
 				} else {
-					materialReturnDto.setMaterialCmCode(materialCmCode);
-					materialCmService.updBiztypeForPub(materialReturnDto, shopDtos.get(0));
+					addMateriaEcmDto.setMerchantNo(UserUtils.getUser().getMerchant().getOfficeId());
+					addMateriaEcmDto.setMerchantName(UserUtils.getUser().getMerchant().getMerchantName());
+					materialCmService.updBiztypeForPub(addMateriaEcmDto, rltShopDto);
 					
 					addMessage(redirectAttributes, "引用为官方精选成功");
 				}
@@ -170,27 +178,59 @@ public class MaterialController extends BaseController {
 	 */
 	@RequiresPermissions("marketing:material:view")
 	@RequestMapping(value = "view")
-	public String view(FindMaterialEcmPage findMaterialReturnPage, Model model) {
+	public String view(String code, Model model) {
 		try {
-			if (findMaterialReturnPage != null && findMaterialReturnPage.getCmMaterialCode() != null) {
-				//
-				MateriaEcmDto returnDto =  materialCmService.findMaterialSale(findMaterialReturnPage);
-				model.addAttribute("data", returnDto);
-				/* 获取模版 */
-				/*
-				 * if(StringUtils.isNotEmpty(findMaterialCommenReturn.getTempId())){
-				 * model.addAttribute("temp",
-				 * dictService.get(findMaterialCommenReturn.getTempId())); }
-				 */
+			if(StringUtils.isNotEmpty(code)){
+				MateriaEcmDto findMateriaEcmDto = new MateriaEcmDto();
+				findMateriaEcmDto.setCode(code);
+				MateriaEcmDto materiaEcmDto = materialCmService.findMaterialEcm(findMateriaEcmDto);
+				model.addAttribute("data", materiaEcmDto);
+				//公司名
+				model.addAttribute("companyName",UserUtils.getUser().getCompany().getName());
+				//公司LOGO
+				model.addAttribute("companyLogo",UserUtils.getUser().getCompany().getLogo());
+				//公司简介
+				model.addAttribute("companyRemarks",UserUtils.getUser().getCompany().getRemarks());
 			}
 
-			// 地址 TODO获取附近门店
-			// model.addAttribute("addr","深圳市龙华新区民治大道785号");
-			// 电话 TODO
-			// model.addAttribute("tel","400-8008001");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "modules/marketing/material/materialView";
+	}
+	
+	
+	/**
+	 * 
+	 *
+	 * 方法说明：
+	 *
+	 * @param model
+	 * @return 返回静态页面数据
+	 *
+	 * @author 林进权 CreateDate: 2017年9月25日
+	 *
+	 */
+	@RequestMapping(value = "viewH5")
+	public String viewH5(String code, Model model) {
+		try {
+			if(StringUtils.isNotEmpty(code)){
+				MateriaEcmDto findMateriaEcmDto = new MateriaEcmDto();
+				findMateriaEcmDto.setCode(code);
+				MateriaEcmDto materiaEcmDto = materialCmService.findMaterialEcm(findMateriaEcmDto);
+				model.addAttribute("data", materiaEcmDto);
+				
+				//公司名
+				model.addAttribute("companyName",UserUtils.getUser().getCompany().getName());
+				//公司LOGO
+				model.addAttribute("companyLogo",UserUtils.getUser().getCompany().getLogo());
+				//公司简介
+				model.addAttribute("companyRemarks",UserUtils.getUser().getCompany().getRemarks());
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return "modules/marketing/materialcommon/materialcommenH5";
 	}
 }

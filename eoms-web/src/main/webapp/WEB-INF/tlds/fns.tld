@@ -114,13 +114,13 @@
   </function>
   
   <!--   duanzhipeng 2017-08-08-->
-<!--   <function> -->
-<!--     <description>获取上传路径前缀</description> -->
-<!--     <name>getUploadUrl</name> -->
-<!--     <function-class>com.lj.eoms.utils.UserUtils</function-class> -->
-<!--     <function-signature>java.util.String getUploadUrl()</function-signature> -->
-<!--     <example>${fns:getUploadUrl()}</example>   -->
-<!--   </function> -->
+  <function>
+    <description>获取上传路径前缀</description>
+    <name>getUploadUrl</name>
+    <function-class>com.lj.eoms.utils.UserUtils</function-class>
+    <function-signature>java.util.String getUploadUrl()</function-signature>
+    <example>${fns:getUploadUrl()}</example>  
+  </function>
 	
   <!-- DictUtils -->
   <function>

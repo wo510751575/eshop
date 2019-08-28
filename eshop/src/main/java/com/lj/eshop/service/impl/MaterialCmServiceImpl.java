@@ -2,13 +2,15 @@ package com.lj.eshop.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -29,14 +31,11 @@ import com.lj.business.cm.dto.AddMaterialCommenReturn;
 import com.lj.business.cm.dto.AddMaterialReturn;
 import com.lj.business.cm.dto.DelMaterial;
 import com.lj.business.cm.dto.DelMaterialCommen;
-import com.lj.business.cm.dto.FindMaterial;
-import com.lj.business.cm.dto.FindMaterialCommen;
-import com.lj.business.cm.dto.FindMaterialCommenReturn;
+import com.lj.business.cm.dto.FindMaterialCommenPage;
+import com.lj.business.cm.dto.FindMaterialCommenPageReturn;
+import com.lj.business.cm.dto.FindMaterialPage;
 import com.lj.business.cm.dto.FindMaterialPageReturn;
-import com.lj.business.cm.dto.FindMaterialReturn;
 import com.lj.business.cm.dto.FindMaterialType;
-import com.lj.business.cm.dto.FindMaterialTypePage;
-import com.lj.business.cm.dto.FindMaterialTypePageReturn;
 import com.lj.business.cm.dto.FindMaterialTypeReturn;
 import com.lj.business.cm.dto.UpdateMaterialCommen;
 import com.lj.business.cm.service.IMaterialCommenService;
@@ -224,24 +223,17 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 	}
 
 	@Override
-	public Page<MateriaEcmDto> findCmMaterialPgae(FindMaterialEcmPage findMaterialReturnPage) throws TsfaServiceException {
-		logger.debug("findCmMaterialPgae(FindMaterialReturnPage findMaterialReturnPage={}) - start", findMaterialReturnPage); //$NON-NLS-1$
+	public Page<MateriaEcmDto> findCmMaterialPgae(FindMaterialEcmPage findMaterialEcmPage) throws TsfaServiceException {
+		logger.debug("findCmMaterialPgae(FindMaterialReturnPage findMaterialReturnPage={}) - start", findMaterialEcmPage); //$NON-NLS-1$
 		
-		AssertUtils.notNull(findMaterialReturnPage);
-		AssertUtils.notAllNull(findMaterialReturnPage.getMerchantCode(), "商户Code不能为空");
-		AssertUtils.notAllNull(findMaterialReturnPage.getShopCode(), "商店Code不能为空");
+		AssertUtils.notNull(findMaterialEcmPage);
+		AssertUtils.notNull(findMaterialEcmPage.getParam().getMerchantCode(), "商户Code不能为空");
+//		AssertUtils.notNull(findMaterialEcmPage.getParam().getShopCode(), "商店Code不能为空");
 		
 		FindMaterialCmPage findMaterialCmPage = new FindMaterialCmPage();
-		findMaterialCmPage.setStart(findMaterialReturnPage.getStart());
-		findMaterialCmPage.setLimit(findMaterialReturnPage.getLimit());
-		MaterialCmDto materialCmDto = new MaterialCmDto();
-		materialCmDto.setType(MaterialCmType.SALE.getValue());
-		materialCmDto.setMerchantCode(findMaterialReturnPage.getMerchantCode());
-		materialCmDto.setShopCode(findMaterialReturnPage.getShopCode());
-		if(null!=findMaterialReturnPage.getParam()) {
-			materialCmDto.setProductName(findMaterialReturnPage.getParam().getProductName());
-		}
-		findMaterialCmPage.setParam(materialCmDto);
+		findMaterialCmPage.setStart(findMaterialEcmPage.getStart());
+		findMaterialCmPage.setLimit(findMaterialEcmPage.getLimit());
+		findMaterialCmPage.setParam(findMaterialEcmPage.getParam());
 		
 		Page<MaterialCmDto>  page = findMaterialCmPage(findMaterialCmPage);
 		List<MaterialCmDto> materialCmDtos = new ArrayList<MaterialCmDto>();
@@ -257,27 +249,36 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 	private List<MateriaEcmDto> reBuildMaterials(List<MaterialCmDto> materialCmDtos) {
 		List<MateriaEcmDto> list = new ArrayList<MateriaEcmDto>();
 		if(materialCmDtos.size()>0) {
+			List<String> codes = new ArrayList<String>();
 			for (MaterialCmDto materialCmDto : materialCmDtos) {
-				FindMaterial findMaterial = new FindMaterial();
-				findMaterial.setCode(materialCmDto.getCmMaterialCode());
-				try {
-					FindMaterialReturn sourceMaterial  = cmMaterialService.findMaterial(findMaterial);
+				codes.add(materialCmDto.getCmMaterialCode());
+			}
+			
+			FindMaterialPage findMaterialPage = new FindMaterialPage();
+			findMaterialPage.setCodes(codes);
+			List<FindMaterialPageReturn>  findMaterialPageReturns = cmMaterialService.findMaterials(findMaterialPage);
+			if(findMaterialPageReturns.size()>0) {
+				Map<String, FindMaterialPageReturn> findMaterialPageReturnMap = new HashMap<String, FindMaterialPageReturn>();
+				for (FindMaterialPageReturn findMaterialPageReturn : findMaterialPageReturns) {
+					findMaterialPageReturnMap.put(findMaterialPageReturn.getCode(), findMaterialPageReturn);
+				}
+				
+				
+				for (MaterialCmDto materialCmDto : materialCmDtos) {
 					MateriaEcmDto returnDto = new MateriaEcmDto();
-					BeanUtils.copyProperties(sourceMaterial, returnDto);
-					returnDto.setType(materialCmDto.getType());
-					returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
-					returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
-					returnDto.setCode(materialCmDto.getCode());
-					returnDto.setProductCode(materialCmDto.getProductCode());
-					returnDto.setProductName(materialCmDto.getProductName());
-					returnDto.setChoicenessCode(materialCmDto.getChoicenessCode());
-					if(StringUtils.isNotEmpty(materialCmDto.getChoicenessCode())) {
-						returnDto.setType(MaterialCmType.CHOICE.getValue());
+					FindMaterialPageReturn sourceMaterial = findMaterialPageReturnMap.get(materialCmDto.getCmMaterialCode());
+					if(null!=sourceMaterial) {
+						BeanUtils.copyProperties(sourceMaterial, returnDto);
+						returnDto.setType(materialCmDto.getType());
+						returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
+						returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
+						returnDto.setCode(materialCmDto.getCode());
+						returnDto.setProductCode(materialCmDto.getProductCode());
+						returnDto.setProductName(materialCmDto.getProductName());
+						returnDto.setChoicenessCode(materialCmDto.getChoicenessCode());
+						returnDto.setCreateDate(materialCmDto.getCreateTime());
+						list.add(returnDto);
 					}
-					returnDto.setCreateDate(materialCmDto.getCreateTime());
-					list.add(returnDto);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -285,23 +286,23 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 	}
 
 	@Override
-	public Page<MateriaEcmDto> findCmCommonMaterialPgae(FindMaterialEcmPage findMaterialReturnPage)
+	public Page<MateriaEcmDto> findCmCommonMaterialPgae(FindMaterialEcmPage findMaterialEcmPage)
 			throws TsfaServiceException {
-		logger.debug("findCmCommonMaterialPgae(FindMaterialReturnPage findMaterialReturnPage)={}) - start", findMaterialReturnPage); //$NON-NLS-1$
+		logger.debug("findCmCommonMaterialPgae(FindMaterialReturnPage findMaterialReturnPage)={}) - start", findMaterialEcmPage); //$NON-NLS-1$
 		
-		AssertUtils.notNull(findMaterialReturnPage);
-		AssertUtils.notAllNull(findMaterialReturnPage.getMerchantCode(), "商户Code不能为空");
+		AssertUtils.notNull(findMaterialEcmPage);
+		AssertUtils.notNull(findMaterialEcmPage.getParam().getMerchantCode(), "商户Code不能为空");
 		
 		FindMaterialCmPage findMaterialCmPage = new FindMaterialCmPage();
-		findMaterialCmPage.setStart(findMaterialReturnPage.getStart());
-		findMaterialCmPage.setLimit(findMaterialReturnPage.getLimit());
-		MaterialCmDto materialCmDto = new MaterialCmDto();
-		materialCmDto.setType(MaterialCmType.PUBLIC.getValue());
-		materialCmDto.setMerchantCode(findMaterialReturnPage.getMerchantCode());
-		if(null!=findMaterialReturnPage.getParam()) {
-			materialCmDto.setProductName(findMaterialReturnPage.getParam().getProductName());
-		}
-		findMaterialCmPage.setParam(materialCmDto);
+		findMaterialCmPage.setStart(findMaterialEcmPage.getStart());
+		findMaterialCmPage.setLimit(findMaterialEcmPage.getLimit());
+		MaterialCmDto findMaterialCmDto = findMaterialEcmPage.getParam();
+		findMaterialCmDto.setType(MaterialCmType.PUBLIC.getValue());
+//		materialCmDto.setMerchantCode(findMaterialReturnPage.getMerchantCode());
+//		if(null!=findMaterialReturnPage.getParam()) {
+//			materialCmDto.setProductName(findMaterialReturnPage.getParam().getProductName());
+//		}
+		findMaterialCmPage.setParam(findMaterialCmDto);
 		
 		Page<MaterialCmDto>  page = findMaterialCmPage(findMaterialCmPage);
 		List<MaterialCmDto> materialCmDtos = new ArrayList<MaterialCmDto>();
@@ -316,22 +317,56 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 	private List<MateriaEcmDto> reBuildCommonMaterials(List<MaterialCmDto> materialCmDtos) {
 		List<MateriaEcmDto> list = new ArrayList<MateriaEcmDto>();
 		if(materialCmDtos.size()>0) {
+//			for (MaterialCmDto materialCmDto : materialCmDtos) {
+//				FindMaterialCommen findMaterialCommen = new FindMaterialCommen();
+//				findMaterialCommen.setCode(materialCmDto.getCmMaterialCode());
+//				try {
+//					FindMaterialCommenReturn sourceCommon  = materialCommenService.findMaterialCommen(findMaterialCommen);
+//					MateriaEcmDto returnDto = new MateriaEcmDto();
+//					BeanUtils.copyProperties(sourceCommon, returnDto);
+//					materialCmDto.setType(MaterialCmType.PUBLIC.getValue());
+//					returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
+//					returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
+//					returnDto.setCode(materialCmDto.getCode());
+//					returnDto.setCreateDate(materialCmDto.getCreateTime());
+//					returnDto.setProductCode(materialCmDto.getProductCode());
+//					returnDto.setProductName(materialCmDto.getProductName());
+//					list.add(returnDto);
+//				} catch (Exception e) {
+//				}
+//			}
+			List<String> codes = new ArrayList<String>();
 			for (MaterialCmDto materialCmDto : materialCmDtos) {
-				FindMaterialCommen findMaterialCommen = new FindMaterialCommen();
-				findMaterialCommen.setCode(materialCmDto.getCmMaterialCode());
-				try {
-					FindMaterialCommenReturn sourceCommon  = materialCommenService.findMaterialCommen(findMaterialCommen);
+				codes.add(materialCmDto.getCmMaterialCode());
+			}
+			
+			FindMaterialCommenPage findMaterialCommenPage = new FindMaterialCommenPage();
+			findMaterialCommenPage.setCodes(codes);
+			FindMaterialPage findMaterialPage = new FindMaterialPage();
+			findMaterialPage.setCodes(codes);
+			List<FindMaterialCommenPageReturn>  findMaterialPageReturns = materialCommenService.findMaterialCommenList(findMaterialCommenPage);
+			if(findMaterialPageReturns.size()>0) {
+				Map<String, FindMaterialCommenPageReturn> findMaterialPageReturnMap = new HashMap<String, FindMaterialCommenPageReturn>();
+				for (FindMaterialCommenPageReturn findMaterialPageReturn : findMaterialPageReturns) {
+					findMaterialPageReturnMap.put(findMaterialPageReturn.getCode(), findMaterialPageReturn);
+				}
+				
+				
+				for (MaterialCmDto materialCmDto : materialCmDtos) {
 					MateriaEcmDto returnDto = new MateriaEcmDto();
-					BeanUtils.copyProperties(sourceCommon, returnDto);
-					materialCmDto.setType(MaterialCmType.PUBLIC.getValue());
-					returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
-					returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
-					returnDto.setCode(materialCmDto.getCode());
-					returnDto.setCreateDate(materialCmDto.getCreateTime());
-					returnDto.setProductCode(materialCmDto.getProductCode());
-					returnDto.setProductName(materialCmDto.getProductName());
-					list.add(returnDto);
-				} catch (Exception e) {
+					FindMaterialCommenPageReturn sourceMaterial = findMaterialPageReturnMap.get(materialCmDto.getCmMaterialCode());
+					if(null!=sourceMaterial) {
+						BeanUtils.copyProperties(sourceMaterial, returnDto);
+						returnDto.setType(materialCmDto.getType());
+						returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
+						returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
+						returnDto.setCode(materialCmDto.getCode());
+						returnDto.setProductCode(materialCmDto.getProductCode());
+						returnDto.setProductName(materialCmDto.getProductName());
+						returnDto.setChoicenessCode(materialCmDto.getChoicenessCode());
+						returnDto.setCreateDate(materialCmDto.getCreateTime());
+						list.add(returnDto);
+					}
 				}
 			}
 		}
@@ -346,18 +381,75 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		AssertUtils.notAllNull(materialCmDto.getCode(), "Code不能为空");
 		
 		try {
+			materialCmDao.deleteByPrimaryKey(materialCmDto.getCode());
+			logger.debug("delMaterial(MaterialCmDto materialCmDto)={}) - end"); 
+		} catch (Exception e) {
+			
+		}
+	}
+	@Override
+	public void delCmMaterial(MaterialCmDto materialCmDto) throws TsfaServiceException {
+		logger.debug("delMaterial(MaterialCmDto materialCmDto)={}) - start", materialCmDto);
+		
+		AssertUtils.notNull(materialCmDto);
+		AssertUtils.notAllNull(materialCmDto.getCode(), "Code不能为空");
+		
+		try {
+			MaterialCmDto rltMaterial = findMaterialCm(materialCmDto);
+			
+			//删除个人素材
+			DelMaterial delMaterial = new DelMaterial();
+			delMaterial.setCode(rltMaterial.getCode());
+			cmMaterialService.delMaterial(delMaterial);
+			
+			
+			//删除关连的个人素材
+			delMaterial(materialCmDto);
+			
+			// 减少类型总数
+			materialTypeService.decrementTypeCountByPrimaryKey(rltMaterial.getMaterialTypeCode(), 1);
+						
+			logger.debug("delMaterial(MaterialCmDto materialCmDto)={}) - end"); 
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	@Override
+	public void delCommonMaterial(MaterialCmDto materialCmDto) throws TsfaServiceException {
+		logger.debug("delMaterial(MaterialCmDto materialCmDto)={}) - start", materialCmDto);
+		
+		AssertUtils.notNull(materialCmDto);
+		AssertUtils.notAllNull(materialCmDto.getCode(), "Code不能为空");
+		
+		try {
 			
 			MaterialCmDto rltMaterial = findMaterialCm(materialCmDto);
 			
-			DelMaterial delMaterial = new DelMaterial();
-			delMaterial.setCode(rltMaterial.getCmMaterialCode());
-			cmMaterialService.delMaterial(delMaterial);
-			
+			//删除公共素材
 			DelMaterialCommen delMaterialCommen = new DelMaterialCommen();
 			delMaterialCommen.setCode(rltMaterial.getCmMaterialCode());
 			materialCommenService.delMaterialCommen(delMaterialCommen);
 			
-			materialCmDao.deleteByPrimaryKey(rltMaterial.getCode());
+			//清除卖家素材关联的精选素材
+			FindMaterialCmPage findMaterialCmPage = new FindMaterialCmPage();
+			MaterialCmDto findMaterialCmPageParam = new MaterialCmDto();
+			findMaterialCmPageParam.setChoicenessCode(rltMaterial.getCode());
+			findMaterialCmPage.setParam(findMaterialCmPageParam);
+			List<MaterialCmDto> materialCmDtos = findMaterialCms(findMaterialCmPage);
+			if(materialCmDtos.size()>0) {
+				MaterialCm target = new MaterialCm();
+				BeanUtils.copyProperties(materialCmDtos.get(0), target);
+				target.setChoicenessCode(null);
+				materialCmDao.updateByPrimaryKey(target);
+			}
+			
+			//删除关连的公共素材
+			delMaterial(materialCmDto);
+			
+			// 减少类型总数
+			materialTypeService.decrementTypeCountByPrimaryKey(rltMaterial.getMaterialTypeCode(), 1);
+			
 			logger.debug("delMaterial(MaterialCmDto materialCmDto)={}) - end"); 
 		} catch (Exception e) {
 			
@@ -365,13 +457,13 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 	}
 
 	@Override
-	public void addMaterialSale(MateriaEcmDto materialReturnDto) {
-		logger.debug(" addMaterialEs(MaterialReturnDto materialReturnDto) ={}) - start", materialReturnDto); 
+	public void addMaterialSale(MateriaEcmDto addMateriaEcmDto) {
+		logger.debug(" addMaterialEs(MaterialReturnDto materialReturnDto) ={}) - start", addMateriaEcmDto); 
 		
-		AssertUtils.notNull(materialReturnDto);
-		AssertUtils.notAllNull(materialReturnDto.getMerchantNo(), "商户Code不能为空");
-		AssertUtils.notAllNull(materialReturnDto.getShopCode(), "商店Code不能为空");
-		AssertUtils.notAllNull(materialReturnDto.getMemberNoGm(), "卖家Code不能为空");
+		AssertUtils.notNull(addMateriaEcmDto);
+		AssertUtils.notAllNull(addMateriaEcmDto.getMerchantCode(), "商户Code不能为空");
+		AssertUtils.notAllNull(addMateriaEcmDto.getShopCode(), "商店Code不能为空");
+		AssertUtils.notAllNull(addMateriaEcmDto.getMemberNoGm(), "卖家Code不能为空");
 //		AssertUtils.notAllNull(materialReturnDto.getProductCode(), "商品Code不能为空");
 		
 		
@@ -379,54 +471,43 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		
 		//素材添加
 		AddMaterial addMaterial = new AddMaterial();
-		addMaterial.setTitle(materialReturnDto.getTitle());
+		addMaterial.setTitle(addMateriaEcmDto.getTitle());
 //		addMaterial.setBrief(materialReturnDto.getBrief());
-		addMaterial.setContent(materialReturnDto.getContent());
-		addMaterial.setImgAddr(materialReturnDto.getImgAddr());
-		addMaterial.setMemberNameGm(materialReturnDto.getMemberNameGm());
-		addMaterial.setMemberNoGm(materialReturnDto.getMemberNoGm());
-		addMaterial.setMerchantNo(materialReturnDto.getMerchantNo());
+		addMaterial.setContent(addMateriaEcmDto.getContent());
+		addMaterial.setImgAddr(addMateriaEcmDto.getImgAddr());
+		addMaterial.setMemberNameGm(addMateriaEcmDto.getMemberNameGm());
+		addMaterial.setMemberNoGm(addMateriaEcmDto.getMemberNoGm());
+		addMaterial.setMerchantNo(addMateriaEcmDto.getMerchantNo());
 		
 		//如果有分类类型
-		if(StringUtils.isNotEmpty(materialReturnDto.getMaterialTypeCode())) {
+		if(StringUtils.isNotEmpty(addMateriaEcmDto.getMaterialTypeCode())) {
 			
 			FindMaterialType findMaterialType = new FindMaterialType();
-			findMaterialType.setCode(materialReturnDto.getMaterialTypeCode());
+			findMaterialType.setCode(addMateriaEcmDto.getMaterialTypeCode());
 			FindMaterialTypeReturn findMaterialTypeReturn = materialTypeService.findMaterialType(findMaterialType);
 			addMaterial.setMaterialTypeCode(findMaterialTypeReturn.getCode());
 			addMaterial.setMaterialTypeName(findMaterialTypeReturn.getTypeName());
-		} else {
-			
-			//默认分类类型
-			FindMaterialTypePage findMaterialTypePage = new FindMaterialTypePage();
-			findMaterialTypePage.setMerchantNo(materialReturnDto.getMerchantNo());
-			findMaterialTypePage.setMemberNoGm(materialReturnDto.getMemberNoGm());
-			List<FindMaterialTypePageReturn> materialTypePageReturns = materialTypeService.findMaterialTypes(findMaterialTypePage);
-			if(materialTypePageReturns.size()>0) {
-				addMaterial.setMaterialTypeCode(materialTypePageReturns.get(0).getCode());
-				addMaterial.setMaterialTypeName(materialTypePageReturns.get(0).getTypeName());
-			}
-		}
-		
+		} 
+
 		
 		//导购信息
-//		addMaterial.setMemberNoGm(materialReturnDto.getEcGuildNo());
-//		addMaterial.setMemberNameGm(materialReturnDto.getMemberNameGm());
-//		addMaterial.setMerchantNo(materialReturnDto.getMerchantNo());
-		
+		addMaterial.setMemberNoGm(addMateriaEcmDto.getMemberNoGm());
+		addMaterial.setMemberNameGm(addMateriaEcmDto.getMemberNameGm());
+		addMaterial.setMerchantNo(addMateriaEcmDto.getMerchantNo());
 		AddMaterialReturn addMatralReturn = cmMaterialService.addMaterialEc(addMaterial);
 		
 		//插入关联表
 		MaterialCmDto materialCmDto = new MaterialCmDto();
 		materialCmDto.setCmMaterialCode(addMatralReturn.getCode());
-		materialCmDto.setProductCode(materialReturnDto.getProductCode());
-		materialCmDto.setProductName(materialReturnDto.getProductName());
-		materialCmDto.setType(materialReturnDto.getType());
-		materialCmDto.setShopCode(materialReturnDto.getShopCode());
-		materialCmDto.setMerchantCode(materialReturnDto.getMerchantNo());
+		materialCmDto.setProductCode(addMateriaEcmDto.getProductCode());
+		materialCmDto.setProductName(addMateriaEcmDto.getProductName());
+		materialCmDto.setType(addMateriaEcmDto.getType());
+		materialCmDto.setShopCode(addMateriaEcmDto.getShopCode());
+		materialCmDto.setMerchantCode(addMateriaEcmDto.getMerchantCode());
 		materialCmDto.setCreateTime(new Date());
-		materialCmDto.setMaterialTypeCode(materialReturnDto.getMaterialTypeCode());
+		materialCmDto.setMaterialTypeCode(addMaterial.getMaterialTypeCode());
 		addMaterialCm(materialCmDto);
+		
 		logger.debug(" addMaterialEs(MaterialReturnDto materialReturnDto) ={}) - end"); 
 	}
 	
@@ -454,69 +535,12 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		materialCmDto.setCmMaterialCode(commonReturn.getCode());
 		materialCmDto.setType(MaterialCmType.PUBLIC.getValue());
 		materialCmDto.setCreateTime(new Date());
-		materialCmDto.setMerchantCode(materialReturnDto.getMerchantNo());
+		materialCmDto.setMerchantCode(materialReturnDto.getMerchantCode());
 		materialCmDto.setProductCode(materialReturnDto.getProductCode());
 		materialCmDto.setProductName(materialReturnDto.getProductName());
+		materialCmDto.setMaterialTypeCode(addMaterial.getMaterialTypeCode());
 		addMaterialCm(materialCmDto);
 		logger.debug(" addMaterialPub(MaterialReturnDto materialReturnDto) ={}) - end"); 
-	}
-
-
-	@Override
-	public MateriaEcmDto findMaterialCommen(FindMaterialEcmPage findMaterialReturnPage) {
-		logger.debug(" findMaterialCommen(FindMaterialReturnPage findMaterialReturnPage) ={}) - start", findMaterialReturnPage); 
-		AssertUtils.notNull(findMaterialReturnPage);
-		AssertUtils.notAllNull(findMaterialReturnPage.getCmMaterialCode(), "公共素材code不能为空");
-		AssertUtils.notAllNull(findMaterialReturnPage.getMaterialCmCode(), "电商关连code不能为空");
-		
-		FindMaterialCommen findMaterialCommen = new FindMaterialCommen();
-		findMaterialCommen.setCode(findMaterialReturnPage.getCmMaterialCode());
-		FindMaterialCommenReturn findMaterialCommenReturn = materialCommenService.findMaterialCommen(findMaterialCommen);
-		MateriaEcmDto commonTarget = new MateriaEcmDto(); 
-		BeanUtils.copyProperties(findMaterialCommenReturn, commonTarget);
-		
-		MaterialCmDto paramCmDto = new MaterialCmDto();
-		paramCmDto.setCode(findMaterialReturnPage.getMaterialCmCode());
-		MaterialCmDto rltMaterialCm = findMaterialCm(paramCmDto);
-		commonTarget.setProductCode(rltMaterialCm.getProductCode());
-		commonTarget.setProductName(rltMaterialCm.getProductName());
-		commonTarget.setMaterialCmCode(rltMaterialCm.getCode());
-		commonTarget.setCmMaterialCode(rltMaterialCm.getCmMaterialCode());
-		logger.debug(" findMaterialCommen(FindMaterialReturnPage findMaterialReturnPage) ={}) - end");
-		return commonTarget;
-	}
-
-	@Override
-	public MateriaEcmDto findMaterialSale(FindMaterialEcmPage findMaterialReturnPage) {
-		logger.debug(" findMaterialSale(FindMaterialReturnPage findMaterialReturnPage) ={}) - start", findMaterialReturnPage); 
-		AssertUtils.notNull(findMaterialReturnPage);
-		AssertUtils.notAllNull(findMaterialReturnPage.getCmMaterialCode(), "素材code不能为空");
-		AssertUtils.notAllNull(findMaterialReturnPage.getMaterialCmCode(), "电商关连code不能为空");
-		
-		FindMaterialPageReturn sourceMaterial = cmMaterialService .findMaterialByCode(findMaterialReturnPage.getCmMaterialCode());
-		
-		//查询关连表
-		MaterialCmDto paramMaterialCmDto = new MaterialCmDto();
-		paramMaterialCmDto.setCode(findMaterialReturnPage.getMaterialCmCode());
-		MaterialCmDto materialCmDto = findMaterialCm(paramMaterialCmDto);
-		
-		//查询素材表
-		MateriaEcmDto returnDto = new MateriaEcmDto();
-		BeanUtils.copyProperties(sourceMaterial, returnDto);
-//		returnDto.setType(MaterialCmType.SALE.getValue());
-		returnDto.setType(materialCmDto.getType());
-		returnDto.setMaterialCmCode(materialCmDto.getCmMaterialCode());
-		returnDto.setCmMaterialCode(materialCmDto.getCmMaterialCode());
-		returnDto.setCode(materialCmDto.getCode());
-		returnDto.setProductCode(materialCmDto.getProductCode());
-		returnDto.setProductName(materialCmDto.getProductName());
-		returnDto.setChoicenessCode(materialCmDto.getChoicenessCode());
-		if(StringUtils.isNotEmpty(materialCmDto.getChoicenessCode())) {
-			returnDto.setType(MaterialCmType.CHOICE.getValue());
-		}
-		returnDto.setCreateDate(materialCmDto.getCreateTime());
-		logger.debug(" findMaterialSale(FindMaterialReturnPage findMaterialReturnPage) ={}) - end");
-		return returnDto;
 	}
 
 	@Override
@@ -525,7 +549,7 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		
 		AssertUtils.notNull(materialReturnDto);
 		AssertUtils.notAllNull(materialReturnDto.getMerchantNo(), "商户code不能为空");
-		AssertUtils.notAllNull(materialReturnDto.getMaterialCmCode(), "电商素材code不能为空");
+		AssertUtils.notAllNull(materialReturnDto.getCode(), "电商素材code不能为空");
 		
 		//增加公共素材
 		AddMaterialCommen addMaterialCommen = new AddMaterialCommen();
@@ -533,23 +557,29 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		addMaterialCommen.setRespondNum(0);
 		addMaterialCommen.setShopNo(shopDto.getCode());
 		addMaterialCommen.setShopName(shopDto.getShopName());
+		addMaterialCommen.setMaterialTypeCode(null);
+		addMaterialCommen.setMaterialTypeName(null);
 		AddMaterialCommenReturn commonReturn = materialCommenService.addMaterialCommen(addMaterialCommen);
 		
 		//设置电商素材为精选
-		MaterialCmDto paramCmdto = new MaterialCmDto();
-		paramCmdto.setCode(materialReturnDto.getMaterialCmCode());
-		MaterialCmDto rltCmDto = findMaterialCm(paramCmdto);
-		rltCmDto.setChoicenessCode(commonReturn.getCode());
-		updateMaterialCm(rltCmDto);
+		MaterialCmDto updCmDto = new MaterialCmDto();
+		updCmDto.setChoicenessCode(commonReturn.getCode());
+		updCmDto.setCode(materialReturnDto.getCode());
+		updateMaterialCm(updCmDto);
 		
-		//增加关连信息
+		MaterialCmDto paramMaterialCmDto = new MaterialCmDto();
+		paramMaterialCmDto.setCode(materialReturnDto.getCode());
+		MaterialCmDto rltMaterialCmDto = findMaterialCm(paramMaterialCmDto);
+		
+		//增加公共素材关连信息
 		MaterialCmDto materialCmDto = new MaterialCmDto();
 		materialCmDto.setCmMaterialCode(commonReturn.getCode());
 		materialCmDto.setType(MaterialCmType.PUBLIC.getValue());
 		materialCmDto.setCreateTime(new Date());
-		materialCmDto.setMerchantCode(materialReturnDto.getMerchantNo());
-		materialCmDto.setProductCode(rltCmDto.getProductCode());
-		materialCmDto.setProductName(rltCmDto.getProductName());
+		materialCmDto.setMerchantCode(materialReturnDto.getMerchantCode());
+		materialCmDto.setProductCode(rltMaterialCmDto.getProductCode());
+		materialCmDto.setProductName(rltMaterialCmDto.getProductName());
+//		materialCmDto.setMaterialTypeCode(rltCmDto.getMaterialTypeCode());
 		addMaterialCm(materialCmDto);
 		
 		logger.debug(" updBiztypeForPub(MaterialEcDto materialEcDto)={}) - end");
@@ -572,8 +602,59 @@ public class MaterialCmServiceImpl implements IMaterialCmService {
 		materialCmDto.setCode(materialReturnDto.getMaterialCmCode());
 		materialCmDto.setProductCode(materialReturnDto.getProductCode());
 		materialCmDto.setProductName(materialReturnDto.getProductName());
+		materialCmDto.setMaterialTypeCode(updateMaterial.getMaterialTypeCode());
 		updateMaterialCm(materialCmDto);
 		logger.debug(" updMaterialPub(MaterialEcDto materialEcDto)={}) - end");
+	}
+
+	@Override
+	public MateriaEcmDto findMaterialEcm(MateriaEcmDto findMateriaEcmDto) {
+		logger.debug(" findMaterialEcm(MateriaEcmDto findMateriaEcmDto)={}) - start", findMateriaEcmDto);
+		AssertUtils.notNull(findMateriaEcmDto);
+		AssertUtils.notAllNull(findMateriaEcmDto.getCode(), "素材code不能为空");
+		
+		MaterialCmDto findMaterialCmDto = new MaterialCmDto();
+		findMaterialCmDto.setCode(findMateriaEcmDto.getCode());
+		MateriaEcmDto commonTarget = new MateriaEcmDto();
+		try {
+			MaterialCmDto materialCm = findMaterialCm(findMaterialCmDto);
+			if(null==materialCm) {
+				findMaterialCmDto.setCode(null);
+				findMaterialCmDto.setCmMaterialCode(findMateriaEcmDto.getCode());
+				FindMaterialCmPage findMaterialCmPage = new FindMaterialCmPage();
+				findMaterialCmPage.setParam(findMaterialCmDto);
+				List<MaterialCmDto> list = findMaterialCms(findMaterialCmPage);
+				materialCm = list.get(0);
+			}
+			
+			if(StringUtils.equal(materialCm.getType(), MaterialCmType.PUBLIC.getValue())) {
+				FindMaterialCommenPageReturn findMaterialCommenReturn = materialCommenService.findMaterialCommenByCode(materialCm.getCmMaterialCode());
+				BeanUtils.copyProperties(findMaterialCommenReturn, commonTarget);
+				
+			} else {
+				//查询素材表
+				FindMaterialPageReturn sourceMaterial = cmMaterialService .findMaterialByCode(materialCm.getCmMaterialCode());
+				BeanUtils.copyProperties(sourceMaterial, commonTarget);
+				
+			}
+			
+			commonTarget.setType(materialCm.getType());
+			commonTarget.setMaterialCmCode(materialCm.getCmMaterialCode());
+			commonTarget.setCmMaterialCode(materialCm.getCmMaterialCode());
+			commonTarget.setCode(materialCm.getCode());
+			commonTarget.setProductCode(materialCm.getProductCode());
+			commonTarget.setProductName(materialCm.getProductName());
+			commonTarget.setChoicenessCode(materialCm.getChoicenessCode());
+			commonTarget.setShopCode(materialCm.getShopCode());
+			commonTarget.setMerchantCode(materialCm.getMerchantCode());
+			commonTarget.setMaterialTypeCode(materialCm.getMaterialTypeCode());
+			
+		} catch (Exception e) {
+			logger.error("CM素材关联信息信息不存在错误", e);
+			throw new TsfaServiceException(ErrorCode.MATERIAL_CM_FIND_PAGE_ERROR, "CM素材关联信息信息不存在错误.！", e);
+		}
+		logger.debug(" findMaterialEcm(MateriaEcmDto findMateriaEcmDto)={}) - end", commonTarget);
+		return commonTarget;
 	}
 
 	

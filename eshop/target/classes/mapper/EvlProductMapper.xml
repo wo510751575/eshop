@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IEvlProductDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.EvlProduct">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="evl_info" jdbcType="VARCHAR" property="evlInfo" />
+    <result column="evl_grade" jdbcType="VARCHAR" property="evlGrade" />
+    <result column="evl_mbr_code" jdbcType="VARCHAR" property="evlMbrCode" />
+    <result column="evl_mbr_name" jdbcType="VARCHAR" property="evlMbrName" />
+    <result column="evl_mbr_img" jdbcType="VARCHAR" property="evlMbrImg" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_sku_code" jdbcType="VARCHAR" property="productSkuCode" />
+    <result column="good_cnt" jdbcType="INTEGER" property="goodCnt" />
+    <result column="imgs" jdbcType="VARCHAR" property="imgs" />
+  </resultMap>
+    
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.EvlProductDto" extends="BaseResultMap">
+  	<result column="sku_desc" jdbcType="VARCHAR" property="skuDesc" />
+  	<result column="like_status" jdbcType="VARCHAR" property="likeStatus" />
+  </resultMap> 
+  
+  <sql id="Base_Column_List">
+    t.code, t.evl_info, t.evl_grade, t.evl_mbr_code, t.evl_mbr_name, t.evl_mbr_img, t.create_time, 
+    t.product_code, t.product_name, t.product_sku_code, t.good_cnt,t.imgs
+  </sql>
+  <sql id="sku_Column_List">
+    s.sku_desc
+  </sql>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and t.code =#{param.code}]]>
+				</if>
+				<if test="param.productCode != null and param.productCode !='' ">
+					<![CDATA[and t.product_code =#{param.productCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findEvlProducts" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindEvlProductPage">
+		SELECT
+		<include refid="Base_Column_List" />,
+		<include refid="sku_Column_List" />
+		<if test="param!=null">
+			<if test="param.evlMbrCode != null and param.evlMbrCode !='' ">
+					<![CDATA[,s.sku_desc ,CASE WHEN l.`code` IS NULL THEN 0 ELSE 1 END like_status]]>
+			</if>
+		</if>
+		FROM t_evl_product t
+		join t_product_sku s on t.product_code=s.product_code AND t.product_sku_code=s.`code`
+		<if test="param!=null">
+			<if test="param.evlMbrCode != null and param.evlMbrCode !='' ">
+					<![CDATA[LEFT JOIN t_evl_like l on t.`code`=l.evl_code and l.mbr_code =#{param.evlMbrCode}]]>
+			</if>
+		</if>
+		<include refid="findPage_condition" />
+		order by t.create_time desc 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findEvlProductPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindEvlProductPage">
+		SELECT
+		<include refid="Base_Column_List" />,
+		<include refid="sku_Column_List" />
+		<if test="param!=null">
+			<if test="param.evlMbrCode != null and param.evlMbrCode !='' ">
+					<![CDATA[,s.sku_desc ,CASE WHEN l.`code` IS NULL THEN 0 ELSE 1 END like_status]]>
+			</if>
+		</if>
+		FROM t_evl_product t
+		join t_product_sku s on t.product_code=s.product_code AND t.product_sku_code=s.`code`
+		<if test="param!=null">
+			<if test="param.evlMbrCode != null and param.evlMbrCode !='' ">
+					<![CDATA[LEFT JOIN t_evl_like l on t.`code`=l.evl_code and l.mbr_code =#{param.evlMbrCode}]]>
+			</if>
+		</if>
+		<include refid="findPage_condition" />
+		order by t.create_time desc 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findEvlProductPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindEvlProductPage">
+		select count(*)
+		FROM t_evl_product t
+		join t_product_sku s on t.product_code=s.product_code AND t.product_sku_code=s.`code`
+		<if test="param!=null">
+			<if test="param.evlMbrCode != null and param.evlMbrCode !='' ">
+					<![CDATA[LEFT JOIN t_evl_like l on t.`code`=l.evl_code and l.mbr_code =#{param.evlMbrCode}]]>
+			</if>
+		</if>
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_evl_product t
+    where t.code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.EvlProduct">
+    insert into t_evl_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="evlInfo != null">
+        evl_info,
+      </if>
+      <if test="evlGrade != null">
+        evl_grade,
+      </if>
+      <if test="evlMbrCode != null">
+        evl_mbr_code,
+      </if>
+      <if test="evlMbrName != null">
+        evl_mbr_name,
+      </if>
+      <if test="evlMbrImg != null">
+        evl_mbr_img,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productSkuCode != null">
+        product_sku_code,
+      </if>
+      <if test="goodCnt != null">
+        good_cnt,
+      </if>
+      <if test="imgs != null">
+        imgs,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="evlInfo != null">
+        #{evlInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="evlGrade != null">
+        #{evlGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrCode != null">
+        #{evlMbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrName != null">
+        #{evlMbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrImg != null">
+        #{evlMbrImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuCode != null">
+        #{productSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodCnt != null">
+        #{goodCnt,jdbcType=INTEGER},
+      </if>
+       <if test="imgs != null">
+        #{imgs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.EvlProduct">
+    update t_evl_product
+    <set>
+      <if test="evlInfo != null">
+        evl_info = #{evlInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="evlGrade != null">
+        evl_grade = #{evlGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrCode != null">
+        evl_mbr_code = #{evlMbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrName != null">
+        evl_mbr_name = #{evlMbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="evlMbrImg != null">
+        evl_mbr_img = #{evlMbrImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuCode != null">
+        product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodCnt != null">
+        good_cnt = #{goodCnt,jdbcType=INTEGER},
+      </if>
+      <if test="imgs != null">
+        imgs = #{imgs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

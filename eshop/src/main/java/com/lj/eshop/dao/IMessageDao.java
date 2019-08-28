@@ -18,4 +18,6 @@ public interface IMessageDao {
    	int findMessagePageCount(FindMessagePage findMessagePage);
    	
    	List<MessageDto> findMessages(FindMessagePage findMessagePage);
+   	
+   	int updateByRecevier(Message record);
 }

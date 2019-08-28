@@ -24,7 +24,7 @@ import com.lj.business.member.service.IAgreementMerchantService;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 
@@ -37,7 +37,7 @@ import com.lj.business.member.service.IAgreementMerchantService;
  * <p>
  * 详细描述：
  * 
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 邹磊
  * 
  *         CreateDate: 2017年7月1日
@@ -62,11 +62,11 @@ public class AgreementMerchantServiceImplTest extends SpringTestCase {
 		AddAgreementMerchantDto agreementMerchant = new AddAgreementMerchantDto();
 		agreementMerchant.setCode(GUID.getPreUUID());
 		agreementMerchant.setMerchantNo(GUID.generateByUUID());
-		agreementMerchant.setAgreement("领居科技有限公司服务合同");
+		agreementMerchant.setAgreement("深圳扬恩科技有限公司服务合同");
 		agreementMerchant.setAgreementType(AgreementType.APP_SERVICE.toString());
-		agreementMerchant.setCreateId("领居科技有限公司");
+		agreementMerchant.setCreateId("深圳扬恩科技有限公司");
 		agreementMerchant.setCreateDate(new Date());
-		agreementMerchant.setUpdateId("领居科技有限公司");
+		agreementMerchant.setUpdateId("深圳扬恩科技有限公司");
 		agreementMerchant.setUpdateDate(new Date());
 		agreementMerchantService.addAgreementMerchant(agreementMerchant);
 		
@@ -88,10 +88,10 @@ public class AgreementMerchantServiceImplTest extends SpringTestCase {
 		EditAgreementMerchantDto agreementMerchant = new EditAgreementMerchantDto();
 		agreementMerchant.setCode(GUID.getPreUUID());
 		agreementMerchant.setMerchantNo(GUID.getPreUUID());
-		agreementMerchant.setAgreement("深圳领居科技有限公司服务合同 ");
-		agreementMerchant.setCreateId("深圳领居科技有限公司");
+		agreementMerchant.setAgreement("深圳深圳扬恩科技有限公司服务合同 ");
+		agreementMerchant.setCreateId("深圳深圳扬恩科技有限公司");
 		agreementMerchant.setCreateDate(new Date());
-		agreementMerchant.setUpdateId("深圳领居科技有限公司");
+		agreementMerchant.setUpdateId("深圳深圳扬恩科技有限公司");
 		agreementMerchant.setUpdateDate(new Date());
 		agreementMerchantService.editAgreementMerchant(agreementMerchant);
 	}

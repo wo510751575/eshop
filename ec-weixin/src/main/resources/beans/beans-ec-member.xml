@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	  http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<bean id="memberLoginService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>memberLoginService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IMemberLoginService</value>  
+		</property>
+    </bean>
+    
+    <bean id="agreementMerchantService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>agreementMerchantService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IAgreementMerchantService</value>  
+		</property>
+    </bean>
+    
+    <bean id="personMemberService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>personMemberService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IPersonMemberService</value>  
+		</property>
+    </bean>
+    
+     <bean id="personMemberBaseService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>personMemberBaseService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IPersonMemberBaseService</value>  
+		</property>
+    </bean>
+    
+    <bean id="pmTypeService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>pmTypeService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IPmTypeService</value>  
+		</property>
+    </bean>
+    
+    <bean id="memLineService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>memLineService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IMemLineService</value>  
+		</property>
+    </bean>
+
+	<bean id="mbrMerchantService" parent="systemParamsService">
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>merchantService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.lj.business.member.service.IMerchantService</value>
+		</property>
+	</bean> 
+    
+    <bean id="guidMemberService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>guidMemberService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IGuidMemberService</value>  
+		</property>
+    </bean>
+    
+    <bean id="managerMemberService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>managerMemberService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IManagerMemberService</value>  
+		</property>
+    </bean>
+    
+   <bean id="mbrShopService" parent="systemParamsService">   
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>shopService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IShopService</value>  
+		</property>
+    </bean> 
+    
+    <bean id="guidMemberIntegralService" parent="systemParamsService">
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>guidMemberIntegralService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IGuidMemberIntegralService</value>  
+		</property>
+    </bean>
+    
+    <bean id="guidMemberIntegralDayService" parent="systemParamsService">
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>guidMemberIntegralDayService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IGuidMemberIntegralDayService</value>  
+		</property>
+    </bean>
+    
+<!--     导购行为统计 -->
+    <bean id="guidmemberActionInfoService" parent="systemParamsService">
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>guidmemberActionInfoService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IGuidmemberActionInfoService</value>  
+		</property>
+    </bean>
+    
+    <bean id="behaviorPmService" parent="systemParamsService">	
+		<property name="systemAliasName">
+			<value>ec-ms</value>
+		</property>
+		<property name="serviceName">
+			<value>behaviorPmService</value>
+		</property>
+		<property name="serviceInterface">   
+			<value>com.lj.business.member.service.IBehaviorPmService</value>  
+		</property>
+    </bean>
+</beans> 

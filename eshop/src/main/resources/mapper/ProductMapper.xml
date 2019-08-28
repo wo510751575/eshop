@@ -122,13 +122,16 @@
 				 <foreach collection="param.flags" open="(" close=")" item="item" separator=",">#{item.code}</foreach>
   					)
   				</if>
+  				<if test="param.rankCode != null and param.rankCode !='' ">
+					<![CDATA[AND prp.rank_code = #{param.rankCode}]]>
+				</if>
 			</if>
 		</where>
 	</sql>
 	<!-- B端商品查询 -->
 	<select id="findIndexProductPage" resultMap="FindResultMap"
 		parameterType="com.lj.eshop.dto.FindProductPage">
-		<if test="shopCode!=null and shopCode!=''">
+		<!-- <if test="shopCode!=null and shopCode!=''">
 			<![CDATA[
 			SELECT p.`code`,p.product_icon,p.`name`,p.unit,s.sale_price sku_sale_price,
 			(((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) )
@@ -138,18 +141,19 @@
 			JOIN t_catalog c on p.catalog_type_code=c.`code` 
 			left JOIN t_shop_product sp on p.`code`=sp.product_code AND sp.shop_code=#{shopCode}
  			]]>
-		</if>
-		<if test="shopCode==null or shopCode==''.toString()">
+		</if> -->
+<!-- 		<if test="shopCode==null or shopCode==''.toString()"> -->
 			<![CDATA[
 			SELECT p.`code`,p.product_icon,p.`name`,p.unit,s.sale_price sku_sale_price,
-			(((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) )
-			)  sku_gap_price, s.sku_desc sku_sku_desc ,s.`code` sku_code, s.price sku_price ,p.product_key  from t_product p 
+			IF(s.sale_price-prp.rank_price < 0,0,s.sale_price-prp.rank_price) sku_gap_price,
+			 s.sku_desc sku_sku_desc ,s.`code` sku_code, s.price sku_price ,p.product_key  from t_product p 
 			JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
-			JOIN t_supply y on p.supply_code=y.`code`   
+			JOIN t_product_rank_price prp ON prp.sku_code=s.code
 			JOIN t_catalog c on p.catalog_type_code=c.`code` 
  			]]>
-		</if>
+<!-- 		</if> -->
 		 <include refid="findIndexPage_condition" />
+		 GROUP BY p.code
 		<if test="sortBy==null or sortBy==''.toString() ">
 			ORDER BY p.sale_cnt DESC,p.product_order ASC,p.view_cnt DESC,p.evl_cnt DESC,  p.create_time  desc,p.`code`
 		</if>
@@ -159,26 +163,12 @@
 		limit ${start} , ${limit}
 	</select>
 	 <!-- B端商品查询总数 -->
-	<select id="findIndexProductPageCount" resultType="int"
-		parameterType="com.lj.eshop.dto.FindProductPage">
-		select count(*)
-		<if test="shopCode!=null and shopCode!=''">
-			<![CDATA[
-			from t_product p 
-			JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
-			JOIN t_supply y on p.supply_code=y.`code`   
-			JOIN t_catalog c on p.catalog_type_code=c.`code` 
-			left JOIN t_shop_product sp on p.`code`=sp.product_code AND sp.shop_code=#{shopCode}
- 			]]>
-		</if>
-		<if test="shopCode==null or shopCode==''.toString()">
-			<![CDATA[
-				from t_product p 
-				JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
-				JOIN t_supply y on p.supply_code=y.`code`   
-				JOIN t_catalog c on p.catalog_type_code=c.`code` 
-	 		]]>
- 		</if>
+	<select id="findIndexProductPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindProductPage">
+		select count(DISTINCT p.code)
+		from t_product p 
+		JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
+		JOIN t_product_rank_price prp ON prp.sku_code=s.code
+		JOIN t_catalog c on p.catalog_type_code=c.`code` 
  		<include refid="findIndexPage_condition" />
 	</select>
 
@@ -199,13 +189,20 @@
 				<if test="param.catalogTypeCode != null and param.catalogTypeCode !='' ">
 						<![CDATA[and t.catalog_type_code =#{param.catalogTypeCode}]]>
 				</if>
-				</if>
 				<if test="param.supplyCode!= null and param.supplyCode !='' ">
 						<![CDATA[and t.supply_code =#{param.supplyCode}]]>
 				</if>
 				<if test="param.merchantCode != null and param.merchantCode !='' ">
 						<![CDATA[and t.merchant_code =#{param.merchantCode}]]>
 				</if>
+			</if>
+			
+			<if test="catalogTypeCodes != null and catalogTypeCodes.size > 0 ">
+					and catalog_type_code IN 
+					<foreach item="item" index="index" collection="catalogTypeCodes" open="(" separator="," close=")">  
+					  	#{item} 
+					 </foreach>  
+			</if>
 		</where>
 	</sql>
 	<!-- 不分页查询 -->

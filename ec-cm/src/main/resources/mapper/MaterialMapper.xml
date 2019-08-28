@@ -90,6 +90,12 @@
 	 <if test="createDate != null"> 
 		<![CDATA[and CREATE_DATE <= #{createDateEnd}]]>
 	 </if>
+	 <if test="codes != null and codes.size > 0">
+			and code IN 
+			<foreach item="item" index="index" collection="codes" open="(" separator="," close=")">  
+			  	#{item}  
+			</foreach>  
+	 </if>
       </where>
   </sql>
 
@@ -117,6 +123,13 @@
 	  FROM MATERIAL_COMMEN
 	 WHERE MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR} AND MATERIAL_TYPE_CODE = #{materialTypeCode,jdbcType=VARCHAR}
 	 ) t
+  </select>
+  
+    <!-- 查询 -->
+   <select id="findMaterials" resultMap="findMaterialPageResultMap" parameterType="com.lj.business.cm.dto.FindMaterialPage" >
+  SELECT  <include refid="Base_Column_List" />   
+  FROM material 
+ 	 <include refid="findMaterialPage_condition" />
   </select>
   
     <!-- 分页查询 -->

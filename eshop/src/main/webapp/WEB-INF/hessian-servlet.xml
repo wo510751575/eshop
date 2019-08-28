@@ -305,4 +305,16 @@
 		<property name="service" ref="materialCmServiceImpl" />
 		<property name="serviceInterface" value="com.lj.eshop.service.IMaterialCmService" />
 	</bean>
+	
+	<!-- 商品特权价服务 -->
+	<bean name="/productRankPriceService" class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="productRankPriceServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductRankPriceService" />
+	</bean>
+	
+	<!-- 商品素材服务 -->
+	<bean name="/productMaterialService" class="com.lj.base.mvc.remote.hession.spring.HessianServiceExporter">
+		<property name="service" ref="productMaterialServiceImpl" />
+		<property name="serviceInterface" value="com.lj.eshop.service.IProductMaterialService" />
+	</bean>
 </beans> 

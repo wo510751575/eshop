@@ -3,20 +3,20 @@
 <mapper namespace="com.lj.eshop.dao.IMemberRankApplyDao" >
   <resultMap id="BaseResultMap" type="com.lj.eshop.domain.MemberRankApply" >
     <id column="code" property="code" jdbcType="VARCHAR" />
-    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="member_rank_code" property="memberRankCode" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="del_flag" property="delFlag" jdbcType="CHAR" />
-    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
     <result column="member_rank_name" property="memberRankName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FindResultMap" type="com.lj.eshop.dto.MemberRankApplyDto"
 		extends="BaseResultMap"></resultMap>
 		
   <sql id="Base_Column_List" >
-    code, shop_code, member_rank_code, apply_time, approve_time, status, del_flag, shop_name, member_rank_name
+    code, member_code, member_rank_code, apply_time, approve_time, status, del_flag, member_name, member_rank_name
   </sql>
   
   <sql id="findPage_condition">
@@ -29,8 +29,8 @@
 				<if test="param.delFlag != null and param.delFlag !='' ">
 					<![CDATA[and del_flag=#{param.delFlag}]]>
 				</if>
-				<if test="param.shopCode != null and param.shopCode !='' ">
-					<![CDATA[and shop_code=#{param.shopCode}]]>
+				<if test="param.memberCode != null and param.memberCode !='' ">
+					<![CDATA[and member_code=#{param.memberCode}]]>
 				</if>
 				<if test="param.memberRankCode != null and param.memberRankCode !='' ">
 					<![CDATA[and member_rank_code=#{param.memberRankCode}]]>
@@ -38,8 +38,8 @@
 				<if test="param.status != null and param.status !='' ">
 					<![CDATA[and status=#{param.status}]]>
 				</if>
-				<if test="param.shopName != null and param.shopName !='' ">
-					<![CDATA[and shop_name like CONCAT('%',#{param.shopName},'%' )]]>
+				<if test="param.memberName != null and param.memberName !='' ">
+					<![CDATA[and member_name like CONCAT('%',#{param.memberName},'%' )]]>
 				</if>
 				<if test="param.memberRankName != null and param.memberRankName !='' ">
 					<![CDATA[and member_rank_name=#{param.memberRankName}]]>
@@ -90,12 +90,12 @@
     where code = #{code,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.lj.eshop.domain.MemberRankApply" >
-    insert into t_member_rank_apply (code, shop_code, member_rank_code, 
+    insert into t_member_rank_apply (code, member_code, member_rank_code, 
       apply_time, approve_time, status, 
-      del_flag, shop_name, member_rank_name)
-    values (#{code,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{memberRankCode,jdbcType=VARCHAR}, 
+      del_flag, member_name, member_rank_name)
+    values (#{code,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{memberRankCode,jdbcType=VARCHAR}, 
       #{applyTime,jdbcType=TIMESTAMP}, #{approveTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, 
-      #{delFlag,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, #{memberRankName,jdbcType=VARCHAR})
+      #{delFlag,jdbcType=CHAR}, #{memberName,jdbcType=VARCHAR}, #{memberRankName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.eshop.domain.MemberRankApply" >
     insert into t_member_rank_apply
@@ -103,8 +103,8 @@
       <if test="code != null" >
         code,
       </if>
-      <if test="shopCode != null" >
-        shop_code,
+      <if test="memberCode != null" >
+        member_code,
       </if>
       <if test="memberRankCode != null" >
         member_rank_code,
@@ -121,8 +121,8 @@
       <if test="delFlag != null" >
         del_flag,
       </if>
-      <if test="shopName != null" >
-        shop_name,
+      <if test="memberName != null" >
+        member_name,
       </if>
       <if test="memberRankName != null" >
         member_rank_name,
@@ -132,8 +132,8 @@
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null" >
-        #{shopCode,jdbcType=VARCHAR},
+      <if test="memberCode != null" >
+        #{memberCode,jdbcType=VARCHAR},
       </if>
       <if test="memberRankCode != null" >
         #{memberRankCode,jdbcType=VARCHAR},
@@ -150,8 +150,8 @@
       <if test="delFlag != null" >
         #{delFlag,jdbcType=CHAR},
       </if>
-      <if test="shopName != null" >
-        #{shopName,jdbcType=VARCHAR},
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
       </if>
       <if test="memberRankName != null" >
         #{memberRankName,jdbcType=VARCHAR},
@@ -161,8 +161,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MemberRankApply" >
     update t_member_rank_apply
     <set >
-      <if test="shopCode != null" >
-        shop_code = #{shopCode,jdbcType=VARCHAR},
+      <if test="memberCode != null" >
+        member_code = #{memberCode,jdbcType=VARCHAR},
       </if>
       <if test="memberRankCode != null" >
         member_rank_code = #{memberRankCode,jdbcType=VARCHAR},
@@ -179,8 +179,8 @@
       <if test="delFlag != null" >
         del_flag = #{delFlag,jdbcType=CHAR},
       </if>
-      <if test="shopName != null" >
-        shop_name = #{shopName,jdbcType=VARCHAR},
+      <if test="memberName != null" >
+        member_name = #{memberName,jdbcType=VARCHAR},
       </if>
       <if test="memberRankName != null" >
         member_rank_name = #{memberRankName,jdbcType=VARCHAR},
@@ -190,13 +190,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.eshop.domain.MemberRankApply" >
     update t_member_rank_apply
-    set shop_code = #{shopCode,jdbcType=VARCHAR},
+    set member_code = #{memberCode,jdbcType=VARCHAR},
       member_rank_code = #{memberRankCode,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
       approve_time = #{approveTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=CHAR},
       del_flag = #{delFlag,jdbcType=CHAR}
-      shop_name = #{shopName,jdbcType=VARCHAR}
+      member_name = #{memberName,jdbcType=VARCHAR}
       member_rank_name = #{memberRankName,jdbcType=VARCHAR}
     where code = #{code,jdbcType=VARCHAR}
   </update>

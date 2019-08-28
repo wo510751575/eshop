@@ -54,13 +54,13 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 		    <li><label>订单号：</label>
-		    	<input type="text" name="param.orderNo" value="${param.orderNo}" class="input-medium" maxlength="100" placeholder="订单号">
+		    	<input type="text" name="param.likeOrderNo" value="${orderRetireParam.likeOrderNo}" class="input-medium" maxlength="100" placeholder="订单号">
 			</li>
 			<li><label>审核状态：</label>
 				<select style="width: 177px;" name="param.auditStatus">
                     <option value="">全部</option>
                     <c:forEach items="${auditStatus}" var="item">
-						<option value="${item.value}"<c:if test="${item.value eq param.auditStatus}">selected="selected"</c:if>>${item.chName}</option>
+						<option value="${item.value}"<c:if test="${item.value eq orderRetireParam.auditStatus}">selected="selected"</c:if>>${item.chName}</option>
 					</c:forEach>
                 </select>
 			</li>
@@ -88,7 +88,7 @@
 		<c:forEach items="${page.list}" var="item" varStatus="number"> 
 			<tr>
 			    <td>
-			    	${item.orderNo}
+			    	<a  href="${ctx}/order/retire/view?code=${item.code}" >${item.orderNo}</a>
 				</td>
 				<td>
 			    	${item.retireNo}
@@ -118,13 +118,16 @@
 				<td>
 			    	<fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd"/>
 				</td>
-				<shiro:hasPermission name="order:retire:edit"><td nowrap>
-					<!-- 待审核 -->
-					<c:if test="${item.auditStatus eq '0'}">
-						<a href="${ctx}/order/retire/status?code=${item.code}&auditStatus=1" onclick="return confirmx('确定审核通过吗？', this.href)">审核通过</a>
-						<a href="javascript:;"  class="jjBtn" data-code="${item.code}" >审核拒绝</a>
-					</c:if>
-				</td></shiro:hasPermission>
+				<td nowrap>
+					<a  href="${ctx}/order/retire/view?code=${item.code}" >详情</a>
+					<shiro:hasPermission name="order:retire:edit">
+						<!-- 待审核 -->
+						<c:if test="${item.auditStatus eq '0'}">
+							<a href="${ctx}/order/retire/status?code=${item.code}&auditStatus=1" onclick="return confirmx('确定审核通过吗？', this.href)">审核通过</a>
+							<a href="javascript:;"  class="jjBtn" data-code="${item.code}" >审核拒绝</a>
+						</c:if>
+					</shiro:hasPermission>
+				</td>
 			</tr>
 		</c:forEach>
 		</tbody>

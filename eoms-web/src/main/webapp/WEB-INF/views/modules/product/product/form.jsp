@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="${ctxStatic}/editor/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctxStatic}/editor/init.js"></script>
 	<script src="${ctxStatic}/common/plupload.full.min.js" type="text/javascript"></script>
-		<link href="${ctxStatic}/common/select2.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
    
     </script>
@@ -85,6 +84,9 @@
 			});
 			$("#checkedFlags").html(htmls);
 		}
+		
+		
+		
 		function setProductPics(){
 			//设置图片
 			var imgInfo="";
@@ -96,8 +98,26 @@
 					imgInfo=imgInfo+$(imgJi[i]).attr('url')+",";
 				}
 			}
+			
 			$("#product_input_images").val(imgInfo);
 		}
+		
+		function setProductMaterialPics(){
+			//设置商品素材图片介绍 
+			var imgInfo="";
+			var imgJi=$("#product_material_img_bt img");
+			for(var i=0;i<imgJi.length;i++){
+				if(i==imgJi.length-1){
+					imgInfo=imgInfo+$(imgJi[i]).attr('url');
+				}else{
+					imgInfo=imgInfo+$(imgJi[i]).attr('url')+",";
+				}
+			}
+			
+			$("#product_material_images").val(imgInfo);
+			//设置商品素材图片介绍 END 
+		}
+		
 		$(document).ready(function() {
 			$("#name").focus();
 			$("#inputForm").validate({
@@ -115,7 +135,9 @@
 						}
 					}
 					$("#product_desc_images").val(descPic);
-					//设置图片介绍 END 
+					//设置图片介绍 END
+					
+					
 					
 					loading('正在提交，请稍等...');
 	                form.submit();
@@ -135,7 +157,7 @@
 	</script>
 </head>
 <body>
-<div class="container" style="height:950px;overflow:scroll;">
+<div class="container" style="height:950px;overflow-x:visible;overflow-y:scroll;">
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/product/product/">商品列表</a></li>
 		<li class="active"><a href="${ctx}/product/product/form?code=${data.code}">商品<shiro:hasPermission name="product:product:edit">${not empty data.code?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="product:product:edit">查看</shiro:lacksPermission></a></li>
@@ -164,7 +186,7 @@
 			<div class="controls">
 			      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.productIcon}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.productIcon}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.productIcon}"/>
 				       </c:if>
 				       <c:if test="${empty data.productIcon}">
 				                                  选择图片
@@ -175,7 +197,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-                <label class="control-label">商品图:</label>
+                <label class="control-label"><span class="help-inline"><font color="red">*</font> </span>商品图:</label>
                 <div class="controls">
             		<div id="product_img_bt" style="border: 1px solid #ddd;width:50%;line-height:100px;text-align:center;overflow: auto;">
                 	<c:choose>
@@ -187,7 +209,7 @@
                 			<c:forEach items="${data.imgs }" var="imgaddr">
 	                			<div class="img_info">
 	                			<span class="close-Icon"></span>
-	                			<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgaddr.img}" url="${imgaddr.img}"  height="120px" width="120px">
+	                			<img src="${fns:getUploadUrl()}${imgaddr.img}" url="${imgaddr.img}"  height="120px" width="120px">
 	                			</div>
                 			</c:forEach>
                 		</c:when>
@@ -197,7 +219,7 @@
                      <!-- <span class="help-inline">建议图片尺寸1080*1540</span> -->
                 </div>
          </div>
-		 
+         
 		<div class="control-group">
 			<label class="control-label">状态:</label>
 			<div class="controls">
@@ -241,7 +263,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">服务：</label>
+			<label class="control-label">服务:</label>
 			<div class="controls">
 				<c:choose>
 					<c:when test="${empty data}">
@@ -425,9 +447,19 @@
 				htmls+='	<input name="skus['+i+'].productSpes" class="skuProductSpes" type="hidden" value="'+e2.code+'"  style="width: 80px;"/>';
 			}
 			htmls+='	<input name="skus['+i+'].skuDesc" class="skuDesc" type="hidden" value="'+e2.name+'" />';
-			htmls+='<input name="skus['+i+'].costPrice"  class="skuCostPrice required number" maxlength="10" style="width: 80px;"/></td>';
-			htmls+='<td><input name="skus['+i+'].salePrice"  class="skuSalePrice required number" maxlength="10" style="width: 80px;"/></td>';
-			htmls+='<td><input name="skus['+i+'].price" class="skuPrice required number" maxlength="10" style="width: 80px;"/></td>';
+// 			htmls+='<input name="skus['+i+'].costPrice"  class="skuCostPrice required number" maxlength="10" style="width: 80px;"/></td>';
+			htmls+='<input name="skus['+i+'].salePrice"  class="skuSalePrice required number" maxlength="10" style="width: 80px;"/></td>';
+// 			htmls+='<td><input name="skus['+i+'].price" class="skuPrice required number" maxlength="10" style="width: 80px;"/></td>';
+
+			//特权价格
+			var memberRankDtos = jQuery.parseJSON('${memberRankDtos}');
+			$(memberRankDtos).each(function(key,value){
+				htmls+='<td>';
+				htmls+='<input type="hidden" name="skus['+i+'].rankPriceDtos['+key+'].rankCode" value="'+value.code+'"/>';
+				htmls+='<input name="skus['+i+'].rankPriceDtos['+key+'].rankPrice" class="skuPrice required number" maxlength="10" style="width: 80px;"/>';
+				htmls+='</td>';
+		    });
+
 			htmls+='<td><input name="skus['+i+'].cnt" class="skuCnt required digits" maxlength="10" style="width: 80px;"/></td>';
 			if(i==0){
 				htmls+='<td><input type="radio" checked="checked" onclick="setIsDefault(this)" class="skuIsDefault" value="0" name="skus['+i+'].isDefault" /></td>';
@@ -471,9 +503,15 @@
 		var htmls='';
 		htmls+='<tr style="font-weight: bold;">';
 		htmls+=setPriceTr(e2);
-		htmls+='<td>出厂价(￥)</td>';
+// 		htmls+='<td>出厂价(￥)</td>';
+// 		htmls+='<td>市场价(￥)</td>';
 		htmls+='<td>售价(￥)</td>';
-		htmls+='<td>市场价(￥)</td>';
+		
+		//特权价格
+		var memberRankDtos = jQuery.parseJSON('${memberRankDtos}');
+		$(memberRankDtos).each(function(key,value){
+			htmls+='<td>'+value.name+'售价(￥)</td>';
+	    });
 		htmls+='<td>库存</td>';
 		htmls+='<td>是否默认</td>';
 		htmls+='<td>操作</td>';
@@ -516,18 +554,18 @@
 	function updateSku(obj){
 			var code=$(obj).attr("code");
 			
-			var a=$("#sku_costPrice_"+code).valid();
+// 			var a=$("#sku_costPrice_"+code).valid();
 			var b=$("#sku_salePrice_"+code).valid();
-			var c=$("#sku_price_"+code).valid();
+// 			var c=$("#sku_price_"+code).valid();
 			var e=$("#sku_cnt_"+code).valid();
-			if(!(a&&b&&c&&e)){
+			if(!(b&&e)){
 				return ;
 			}
 			var param=new Object();
-			 param.code=$(obj).attr("code");
-			 param.costPrice=$("#sku_costPrice_"+code).val();
+			 param.code=code;
+// 			 param.costPrice=$("#sku_costPrice_"+code).val();
 			 param.salePrice=$("#sku_salePrice_"+code).val();
-			 param.price=$("#sku_price_"+code).val();
+// 			 param.price=$("#sku_price_"+code).val();
 			 param.cnt=$("#sku_cnt_"+code).val();
 			 param.productCode=$(obj).attr("productCode");
 			 if($("#sku_isDefault_"+code).get(0).checked){
@@ -604,9 +642,12 @@
 					       		<c:forEach items="${productRules}" var="p">
 									<td>${p.name }</td>
 					       		</c:forEach>
-					       		<td>出厂价(￥)</td>
+<!-- 					       		<td>出厂价(￥)</td> -->
 					       		<td>售价(￥)</td>
-					       		<td>市场价(￥)</td>
+<!-- 					       		<td>市场价(￥)</td> -->
+								<c:forEach items="${memberRankDtosNotJson}" var="item">
+									<td>${item.name}售价(￥)</td>
+					       		</c:forEach>
 					       		<td>库存</td>
 					       		<td>是否默认</td>
 					       		<td>操作</td>
@@ -616,9 +657,16 @@
 				       			<c:forEach items="${p.skuDesc.split(',') }" var="imgaddr">
 		                			 <td>${imgaddr }</td>
                 				</c:forEach>
-					       		<td><input id="sku_costPrice_${p.code }" name="sku_costPrice_${p.code }" value="${p.costPrice}" maxlength="10" class="required number" style="width: 80px;"/></td>
+<%-- 					       		<td><input id="sku_costPrice_${p.code }" name="sku_costPrice_${p.code }" value="${p.costPrice}" maxlength="10" class="required number" style="width: 80px;"/></td> --%>
 					       		<td><input id="sku_salePrice_${p.code }" name="sku_salePrice_${p.code }" value="${p.salePrice}" maxlength="10" class="required number"  style="width: 80px;"/></td>
-					       		<td><input id="sku_price_${p.code }" name="sku_price_${p.code }" value="${p.price}" maxlength="10" class="required number"  style="width: 80px;"/></td>
+<%-- 					       		<td><input id="sku_price_${p.code }" name="sku_price_${p.code }" value="${p.price}" maxlength="10" class="required number"  style="width: 80px;"/></td> --%>
+					       		<c:forEach items="${memberRankDtosNotJson}" var="item">
+									<c:forEach items="${p.rankPriceDtos}" var="r">
+										<c:if test="${item.code eq r.rankCode}">
+											<td><input id="sku_rank_price_${r.code }" name="sku_rank_price_${r.code }" value="${r.rankPrice}" maxlength="10" class="required number"  readonly="readonly" style="width: 80px;"/></td>											
+										</c:if>
+						       		</c:forEach>
+					       		</c:forEach>
 					       		<td><input id="sku_cnt_${p.code }" name="sku_cnt_${p.code }" value="${p.cnt}" maxlength="10" class="required digits" style="width: 80px;"/></td>
 					       		<td>
 					       			<c:if test="${p.isDefault eq '0'}">
@@ -642,7 +690,7 @@
 			<div class="controls">
 			      <div id="spe_img_bt" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.speImg}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.speImg}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.speImg}"/>
 				       </c:if>
 				       <c:if test="${empty data.productIcon}">
 				                                  选择图片
@@ -659,6 +707,30 @@
 			</div>
 		</div>   --%>
 		
+		<div class="control-group">
+                <label class="control-label">商品素材图:</label>
+                <div class="controls">
+            		<div id="product_material_img_bt" style="border: 1px solid #ddd;width:50%;line-height:100px;text-align:center;overflow: auto;">
+                	<c:choose>
+                		<c:when test="${empty data.productMaterial}">
+                			选择图片
+                		</c:when>
+                		<c:when test="${data.productMaterial!=null}">
+                			
+                			<c:forEach items="${data.productMaterial.split(',') }" var="materialImga">
+	                			<div class="img_info">
+	                			<span picType="2" class="close-Icon"></span>
+	                			<img src="${materialImga}" url="${materialImga}"  height="120px" width="120px">
+	                			</div>
+                			</c:forEach>
+                		</c:when>
+                	</c:choose>
+		    		</div>
+                     <input id="product_material_images" type="hidden" name="productMaterial" >
+                     <!-- <span class="help-inline">建议图片尺寸1080*1540</span> -->
+                </div>
+         </div>
+		
 			<div class="control-group">
                 <label class="control-label">商品介绍图:</label>
                 <div class="controls">
@@ -672,7 +744,7 @@
                 			<c:forEach items="${data.productDesc.split(',') }" var="imgaddr">
 	                			<div class="img_info">
 	                			<span picType="2" class="close-Icon"></span>
-	                			<img src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${imgaddr}" url="${imgaddr}"  height="120px" width="120px">
+	                			<img src="${fns:getUploadUrl()}${imgaddr}" url="${imgaddr}"  height="120px" width="120px">
 	                			</div>
                 			</c:forEach>
                 		</c:when>
@@ -682,6 +754,8 @@
                      <!-- <span class="help-inline">建议图片尺寸1080*1540</span> -->
                 </div>
          </div>
+         
+         
 		
 		<div class="control-group">
 			<label class="control-label">备注:</label>
@@ -755,8 +829,10 @@
 		},
 		multipart_params: {
 			fileType: 'image',
-			width:800/* ,
-			height:800 */
+			/* width:800 ,
+			height:800  */
+			width:640,
+			height:525 
 		}
 	});
 	uploaderSpeImg.init(); //初始化
@@ -776,7 +852,7 @@
 	});
 	//规格图END
 	
-//商品图	
+	 //商品图	
 	 var uploaderProductImg = new plupload.Uploader({ //实例化一个plupload上传对象
 		browse_button : 'product_img_bt',
 		url : '${ctx}/file/upload?dirName=product',
@@ -823,10 +899,59 @@
 	        });
 			
 	});//商品图
+	
+	
+	//商品素材图-start	
+	 var uploaderProductImg = new plupload.Uploader({ //实例化一个plupload上传对象
+		browse_button : 'product_material_img_bt',
+		url : '${ctx}/file/upload?dirName=product',
+		multi_selection:false,
+		auto_start : true,
+		flash_swf_url : '${ctxStatic}/common/Moxie.swf',
+		silverlight_xap_url : '${ctxStatic}/common/Moxie.xap',
+		filters: {
+		  mime_types : [ //只允许上传图片文件
+		    { title : "图片文件", extensions : "jpg,gif,png" }
+		  ],
+		  max_file_size : '10240kb',
+		  prevent_duplicates : true 
+		},
+		multipart_params: {
+			fileType: 'image',
+			width:800 ,
+			height:800 
+		}
+	});
+	uploaderProductImg.init(); //初始化
+	uploaderProductImg.bind('FilesAdded',function(uploader,files){
+		if(files.length>0){
+			uploader.start();
+		}
+	});
+	uploaderProductImg.bind('Error',function(uploader,errObject){
+		if(errObject.code!=-602){
+			showTip(errObject.message,"info");
+		}
+	});
+	uploaderProductImg.bind('FileUploaded',function(uploader,file,responseObject){
+		var response = $.parseJSON(responseObject.response);
+		var child=$("#product_material_img_bt").children();
+		var html="";
+		if(child.length>0){
+			html=$("#product_material_img_bt").html();
+		}
+		html=html+'<div class="img_info"><span picType="2" class="close-Icon" ></span><img width="120px" height="120px" src="'+uploadUrl+'/eoms'+response.url+'" url="/eoms'+response.url+'" /></div>';
+		$("#product_material_img_bt").html(html);
+		setProductMaterialPics();
+		$(".close-Icon").on("click",function(e){
+			imgClose(this,e);
+        });
+		
+	});//商品素材图-end
 	 
 	$(document).ready(function() {
 		 $(".close-Icon").on("click",function(e){
-	     	imgClose(this,e);
+			 imgClose(this,e);
 	     });
 		 
 		 $("input[name='pFlags']").each(function(i){ //勾选已经选中的标签
@@ -836,6 +961,8 @@
 		 
 	 });
 	
+		
+	
 		function imgClose(event,e){
 			$(event).parent().remove();
 			var picType=$(event).attr("picType");
@@ -843,6 +970,11 @@
 				var show=$("#product_desc_img_bt").children();
 	        	if(show.length==0){
 	        		$("#product_desc_img_bt").html("选择图片");
+	        	}
+	        	
+	        	var shows=$("#product_material_img_bt").children();
+	        	if(shows.length==0){
+	        		$("#product_material_img_bt").html("选择图片");
 	        	}
 			}else{
 				var show=$("#product_img_bt").children();
@@ -902,6 +1034,10 @@
 		        });
 				
 		});//商品图介绍图 END
+		
+		
+		
+		
 		
 		
 </script>

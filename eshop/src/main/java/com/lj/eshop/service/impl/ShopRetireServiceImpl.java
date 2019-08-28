@@ -3,7 +3,7 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.math.BigDecimal;
@@ -254,26 +254,31 @@ public class ShopRetireServiceImpl implements IShopRetireService {
 				
 				/*打款成功会员账户中增加金额*/
 				AccountDto accountDto=  accountService.findAccountByMbrCode(memberCode);
-				accountDto.setCashAmt(accountDto.getCashAmt().add(amount));
-				accountService.updateAccount(accountDto);
-				
+				BigDecimal afterAmt = accountDto.getCashAmt().add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
 				/*新增流水记录*/
 				AccWaterDto accWaterDto = new AccWaterDto();
 				accWaterDto.setStatus(AccWaterStatus.SUCCESS.getValue());
 				accWaterDto.setAccDate(new Date());
 				accWaterDto.setAccSource(AccWaterSource.DEPOSIT.getValue());
-				accWaterDto.setAccType(AccWaterAccType.MANUAL.getValue());
+				accWaterDto.setAccType(AccWaterAccType.MANUAL.getValue());//系统自动记账
 				accWaterDto.setAmt(amount);
 				accWaterDto.setAccNo(accountDto.getAccNo());
 				accWaterDto.setAccCode(accountDto.getCode());
-//				accWaterDto.setBeforeAmt(beforeAmt);
-//				accWaterDto.setAfterAmt(accountDto.getCashAmt());
+				accWaterDto.setBeforeAmt(accountDto.getCashAmt());//补充退前的金额
+				accWaterDto.setAfterAmt(afterAmt);//补充退后的金额
 				accWaterDto.setBizType(AccWaterBizType.REFUND.getValue());
 				accWaterDto.setPayType(AccWaterPayType.VIRTUAL.getValue());//平台虚户的出入账单
 				accWaterDto.setOpCode(rtShopDto.getMbrCode());
 				accWaterDto.setWaterType(AccWaterType.ADD.getValue());
 				accWaterDto.setUpdateTime(new Date());
+				accWaterDto.setTranOrderNo(rtShopRetireDto.getRetireNo());//申请编号
 				accWaterService.addAccWater(accWaterDto);
+				
+				//3.扣可用余额,增提现总额
+				AccountDto updateAcc=new AccountDto();
+				updateAcc.setCode(accountDto.getCode());
+				updateAcc.setCashAmt(afterAmt);
+				accountService.updateAccount(updateAcc);
 			}
 			shopRetireDto.setUpdateTime(new Date());
 			this.updateShopRetire(shopRetireDto);

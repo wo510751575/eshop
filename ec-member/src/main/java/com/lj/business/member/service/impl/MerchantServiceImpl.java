@@ -3,7 +3,7 @@ package com.lj.business.member.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Calendar;
@@ -27,12 +27,9 @@ import com.lj.base.exception.TsfaServiceException;
 import com.lj.business.cf.dto.comTaskChoose.AddComTaskChooseDto;
 import com.lj.business.cf.dto.comTaskList.AddComTaskListDto;
 import com.lj.business.cf.dto.comTaskList.FindComTaskList;
-import com.lj.business.cf.dto.comTaskList.FindComTaskListPageDto;
 import com.lj.business.cf.dto.comTaskList.FindComTaskListReturn;
 import com.lj.business.cf.dto.taskSetShop.AddTaskSetShop;
-import com.lj.business.cf.dto.workTaskChoose.AddWorkTaskChooseDto;
 import com.lj.business.cf.dto.workTaskList.FindWorkTaskList;
-import com.lj.business.cf.dto.workTaskList.FindWorkTaskListPageReturn;
 import com.lj.business.cf.dto.workTaskList.FindWorkTaskListReturn;
 import com.lj.business.cf.emus.ComTaskType;
 import com.lj.business.cf.emus.ShopTaskType;
@@ -67,6 +64,7 @@ import com.lj.business.member.emus.DimensionStType;
 import com.lj.business.member.emus.IntegralType;
 import com.lj.business.member.emus.MemberStatus;
 import com.lj.business.member.emus.MemberType;
+import com.lj.business.member.emus.PmTypeDim;
 import com.lj.business.member.emus.PmTypeType;
 import com.lj.business.member.emus.ShopStatus;
 import com.lj.business.member.service.IIntegralSetService;
@@ -171,7 +169,7 @@ public class MerchantServiceImpl implements IMerchantService {
 				initTextInfo(merchant);
 
 				logger.debug("客户分类表（基础表）");
-				initPmType(merchant);
+				initPmType(merchant.getMerchantNo());
 				
 				logger.debug("积分设置");
 				initIntegralSet(merchant);
@@ -273,44 +271,32 @@ public class MerchantServiceImpl implements IMerchantService {
 		}
 	}
 
-	private void initPmType(Merchant merchant) {
+	private void initPmType(String  merchantNo) {
 		try {
 			PmTypeType pmTypeAr [] = PmTypeType.values();
 			for (PmTypeType pmTypeType : pmTypeAr) {
 				AddPmType addPmType = new AddPmType();
 				//add数据录入
-				addPmType.setMerchantNo(merchant.getMerchantNo());
+				addPmType.setMerchantNo(merchantNo);
 				addPmType.setMemberNo(null);
 				addPmType.setMemberName(null);
 				addPmType.setTypeName(pmTypeType.getName());
 				addPmType.setPmTypeType(pmTypeType.toString());
-
-				if(pmTypeType.equals(PmTypeType.URGENCY)){
-					addPmType.setFreValue("0");
+				addPmType.setFreValue("0");
+				if(pmTypeType.equals(PmTypeType.MY)){
 					addPmType.setSeq(10);
-				}else if(pmTypeType.equals(PmTypeType.REPEAT)){
+				}else if(pmTypeType.equals(PmTypeType.DIAMONDS)){
 					addPmType.setFreValue("0");
 					addPmType.setSeq(20);
-				}else if(pmTypeType.equals(PmTypeType.UNGROUP)){
+				}else if(pmTypeType.equals(PmTypeType.GOLD)){
 					addPmType.setFreValue("0");
 					addPmType.setSeq(30);
-				}else if(pmTypeType.equals(PmTypeType.INTENTION)){
+				}else if(pmTypeType.equals(PmTypeType.SILVER)){
 					addPmType.setFreValue("0");
 					addPmType.setSeq(40);
-				}else if(pmTypeType.equals(PmTypeType.INTENTION_N)){
-					addPmType.setFreValue("0");
-					addPmType.setSeq(50);
-				}else if(pmTypeType.equals(PmTypeType.OTHER)){
-					addPmType.setFreValue("0");
-					addPmType.setSeq(60);
-				}else if(pmTypeType.equals(PmTypeType.SUCCESS)){
-					addPmType.setFreValue("0");
-					addPmType.setSeq(70);
-				}else if(pmTypeType.equals(PmTypeType.GIVE_UP)){
-					addPmType.setFreValue("0");
-					addPmType.setSeq(80);
 				}
 				addPmType.setStatus("Y");
+				addPmType.setPmTypeDim(PmTypeDim.MERCHANT.toString());
 				addPmType.setCreateId(null);
 				addPmType.setRemark(null);
 				addPmType.setRemark2(null);
@@ -770,6 +756,9 @@ public class MerchantServiceImpl implements IMerchantService {
 		
 		managerMemberDao.insertSelective(addManagerMember);
 	
+		
+		logger.debug("客户分类表（基础表）");
+		initPmType(addMerchant.getMerchantNo());
 		
 	}
 	

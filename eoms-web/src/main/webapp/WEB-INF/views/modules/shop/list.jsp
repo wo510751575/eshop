@@ -30,7 +30,7 @@
 			$(".amtbtn").click(function(){
 				 var code=$(this).attr("data-code");
 				 var retireNo = $(this).attr("mimeCode");
-				 promptx("请输入绑定设备型号", "绑定设备：",function(){
+				 promptx("请输入绑定设备型号", "绑定设备",function(){
 					 debugger;
 			    	  var txt=top.$("#txt").val();
 			    	  confirmx("确认要变更绑定设备号吗", "${ctx}/shop/bindDevice?code="+code+"&mimeCode="+txt);
@@ -39,7 +39,7 @@
 			
 			$(".unApprove").click(function(){
 				 var code=$(this).attr("data-code");
-				 promptx("请输入审核拒绝原因", "审核拒绝：",function(){
+				 promptx("请输入审核拒绝原因", "审核拒绝",function(){
 					 debugger;
 			    	  var txt=top.$("#txt").val();
 			    	  confirmx("确认要审核拒绝吗?", "${ctx}/shop/status?code="+code+"&status=3&closeReason="+txt);
@@ -74,11 +74,23 @@
     padding-top: 0px;
 }
 .img-small {
-	width: 30px;
-	height: 30px;
+}
+.img-tx{
+	 display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 40px;
+    height: 40px; 
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
 }
 .lafen-group {
-    position: relative;
+    position: relative; 
 }
 .lafen-group .img-big {
     position: absolute;
@@ -92,13 +104,13 @@
     width: 130px;
     height: 130px;
 }
-.lafen-group .img-small:hover + .img-big {
+
+.lafen-group .img-tx:hover + .img-big {
     transform: scale(1, 1);
     opacity: 1;
 }
 .lafen-group .img-big img {
     width: 130px;
-    height: 130px;
 }
 </style>
 </head>
@@ -140,8 +152,8 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>店铺图片</th>
 				<th>店铺名称</th>
+				<th>店铺头像</th>
 				<th>所在省市区</th>
 				<th>店铺状态</th>
 				<th>店铺等级</th>
@@ -153,16 +165,31 @@
 		<tbody id="infolist">
 		<c:forEach items="${page.list}" var="item" varStatus="number"> 
 			<tr>
+				<%--<td>
+					<a  href="javascript:;" class="view_btn" data-code="${item.code}" >${item.shopName}</a>
+				</td>--%>
+				<td title="${item.shopName}"><a class="view_btn" data-code="${item.code}">${item.shopName}</a></td>
 				<td>
 			    	<div class="lafen-group">
-			    	<img class="img-small" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.img}" alt="">
-			    	<div class="img-big">
-			    		<img  src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${item.img}" alt="">
+			    	<c:choose>
+			    		<c:when test="${fn:startsWith(item.img, 'http')}">
+   							<div class="img-tx">
+   							<img class="img-small" src="${item.img}" alt="">
+   							</div>
+			    			<div class="img-big">
+			    				<img  src="${item.img }" alt="">
+			    			</div>
+						</c:when>
+						<c:otherwise>
+							<div class="img-tx">
+							<img class="img-small" src="${fns:getUploadUrl()}${item.img}" alt="">
+			    			</div>
+			    			<div class="img-big">
+			    				<img  src="${fns:getUploadUrl()}${item.img}" alt="">
+			    			</div>
+						</c:otherwise>
+			    	</c:choose>
 			    	</div>
-			    	</div>
-				</td>
-			    <td>
-					<a  href="javascript:;" class="view_btn" data-code="${item.code}" >${item.shopName}</a>
 				</td>
 				<td>
 					${fns:getAreaName(item.shopProvide)}${fns:getAreaName(item.shopCity)}${fns:getAreaName(item.shopArea)}

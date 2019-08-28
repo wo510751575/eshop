@@ -18,28 +18,46 @@
     <result column="order_no" jdbcType="INTEGER" property="orderNo" />
   </resultMap>
   <sql id="Base_Column_List">
-    code, cnt, product_code, product_spes, sku_no, del_flag, cost_price, sale_price, 
-    org_price, gap_price, price, is_default, sku_desc,order_no
+    ps.code, ps.cnt, ps.product_code, ps.product_spes, ps.sku_no, ps.del_flag, ps.cost_price, ps.sale_price, 
+    ps.org_price, ps.gap_price, ps.price, ps.is_default, ps.sku_desc,ps.order_no
   </sql>
 
-	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductSkuDto"
-		extends="BaseResultMap"></resultMap>
+
+	<sql id="prp_Column_List">
+	    prp.code prp_code, prp.product_code prp_product_code, prp.rank_code prp_rank_code, prp.sku_code prp_sku_code, prp.rank_price prp_rank_price
+	  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.ProductSkuDto" extends="BaseResultMap">
+	</resultMap>
+	
+	<resultMap id="JoinResultMap" type="com.lj.eshop.dto.ProductSkuDto"	extends="FindResultMap">
+		<collection property="rankPriceDtos"  ofType="com.lj.eshop.dto.ProductRankPriceDto"   resultMap="ProductRankPriceMap"/>
+	</resultMap>
+	
+	<resultMap id="ProductRankPriceMap" type="com.lj.eshop.dto.ProductRankPriceDto">
+    <id column="prp_code" jdbcType="VARCHAR" property="code" />
+    <result column="prp_product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="prp_rank_code" jdbcType="VARCHAR" property="rankCode" />
+    <result column="prp_sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="prp_rank_price" jdbcType="DECIMAL" property="rankPrice" />
+  </resultMap>
+  
+	
 	<sql id="findPage_condition">
 		<where>
 			<if test="param!=null">
 				<!-- 查询条件根据业务需求自由添加 -->
 				<if test="param.code != null and param.code !='' ">
-					<![CDATA[and code =#{param.code}]]>
+					<![CDATA[and ps.code =#{param.code}]]>
 				</if>
 				<if test="param.productCode != null and param.productCode !='' ">
-					<![CDATA[and product_code =#{param.productCode}]]>
+					<![CDATA[and ps.product_code =#{param.productCode}]]>
 				</if>
 				<if test="param.delFlag != null and param.delFlag !='' ">
-					<![CDATA[and del_flag =#{param.delFlag}]]>
+					<![CDATA[and ps.del_flag =#{param.delFlag}]]>
 				</if>
 			</if>
 			<if test="inCodes != null and inCodes.size > 0">
-				and code IN 
+				and ps.code IN 
 				<foreach item="item" index="index" collection="inCodes" open="(" separator="," close=")">  
 				  	#{item}  
 				 </foreach>  
@@ -47,11 +65,13 @@
 		</where>
 	</sql>
 	<!-- 不分页查询 -->
-	<select id="findProductSkus" resultMap="FindResultMap"
+	<select id="findProductSkus" resultMap="JoinResultMap"
 		parameterType="com.lj.eshop.dto.FindProductSkuPage">
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM t_product_sku
+		,<include refid="prp_Column_List" />
+		FROM t_product_sku ps
+		LEFT JOIN t_product_rank_price prp ON ps.code = prp.sku_code
 		<include refid="findPage_condition" />
 		order by order_no
 	</select>
@@ -60,7 +80,7 @@
 		parameterType="com.lj.eshop.dto.FindProductSkuPage">
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM t_product_sku
+		FROM t_product_sku ps
 		<include refid="findPage_condition" />
 		order by order_no
 		limit ${start} , ${limit}
@@ -73,11 +93,13 @@
 		<include refid="findPage_condition" />
 	</select>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="JoinResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_product_sku
-    where code = #{code,jdbcType=VARCHAR}
+    ,<include refid="prp_Column_List" />
+	FROM t_product_sku ps
+	LEFT JOIN t_product_rank_price prp ON ps.code = prp.sku_code
+    where ps.code = #{code,jdbcType=VARCHAR}
   </select>
   <insert id="insertSelective" parameterType="com.lj.eshop.domain.ProductSku">
     insert into t_product_sku
@@ -281,12 +303,13 @@
 		parameterType="com.lj.eshop.dto.FindProductSkuPage">
 		SELECT s.code,s.cnt,s.product_spes,s.sku_no,s.sale_price,
 		<if test="from!=null and from =='b'.toString()">
-		( ((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) ) )  gap_price ,
+			<![CDATA[
+				IF(s.sale_price-prp.rank_price < 0,0,s.sale_price-prp.rank_price) gap_price,
+			]]>
 		</if>
-		<![CDATA[ 
 		s.price,s.is_default,s.sku_desc,s.order_no 
-		from t_product_sku s ,t_product p ,t_supply y 
-		where s.product_code=p.code and p.supply_code=y.`code` ]]>
+		from t_product_sku s ,t_product p ,t_product_rank_price prp
+		where s.product_code=p.code and prp.sku_code=s.code
 			<if test="param!=null">
 				<!-- 查询条件根据业务需求自由添加 -->
 				<if test="param.code != null and param.code !='' ">
@@ -297,6 +320,9 @@
 				</if>
 				<if test="param.delFlag != null and param.delFlag !='' ">
 					<![CDATA[and s.del_flag =#{param.delFlag}]]>
+				</if>
+				<if test="param.rankCode != null and param.rankCode !='' ">
+					<![CDATA[AND prp.rank_code = #{param.rankCode}]]>
 				</if>
 			</if>
 		order by s.order_no

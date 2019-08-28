@@ -14,7 +14,7 @@ import com.lj.business.cm.dto.FindBomPageDto;
  * <p>
  * 详细描述：产品表接口类
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 邹磊
  *   
  * CreateDate: 2017年6月30日

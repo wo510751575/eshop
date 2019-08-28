@@ -34,7 +34,7 @@ import com.lj.eshop.eis.redis.RedisClient;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月2日
@@ -58,8 +58,9 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 //			}
 			return callback.call(jedis, args);
 		} catch (JedisConnectionException e) {
-			if (jedis != null)
+			if (jedis != null){
 				returnBrokeRedis(jedis);
+			}
 			jedis = getJedis();
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
@@ -82,6 +83,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String get(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -93,6 +95,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String type(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -104,6 +107,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long append(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -116,6 +120,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String set(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -129,6 +134,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.List<java.lang.String> sort(java.lang.String arg0,
 			redis.clients.jedis.SortingParams arg1) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -142,6 +148,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> sort(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -154,6 +161,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Boolean exists(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -166,6 +174,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long lrem(java.lang.String arg0, long arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -179,6 +188,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long persist(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -190,6 +200,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long expire(java.lang.String arg0, int arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				int arg1 = (Integer) parms[1];
@@ -202,6 +213,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long expireAt(java.lang.String arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -214,6 +226,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long ttl(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -226,6 +239,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Boolean setbit(java.lang.String arg0, long arg1,
 			boolean arg2) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -240,6 +254,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Boolean setbit(java.lang.String arg0, long arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -253,6 +268,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Boolean getbit(java.lang.String arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -266,6 +282,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long setrange(java.lang.String arg0, long arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -279,6 +296,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String getrange(java.lang.String arg0, long arg1, long arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -292,6 +310,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String getSet(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -304,6 +323,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long setnx(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -317,6 +337,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.String setex(java.lang.String arg0, int arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				int arg1 = (Integer) parms[1];
@@ -330,6 +351,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long decrBy(java.lang.String arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -342,6 +364,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long decr(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -353,6 +376,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long incrBy(java.lang.String arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -365,6 +389,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long incr(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -376,6 +401,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String substr(java.lang.String arg0, int arg1, int arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				int arg1 = (Integer) parms[1];
@@ -390,6 +416,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long hset(java.lang.String arg0, java.lang.String arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -403,6 +430,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String hget(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -416,6 +444,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long hsetnx(java.lang.String arg0, java.lang.String arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -431,6 +460,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.util.Map<java.lang.String, java.lang.String> arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
 			@SuppressWarnings("unchecked")
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.util.Map<java.lang.String, java.lang.String> arg1 = (java.util.Map<java.lang.String, java.lang.String>) parms[1];
@@ -444,6 +474,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.List<java.lang.String> hmget(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -458,6 +489,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long hincrBy(java.lang.String arg0, java.lang.String arg1,
 			long arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -472,6 +504,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Boolean hexists(java.lang.String arg0,
 			java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -484,6 +517,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long hdel(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -496,6 +530,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long hlen(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -507,6 +542,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> hkeys(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -519,6 +555,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> hvals(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -533,6 +570,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0) {
 		return execute(
 				new RedisCallback<java.util.Map<java.lang.String, java.lang.String>>() {
+					@Override
 					public java.util.Map<java.lang.String, java.lang.String> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -545,6 +583,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long rpush(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -557,6 +596,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long lpush(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -569,6 +609,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long llen(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -581,6 +622,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.List<java.lang.String> lrange(java.lang.String arg0,
 			long arg1, long arg2) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -595,6 +637,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String ltrim(java.lang.String arg0, long arg1, long arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -608,6 +651,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String lindex(java.lang.String arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -621,6 +665,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.String lset(java.lang.String arg0, long arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -636,6 +681,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, long arg1, long arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -652,6 +698,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, double arg1, double arg2, int arg3, int arg4) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -671,6 +718,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1, java.lang.String arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -687,6 +735,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, double arg1, double arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -704,6 +753,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg2, int arg3, int arg4) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -724,6 +774,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg2, int arg3, int arg4) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -743,6 +794,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, double arg1, double arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -760,6 +812,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1, java.lang.String arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -777,6 +830,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, double arg1, double arg2, int arg3, int arg4) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -794,6 +848,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String lpop(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -805,6 +860,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String rpop(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -816,6 +872,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long sadd(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -828,6 +885,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> smembers(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -840,6 +898,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long srem(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -852,6 +911,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String spop(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -863,6 +923,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long scard(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -875,6 +936,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Boolean sismember(java.lang.String arg0,
 			java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Boolean>() {
+			@Override
 			public java.lang.Boolean call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -887,6 +949,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String srandmember(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -898,6 +961,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long strlen(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -911,6 +975,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.util.Map<java.lang.String, java.lang.Double> arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
 			@SuppressWarnings("unchecked")
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.util.Map<java.lang.String, java.lang.Double> arg1 = (java.util.Map<java.lang.String, java.lang.Double>) parms[1];
@@ -924,6 +989,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zadd(java.lang.String arg0, double arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				double arg1 = (Double) parms[1];
@@ -938,6 +1004,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrange(java.lang.String arg0,
 			long arg1, long arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -952,6 +1019,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long zrem(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -965,6 +1033,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Double zincrby(java.lang.String arg0, double arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Double>() {
+			@Override
 			public java.lang.Double call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				double arg1 = (Double) parms[1];
@@ -978,6 +1047,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long zrank(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -990,6 +1060,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long zrevrank(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1003,6 +1074,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrevrange(java.lang.String arg0,
 			long arg1, long arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1019,6 +1091,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, long arg1, long arg2) {
 		return execute(
 				new RedisCallback<java.util.Set<redis.clients.jedis.Tuple>>() {
+					@Override
 					public java.util.Set<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1033,6 +1106,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long zcard(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -1044,6 +1118,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Double zscore(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Double>() {
+			@Override
 			public java.lang.Double call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1056,6 +1131,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long zcount(java.lang.String arg0, double arg1, double arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				double arg1 = (Double) parms[1];
@@ -1070,6 +1146,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zcount(java.lang.String arg0, java.lang.String arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1084,6 +1161,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrangeByScore(java.lang.String arg0,
 			java.lang.String arg1, java.lang.String arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1099,6 +1177,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrangeByScore(java.lang.String arg0,
 			double arg1, double arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1114,6 +1193,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrangeByScore(java.lang.String arg0,
 			java.lang.String arg1, java.lang.String arg2, int arg3, int arg4) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1131,6 +1211,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrangeByScore(java.lang.String arg0,
 			double arg1, double arg2, int arg3, int arg4) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1148,6 +1229,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrevrangeByScore(
 			java.lang.String arg0, java.lang.String arg1, java.lang.String arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1163,6 +1245,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrevrangeByScore(
 			java.lang.String arg0, double arg1, double arg2, int arg3, int arg4) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1180,6 +1263,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.Set<java.lang.String> zrevrangeByScore(
 			java.lang.String arg0, double arg1, double arg2) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1196,6 +1280,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1,
 			java.lang.String arg2, int arg3, int arg4) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1213,6 +1298,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zremrangeByRank(java.lang.String arg0, long arg1,
 			long arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -1227,6 +1313,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zremrangeByScore(java.lang.String arg0, double arg1,
 			double arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				double arg1 = (Double) parms[1];
@@ -1241,6 +1328,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zremrangeByScore(java.lang.String arg0,
 			java.lang.String arg1, java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1256,6 +1344,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			redis.clients.jedis.BinaryClient.LIST_POSITION arg1,
 			java.lang.String arg2, java.lang.String arg3) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				redis.clients.jedis.BinaryClient.LIST_POSITION arg1 = (redis.clients.jedis.BinaryClient.LIST_POSITION) parms[1];
@@ -1270,6 +1359,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long lpushx(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1282,6 +1372,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long rpushx(java.lang.String arg0, java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1294,6 +1385,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> blpop(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1306,6 +1398,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> brpop(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1318,6 +1411,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long del(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -1329,6 +1423,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String echo(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -1340,6 +1435,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long move(java.lang.String arg0, int arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				int arg1 = (Integer) parms[1];
@@ -1352,6 +1448,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long bitcount(java.lang.String arg0, long arg1, long arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				long arg1 = (Long) parms[1];
@@ -1365,6 +1462,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long bitcount(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -1378,6 +1476,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1) {
 		return execute(
 				new RedisCallback<redis.clients.jedis.ScanResult<java.util.Map.Entry<java.lang.String, java.lang.String>>>() {
+					@Override
 					public redis.clients.jedis.ScanResult<java.util.Map.Entry<java.lang.String, java.lang.String>> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1394,6 +1493,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1) {
 		return execute(
 				new RedisCallback<redis.clients.jedis.ScanResult<java.lang.String>>() {
+					@Override
 					public redis.clients.jedis.ScanResult<java.lang.String> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1410,6 +1510,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0, java.lang.String arg1) {
 		return execute(
 				new RedisCallback<redis.clients.jedis.ScanResult<redis.clients.jedis.Tuple>>() {
+					@Override
 					public redis.clients.jedis.ScanResult<redis.clients.jedis.Tuple> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1426,6 +1527,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> keys(java.lang.String arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1439,6 +1541,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long sort(java.lang.String arg0,
 			redis.clients.jedis.SortingParams arg1, java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				redis.clients.jedis.SortingParams arg1 = (redis.clients.jedis.SortingParams) parms[1];
@@ -1452,6 +1555,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long sort(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1464,6 +1568,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String rename(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1476,6 +1581,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long del(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
 
@@ -1488,6 +1594,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.List<java.lang.String> blpop(int arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				int arg0 = (Integer) parms[0];
@@ -1501,6 +1608,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> blpop(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1514,6 +1622,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.util.List<java.lang.String> brpop(int arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				int arg0 = (Integer) parms[0];
@@ -1527,6 +1636,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> brpop(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1539,6 +1649,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.List<java.lang.String> mget(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.List<java.lang.String>>() {
+			@Override
 			public java.util.List<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1551,6 +1662,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String mset(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
 
@@ -1562,6 +1674,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long msetnx(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
 
@@ -1573,6 +1686,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long renamenx(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1586,6 +1700,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.String rpoplpush(java.lang.String arg0,
 			java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1598,6 +1713,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> sdiff(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1611,6 +1727,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long sdiffstore(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1623,6 +1740,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> sinter(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1636,6 +1754,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long sinterstore(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1649,6 +1768,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long smove(java.lang.String arg0, java.lang.String arg1,
 			java.lang.String arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1662,6 +1782,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.util.Set<java.lang.String> sunion(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.util.Set<java.lang.String>>() {
+			@Override
 			public java.util.Set<java.lang.String> call(Jedis jedis,
 					Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
@@ -1675,6 +1796,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long sunionstore(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1687,6 +1809,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String watch(java.lang.String... arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String[] arg0 = (java.lang.String[]) parms[0];
 
@@ -1698,6 +1821,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String unwatch() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.unwatch();
@@ -1709,6 +1833,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zinterstore(java.lang.String arg0,
 			redis.clients.jedis.ZParams arg1, java.lang.String... arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				redis.clients.jedis.ZParams arg1 = (redis.clients.jedis.ZParams) parms[1];
@@ -1723,6 +1848,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zinterstore(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1736,6 +1862,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zunionstore(java.lang.String arg0,
 			redis.clients.jedis.ZParams arg1, java.lang.String... arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				redis.clients.jedis.ZParams arg1 = (redis.clients.jedis.ZParams) parms[1];
@@ -1750,6 +1877,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long zunionstore(java.lang.String arg0,
 			java.lang.String... arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1763,6 +1891,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.String brpoplpush(java.lang.String arg0,
 			java.lang.String arg1, int arg2) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1776,6 +1905,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long publish(java.lang.String arg0, java.lang.String arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1789,6 +1919,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public void subscribe(redis.clients.jedis.JedisPubSub arg0,
 			java.lang.String... arg1) {
 		execute(new RedisCallback<Object>() {
+			@Override
 			public Object call(Jedis jedis, Object... parms) {
 				redis.clients.jedis.JedisPubSub arg0 = (redis.clients.jedis.JedisPubSub) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1803,6 +1934,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public void psubscribe(redis.clients.jedis.JedisPubSub arg0,
 			java.lang.String... arg1) {
 		execute(new RedisCallback<Object>() {
+			@Override
 			public Object call(Jedis jedis, Object... parms) {
 				redis.clients.jedis.JedisPubSub arg0 = (redis.clients.jedis.JedisPubSub) parms[0];
 				java.lang.String[] arg1 = (java.lang.String[]) parms[1];
@@ -1816,6 +1948,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String randomKey() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.randomKey();
@@ -1827,6 +1960,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	public java.lang.Long bitop(redis.clients.jedis.BitOP arg0,
 			java.lang.String arg1, java.lang.String... arg2) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				redis.clients.jedis.BitOP arg0 = (redis.clients.jedis.BitOP) parms[0];
 				java.lang.String arg1 = (java.lang.String) parms[1];
@@ -1842,6 +1976,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 			java.lang.String arg0) {
 		return execute(
 				new RedisCallback<redis.clients.jedis.ScanResult<java.lang.String>>() {
+					@Override
 					public redis.clients.jedis.ScanResult<java.lang.String> call(
 							Jedis jedis, Object... parms) {
 						java.lang.String arg0 = (java.lang.String) parms[0];
@@ -1856,6 +1991,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String shutdown() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.shutdown();
@@ -1866,6 +2002,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String debug(redis.clients.jedis.DebugParams arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				redis.clients.jedis.DebugParams arg0 = (redis.clients.jedis.DebugParams) parms[0];
 
@@ -1877,6 +2014,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String save() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.save();
@@ -1887,6 +2025,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String slaveof(java.lang.String arg0, int arg1) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 				int arg1 = (Integer) parms[1];
@@ -1899,6 +2038,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String slaveofNoOne() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.slaveofNoOne();
@@ -1909,6 +2049,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long getDB() {
 	  return execute(new RedisCallback<java.lang.Long>() {
+		  @Override
 	    public java.lang.Long call(Jedis jedis, Object... parms) {
 
 	      return jedis.getDB();
@@ -1919,6 +2060,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String configResetStat() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.configResetStat();
@@ -1929,6 +2071,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long waitReplicas(int arg0, long arg1) {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 				int arg0 = (Integer) parms[0];
 				long arg1 = (Long) parms[1];
@@ -1941,6 +2084,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String ping() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.ping();
@@ -1951,6 +2095,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String quit() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.quit();
@@ -1961,6 +2106,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String flushDB() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.flushDB();
@@ -1971,6 +2117,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long dbSize() {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 
 				return jedis.dbSize();
@@ -1994,6 +2141,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String flushAll() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.flushAll();
@@ -2004,6 +2152,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String auth(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -2015,6 +2164,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String bgsave() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.bgsave();
@@ -2025,6 +2175,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String bgrewriteaof() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.bgrewriteaof();
@@ -2035,6 +2186,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.Long lastsave() {
 		return execute(new RedisCallback<java.lang.Long>() {
+			@Override
 			public java.lang.Long call(Jedis jedis, Object... parms) {
 
 				return jedis.lastsave();
@@ -2045,6 +2197,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String info(java.lang.String arg0) {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 				java.lang.String arg0 = (java.lang.String) parms[0];
 
@@ -2056,6 +2209,7 @@ public abstract class RedisCommands<T extends Pool, R extends Jedis> extends Abs
 	@Override
 	public java.lang.String info() {
 		return execute(new RedisCallback<java.lang.String>() {
+			@Override
 			public java.lang.String call(Jedis jedis, Object... parms) {
 
 				return jedis.info();

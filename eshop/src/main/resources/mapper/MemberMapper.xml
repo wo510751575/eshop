@@ -20,10 +20,16 @@
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="source_from" jdbcType="CHAR" property="sourceFrom" />
     <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="open_member_date" jdbcType="TIMESTAMP" property="openMemberDate" />
+    <result column="close_member_date" jdbcType="TIMESTAMP" property="closeMemberDate" />
+    <result column="member_rank_code" jdbcType="VARCHAR" property="memberRankCode" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="member_rank_name" jdbcType="VARCHAR" property="memberRankName" />
   </resultMap>
   <sql id="Base_Column_List">
     code, name, phone, wx_no, status, type, avotor, province, city, area, my_invite, 
-    grade, create_time, creater, open_id, sex, source_from, merchant_code
+    grade, create_time, creater, open_id, sex, source_from, merchant_code,
+    open_member_date, close_member_date, member_rank_code, password
   </sql>
   <resultMap id="FindResultMap" type="com.lj.eshop.dto.MemberDto"
 		extends="BaseResultMap"></resultMap>
@@ -75,6 +81,10 @@
 				<![CDATA[and wx_no = #{eqWxNo} ]]>
 			</if>
 		</where>
+		
+		<if test="sortBy!=null ">
+			 ORDER BY ${sortBy} ${sortDir}
+		</if>
 	</sql>
 	<!-- 不分页查询 -->
 	<select id="findMembers" resultMap="FindResultMap"
@@ -83,8 +93,8 @@
 		<include refid="Base_Column_List" />
 		FROM t_member
 		<include refid="findPage_condition" />
-		order by create_time desc
 	</select>
+	
 	<!-- 分页查询 -->
 	<select id="findMemberPage" resultMap="FindResultMap"
 		parameterType="com.lj.eshop.dto.FindMemberPage">
@@ -92,7 +102,6 @@
 		<include refid="Base_Column_List" />
 		FROM t_member
 		<include refid="findPage_condition" />
-
 		limit ${start} , ${limit}
 	</select>
 	<!-- 查询总数 -->
@@ -103,9 +112,16 @@
 		<include refid="findPage_condition" />
 	</select>
   
+  
+  <select id="findMemberCodesByInvite" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT code FROM t_member
+		where my_invite =#{myInvite,jdbcType=VARCHAR}
+	</select>
+	
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
+    ,(select name from t_member_rank mr where mr.code=member_rank_code) member_rank_name
     from t_member
     where code = #{code,jdbcType=VARCHAR}
   </select>
@@ -167,6 +183,18 @@
       <if test="merchantCode != null">
         merchant_code,
       </if>
+      <if test="openMemberDate != null">
+        open_member_date,
+      </if>
+      <if test="closeMemberDate != null">
+        close_member_date,
+      </if>
+      <if test="memberRankCode != null">
+        member_rank_code,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="code != null">
@@ -223,6 +251,18 @@
       <if test="merchantCode != null">
         #{merchantCode,jdbcType=VARCHAR},
       </if>
+      <if test="openMemberDate != null">
+        #{openMemberDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeMemberDate != null">
+        #{closeMemberDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberRankCode != null">
+        #{memberRankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Member">
@@ -278,6 +318,18 @@
       </if>
       <if test="merchantCode != null">
         merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openMemberDate != null">
+        open_member_date = #{openMemberDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeMemberDate != null">
+        close_member_date = #{closeMemberDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberRankCode != null">
+        member_rank_code = #{memberRankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
       </if>
     </set>
     where code = #{code,jdbcType=VARCHAR}

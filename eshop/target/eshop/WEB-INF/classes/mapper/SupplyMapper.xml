@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.ISupplyDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Supply">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" />
+    <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="pay_type" jdbcType="CHAR" property="payType" />
+    <result column="account_days" jdbcType="VARCHAR" property="accountDays" />
+    <result column="bank_no" jdbcType="VARCHAR" property="bankNo" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="discount_off" jdbcType="VARCHAR" property="discountOff" />
+    <result column="bill_start" jdbcType="TIMESTAMP" property="billStart" />
+    <result column="addrs" jdbcType="VARCHAR" property="addrs" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="bank_acc_name" jdbcType="VARCHAR" property="bankAccName" />
+    <result column="bank_branch" jdbcType="VARCHAR" property="bankBranch" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, supply_name, supply_code, tel, email, status, fax, pay_type, account_days, 
+    bank_no, bank_name, remarks, update_time, create_time, discount_off, bill_start, 
+    addrs, merchant_code, merchant_name, bank_acc_name, bank_branch
+  </sql>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.SupplyDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.merchantCode != null and param.merchantCode !='' ">
+					<![CDATA[and merchant_code =#{param.merchantCode}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findSupplys" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindSupplyPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_supply
+		<include refid="findPage_condition" />
+		order by create_time desc 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findSupplyPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindSupplyPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_supply
+		<include refid="findPage_condition" />
+		order by create_time desc 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findSupplyPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindSupplyPage">
+		select count(*)
+		FROM t_supply
+		<include refid="findPage_condition" />
+	</select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_supply
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Supply">
+    insert into t_supply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="fax != null">
+        fax,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="accountDays != null">
+        account_days,
+      </if>
+      <if test="bankNo != null">
+        bank_no,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="discountOff != null">
+        discount_off,
+      </if>
+      <if test="billStart != null">
+        bill_start,
+      </if>
+      <if test="addrs != null">
+        addrs,
+      </if>
+      <if test="merchantCode != null">
+        merchant_code,
+      </if>
+      <if test="merchantName != null">
+        merchant_name,
+      </if>
+      <if test="bankAccName != null">
+        bank_acc_name,
+      </if>
+      <if test="bankBranch != null">
+        bank_branch,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="accountDays != null">
+        #{accountDays,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null">
+        #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountOff != null">
+        #{discountOff,jdbcType=VARCHAR},
+      </if>
+      <if test="billStart != null">
+        #{billStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addrs != null">
+        #{addrs,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccName != null">
+        #{bankAccName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null">
+        #{bankBranch,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Supply">
+    update t_supply
+    <set>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="fax != null">
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="accountDays != null">
+        account_days = #{accountDays,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null">
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountOff != null">
+        discount_off = #{discountOff,jdbcType=VARCHAR},
+      </if>
+      <if test="billStart != null">
+        bill_start = #{billStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addrs != null">
+        addrs = #{addrs,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccName != null">
+        bank_acc_name = #{bankAccName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null">
+        bank_branch = #{bankBranch,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+   
+</mapper>

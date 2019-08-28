@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IOrderRetireDetailDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.OrderRetireDetail">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <!-- <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" /> -->
+    <!-- <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" /> -->
+    <result column="cnt" jdbcType="INTEGER" property="cnt" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="retire_no" jdbcType="VARCHAR" property="retireNo" />
+    <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />
+    <result column="order_detail_code" jdbcType="VARCHAR" property="orderDetailCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, cnt, amt, retire_no, 
+    sku_no, order_detail_code
+  </sql>
+
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.OrderRetireDetailDto"
+		extends="BaseResultMap"></resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.retireNo != null and param.retireNo !='' ">
+					<![CDATA[and retire_no =#{param.retireNo}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findOrderRetireDetails" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderRetireDetailPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_order_retire_detail
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findOrderRetireDetailPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderRetireDetailPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_order_retire_detail
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findOrderRetireDetailPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindOrderRetireDetailPage">
+		select count(*)
+		FROM t_order_retire_detail
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_retire_detail
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.OrderRetireDetail">
+    insert into t_order_retire_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <!-- <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if> -->
+      <if test="cnt != null">
+        cnt,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="retireNo != null">
+        retire_no,
+      </if>
+      <if test="skuNo != null">
+        sku_no,
+      </if>
+      <if test="orderDetailCode != null">
+        order_detail_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <!-- <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if> -->
+      <if test="cnt != null">
+        #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="retireNo != null">
+        #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null">
+        #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDetailCode != null">
+         #{orderDetailCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.OrderRetireDetail">
+    update t_order_retire_detail
+    <set>
+      <!-- <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if> 
+      <if test="supplyCode != null">
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>-->
+      <if test="cnt != null">
+        cnt = #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="retireNo != null">
+        retire_no = #{retireNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null">
+        sku_no = #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDetailCode != null">
+        order_detail_code = #{orderDetailCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

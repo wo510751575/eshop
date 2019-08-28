@@ -10,6 +10,7 @@
     <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
     <result column="REMARK" property="remark" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="MATERIAL_DIMENSION" property="materialDimension" jdbcType="VARCHAR" />
   </resultMap>
   
    <resultMap id="findMaterialTypePageResultMap" type="com.lj.business.cm.dto.FindMaterialTypePageReturn" >
@@ -24,9 +25,10 @@
     <result column="TYPE_COUNT" property="typeCount" jdbcType="INTEGER" />
     <result column="IMG_ADDR" property="imgAddr" jdbcType="VARCHAR" />
     <result column="CUSTOMER_ATTENTION_RATE" property="customerAttentionRate" jdbcType="DOUBLE" />
+    <result column="MATERIAL_DIMENSION" property="materialDimension" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, REMARK,CREATE_DATE,TYPE_COUNT,IMG_ADDR,CUSTOMER_ATTENTION_RATE
+    CODE, MERCHANT_NO, MEMBER_NO_GM, MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, REMARK,CREATE_DATE,TYPE_COUNT,IMG_ADDR,CUSTOMER_ATTENTION_RATE,MATERIAL_DIMENSION
   </sql>
    
    
@@ -39,7 +41,10 @@
         and  MEMBER_NAME_GM like CONCAT('%',#{memberNameGm,jdbcType=VARCHAR},'%' )
       </if>
 	 <if test="merchantNo != null and merchantNo != ''" >
-        and  MERCHANT_NO = #{merchantNo}
+        and  MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+      </if>
+	 <if test="materialDimension != null and materialDimension != ''" >
+        and  MATERIAL_DIMENSION = #{materialDimension,jdbcType=VARCHAR}
       </if>
       </where>
   </sql>
@@ -92,9 +97,25 @@
  and mt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
 GROUP BY mt.CODE, mt.TYPE_NAME
   </select>
+
+
+  <select id="findMaterialTypesAppEc" resultType="com.lj.business.cm.dto.FindMaterialTypesAppReturn" parameterType="com.lj.business.cm.dto.FindMaterialTypesApp" >
+    SELECT mt.CODE code, mt.TYPE_NAME typeName, sum(IF(u.MATERIAL_TYPE_CODE IS NULL,0,1)) numMaterial, mt.MATERIAL_DIMENSION materialDimension
+  	FROM material_type mt left join 
+       (SELECT MATERIAL_TYPE_CODE
+          FROM MATERIAL_COMMEN mc
+        UNION ALL
+        SELECT MATERIAL_TYPE_CODE
+          FROM MATERIAL m WHERE member_no_gm=#{memberNoGm,jdbcType=VARCHAR}) u
+    on u.MATERIAL_TYPE_CODE = mt.CODE
+    WHERE mt.MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}
+    and  mt.MEMBER_NO_GM = #{memberNoGm,jdbcType=VARCHAR}
+    GROUP BY mt.CODE, mt.MATERIAL_DIMENSION
+
+  </select>
   
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from material_type
@@ -107,10 +128,10 @@ GROUP BY mt.CODE, mt.TYPE_NAME
   </delete>
   <insert id="insert" parameterType="com.lj.business.cm.domain.MaterialType" >
     insert into material_type (CODE, MERCHANT_NO, MEMBER_NO_GM, 
-      MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, 
+      MEMBER_NAME_GM, TYPE_NAME, CREATE_ID, MATERIAL_DIMENSION, 
       CREATE_DATE)
     values (#{code,jdbcType=VARCHAR}, #{merchantNo,jdbcType=VARCHAR}, #{memberNoGm,jdbcType=VARCHAR}, 
-      #{memberNameGm,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      #{memberNameGm,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, #{materialDimension,jdbcType=VARCHAR}, 
       NOW())
   </insert>
   <insert id="insertSelective" parameterType="com.lj.business.cm.domain.MaterialType" >
@@ -147,6 +168,9 @@ GROUP BY mt.CODE, mt.TYPE_NAME
       <if test="customerAttentionRate != null" >
         CUSTOMER_ATTENTION_RATE,
       </if>
+      <if test="materialDimension != null" >
+        MATERIAL_DIMENSION,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="code != null" >
@@ -179,6 +203,9 @@ GROUP BY mt.CODE, mt.TYPE_NAME
       </if>
       <if test="customerAttentionRate != null" >
         #{customerAttentionRate,jdbcType=DOUBLE},
+      </if>
+      <if test="materialDimension != null" >
+        #{materialDimension,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -215,6 +242,9 @@ GROUP BY mt.CODE, mt.TYPE_NAME
       <if test="customerAttentionRate != null" >
         CUSTOMER_ATTENTION_RATE = #{customerAttentionRate,jdbcType=DOUBLE},
       </if>
+      <if test="materialDimension != null" >
+        MATERIAL_DIMENSION = #{materialDimension,jdbcType=VARCHAR},
+      </if>
     </set>
     where CODE = #{code,jdbcType=VARCHAR}
   </update>
@@ -228,7 +258,8 @@ GROUP BY mt.CODE, mt.TYPE_NAME
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}，
       TYPE_COUNT = #{typeCount,jdbcType=INTEGER},
       IMG_ADDR = #{imgAddr,jdbcType=VARCHAR},
-      CUSTOMER_ATTENTION_RATE = #{customerAttentionRate,jdbcType=DOUBLE}
+      CUSTOMER_ATTENTION_RATE = #{customerAttentionRate,jdbcType=DOUBLE},
+      MATERIAL_DIMENSION = #{materialDimension,jdbcType=VARCHAR}
     where CODE = #{code,jdbcType=VARCHAR}
   </update>
   

@@ -32,7 +32,27 @@
 		});
 	</script>
 	
-	
+<style type="text/css">
+.container {
+	padding: 20px 30px;
+	width: 100%;
+	min-height: 800px;
+	background: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.page_header {
+	font-size: 32px;
+	font-weight: normal;
+	line-height: 1;
+	padding-bottom: 40px;
+	color: #666;
+}
+.nav-tabs > li > a {
+    padding-top: 0px;
+}
+</style>	
 </head>
 <body>
 <div class="container">
@@ -64,7 +84,7 @@
 				<div class="img-div">
 				      <div id="img_btn1" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 					       <c:if test="${!empty data.imgUrl}">
-					       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.imgUrl}"/>
+					       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.imgUrl}"/>
 					       </c:if>
 					       <c:if test="${empty data.imgUrl}">
 					                                  选择图片

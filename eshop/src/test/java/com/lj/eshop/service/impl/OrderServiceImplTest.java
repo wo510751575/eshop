@@ -3,7 +3,7 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.math.BigDecimal;
@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -30,6 +29,7 @@ import com.lj.eshop.dto.FindShopCarPage;
 import com.lj.eshop.dto.OrderDto;
 import com.lj.eshop.dto.ProductSkuDto;
 import com.lj.eshop.dto.ShopCarDto;
+import com.lj.eshop.emus.MemberType;
 import com.lj.eshop.emus.OrderInvoice;
 import com.lj.eshop.emus.OrderStatus;
 import com.lj.eshop.service.IAddrsService;
@@ -47,9 +47,9 @@ import com.lj.eshop.service.IShopCarService;
  * @author lhy
  * 
  * 
- * CreateDate: 2017-08-22
+ *         CreateDate: 2017-08-22
  */
-public class OrderServiceImplTest extends SpringTestCase{
+public class OrderServiceImplTest extends SpringTestCase {
 
 	@Resource
 	IOrderService orderService;
@@ -59,8 +59,6 @@ public class OrderServiceImplTest extends SpringTestCase{
 	IAddrsService addrsService;
 	@Resource
 	IShopCarService shopCarService;
-	
-
 
 	/**
 	 * 
@@ -73,9 +71,9 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void addOrder() throws TsfaServiceException{
+	public void addOrder() throws TsfaServiceException {
 		OrderDto orderDto = new OrderDto();
-		//add数据录入
+		// add数据录入
 		orderDto.setCode("Code");
 		orderDto.setAmt(new BigDecimal(1));
 		orderDto.setMbrCode("LJ_1eb863856573406c956c0478abf47a72");
@@ -94,9 +92,9 @@ public class OrderServiceImplTest extends SpringTestCase{
 		orderDto.setShopCode("LJ_0e0a461585fa493794cc1368b87ec324");
 		orderDto.setMerchantCode("LJ_d0e8edca19bc445bbca254ddca6703d9");
 		orderService.addOrder(orderDto);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -108,9 +106,9 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void updateOrder() throws TsfaServiceException{
+	public void updateOrder() throws TsfaServiceException {
 		OrderDto orderDto = new OrderDto();
-		//update数据录入
+		// update数据录入
 		orderDto.setCode("Code");
 		orderDto.setAmt(new BigDecimal(1));
 		orderDto.setMbrCode("MbrCode");
@@ -129,9 +127,9 @@ public class OrderServiceImplTest extends SpringTestCase{
 		orderDto.setShopCode("ShopCode");
 
 		orderService.updateOrder(orderDto);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -143,13 +141,13 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findOrder() throws TsfaServiceException{
+	public void findOrder() throws TsfaServiceException {
 		OrderDto findOrder = new OrderDto();
 		findOrder.setCode("LJ_42087387dc48478ebfb63692c668b008");
-		OrderDto orderDto= orderService.findOrder(findOrder);
+		OrderDto orderDto = orderService.findOrder(findOrder);
 		System.out.println(orderDto.toString());
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -161,9 +159,10 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findOrderPage() throws TsfaServiceException{
+	public void findOrderPage() throws TsfaServiceException {
 		OrderDto param = new OrderDto();
 		param.setStatus(OrderStatus.UNPAID.getValue());
+		param.setMbrType(MemberType.CLIENT.getValue());
 //		param.setMerchantCode("LJ_d0e8edca19bc445bbca254ddca6703d9");
 		FindOrderPage findOrderPage = new FindOrderPage();
 //		findOrderPage.setSortBy("create_time");
@@ -171,9 +170,9 @@ public class OrderServiceImplTest extends SpringTestCase{
 		findOrderPage.setParam(param);
 		Page<OrderDto> page = orderService.findOrderPage(findOrderPage);
 		Assert.assertNotNull(page);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -185,19 +184,18 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findOrders() throws TsfaServiceException{
+	public void findOrders() throws TsfaServiceException {
 		FindOrderPage findOrderPage = new FindOrderPage();
-		
+
 		List<String> inStatuss = new LinkedList<String>();
 //		inStatuss.add(OrderStatus.UNRETURNS.getValue());
 //		inStatuss.add(OrderStatus.RETURNS.getValue());
 //		findOrderPage.setInStatuss(inStatuss);
-		
+
 		List<OrderDto> page = orderService.findOrders(findOrderPage);
 		System.out.println(page);
 	}
-	
-	
+
 	/**
 	 * 
 	 *
@@ -209,20 +207,20 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void createByCar() throws TsfaServiceException{
+	public void createByCar() throws TsfaServiceException {
 		ShopCarDto param = new ShopCarDto();
 		param.setMbrCode("LJ_1eb863856573406c956c0478abf47a72");
 		FindShopCarPage findShopCarPage = new FindShopCarPage();
 		findShopCarPage.setParam(param);
 		List<ShopCarDto> carList = shopCarService.findShopCars(findShopCarPage);
-		
+
 		AddrsDto parmAddrsDto = new AddrsDto();
 		parmAddrsDto.setCode("LJ_03a22325b5ca4ae9b2cbe1e8e3460e91");
-		AddrsDto addrsDto= addrsService.findAddrs(parmAddrsDto);
-		
-		orderService.createByCar(carList, addrsDto, false, "", "","","","","");
+		AddrsDto addrsDto = addrsService.findAddrs(parmAddrsDto);
+
+//		orderService.createByCar(carList, addrsDto, false, "", "", "", "", "", "");
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -234,23 +232,24 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void createOrder() throws TsfaServiceException{
+	public void createOrder() throws TsfaServiceException {
 //		for (int i = 0; i < 10; i++) {
 //			ProductSkuDto productSkuDto = new ProductSkuDto();
 //			productSkuDto.setCode("LJ_663f16e577de44a784055a5f9739066c");
 //			AddrsDto paramDto = new AddrsDto();
 //			paramDto.setCode("LJ_03a22325b5ca4ae9b2cbe1e8e3460e91");
-//			orderService.createOrder(productSkuService.findProductSku(productSkuDto), "LJ_0e0a461585fa493794cc1368b87ec324", 1, addrsService.findAddrs(paramDto), true, "深圳市领居科技有限公司", "123546151222", "备注");
+//			orderService.createOrder(productSkuService.findProductSku(productSkuDto), "LJ_0e0a461585fa493794cc1368b87ec324", 1, addrsService.findAddrs(paramDto), true, "深圳市深圳扬恩科技有限公司", "123546151222", "备注");
 //		}
-		
+
 		ProductSkuDto productSkuDto = new ProductSkuDto();
 		productSkuDto.setCode("LJ_c38f6f68539e4cd5a803458d2041210b");
 		AddrsDto paramDto = new AddrsDto();
 		paramDto.setCode("LJ_b6e033a1e275476f9bf2464eeb21cfd4");
-		String shopCode ="LJ_0e0a461585fa493794cc1368b87ec324";
-		orderService.createOrder(productSkuService.findProductSku(productSkuDto),shopCode, 1, addrsService.findAddrs(paramDto), true, "深圳市领居科技有限公司", "123546151222", "备注","","","");
+		String shopCode = "LJ_0e0a461585fa493794cc1368b87ec324";
+//		orderService.createOrder(productSkuService.findProductSku(productSkuDto), shopCode, 1,
+//				addrsService.findAddrs(paramDto), true, "深圳市深圳扬恩科技有限公司", "123546151222", "备注", "", "", "");
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -262,16 +261,16 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void payment() throws TsfaServiceException{
+	public void payment() throws TsfaServiceException {
 		FindOrderPage findOrderPage = new FindOrderPage();
 		OrderDto parOrder = new OrderDto();
 		parOrder.setCode("LJ_eded58e823c042cf807df845afaa9052");
 		findOrderPage.setParam(parOrder);
-		List<OrderDto> orderDtos= orderService.findOrders(findOrderPage);
-		
+		List<OrderDto> orderDtos = orderService.findOrders(findOrderPage);
+
 //		orderService.payment(paymentDto);;
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -283,21 +282,21 @@ public class OrderServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void shipping() throws TsfaServiceException{
+	public void shipping() throws TsfaServiceException {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setCode("LJ_6274cd5df2954b3ba447cac8edf4584c");
 		orderService.shipping(orderDto, "111", "222");
 	}
-	
+
 	@Test
-	public void cancel() throws TsfaServiceException{
+	public void cancel() throws TsfaServiceException {
 		OrderDto parmOrderDto = new OrderDto();
 		parmOrderDto.setCode("LJ_28ebe1bc64f2440a844e8907be57c9c7");
 		orderService.cancel(orderService.findOrder(parmOrderDto));
 	}
-	
+
 	@Test
-	public void findProductCatalog() throws TsfaServiceException{
+	public void findProductCatalog() throws TsfaServiceException {
 		FindOrderPage findOrderPage = new FindOrderPage();
 		OrderDto parOrder = new OrderDto();
 		parOrder.setShopCode("LJ_0e0a461585fa493794cc1368b87ec324");
@@ -307,28 +306,28 @@ public class OrderServiceImplTest extends SpringTestCase{
 		List<CatalogSummaryDto> list = orderService.findProductCatalog(findOrderPage);
 		System.out.println(list);
 	}
-	
+
 	@Test
-	public void findOrderPageCount() throws TsfaServiceException{
-		/*当天收益*/
-		Date now =new Date();
-		Calendar calendar =  org.apache.commons.lang.time.DateUtils.toCalendar(now);
-		//将小时至0  
-		calendar.set(Calendar.HOUR_OF_DAY, 0);  
-		//将分钟至0  
-		calendar.set(Calendar.MINUTE, 0);  
-		//将秒至0  
-		calendar.set(Calendar.SECOND,0);  
-		Date startTime= calendar.getTime();
-		
-		//将小时至23  
-		calendar.set(Calendar.HOUR_OF_DAY, 23);  
-		//将分钟至59  
-		calendar.set(Calendar.MINUTE, 59);  
-		//将秒至59  
-		calendar.set(Calendar.SECOND,59);  
-		Date endTime= calendar.getTime();
-		
+	public void findOrderPageCount() throws TsfaServiceException {
+		/* 当天收益 */
+		Date now = new Date();
+		Calendar calendar = org.apache.commons.lang.time.DateUtils.toCalendar(now);
+		// 将小时至0
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		// 将分钟至0
+		calendar.set(Calendar.MINUTE, 0);
+		// 将秒至0
+		calendar.set(Calendar.SECOND, 0);
+		Date startTime = calendar.getTime();
+
+		// 将小时至23
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		// 将分钟至59
+		calendar.set(Calendar.MINUTE, 59);
+		// 将秒至59
+		calendar.set(Calendar.SECOND, 59);
+		Date endTime = calendar.getTime();
+
 		FindOrderPage findOrderPage = new FindOrderPage();
 		OrderDto param = new OrderDto();
 		param.setShopCode("LJ_0e0a461585fa493794cc1368b87ec324");
@@ -339,5 +338,67 @@ public class OrderServiceImplTest extends SpringTestCase{
 		int dayCount = orderService.findOrderPageCount(findOrderPage);
 		System.out.println(dayCount);
 	}
-	
+
+	@Test
+	public void findAmtRank() throws TsfaServiceException {
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+		// 时间推至一周前
+		calendar.add(Calendar.WEEK_OF_YEAR, -1);
+		// 将小时至0
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		// 将分钟至0
+		calendar.set(Calendar.MINUTE, 0);
+		// 将秒至0
+		calendar.set(Calendar.SECOND, 0);
+		Date startTime = calendar.getTime();
+		FindOrderPage findOrderPage = new FindOrderPage();
+		OrderDto paramOrderDto = new OrderDto();
+		paramOrderDto.setShopCode("LJ_38a3414652604d0fbfc653a2517cfdb3");
+		paramOrderDto.setStartTime(DateUtils.formatDate(startTime, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
+		paramOrderDto.setEndTime(DateUtils.formatDate(now, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
+		findOrderPage.setParam(paramOrderDto);
+
+		BigDecimal monthAmt = orderService.findAmtSum(findOrderPage);
+		Integer a = orderService.findAmtRank(findOrderPage);
+
+		System.out.println("排名：" + a + "金额：" + monthAmt);
+	}
+
+	@Test
+	public void findTopProductCatalog() throws TsfaServiceException {
+		Date now = DateUtils.getPreday(new Date());
+		Calendar calendar = org.apache.commons.lang.time.DateUtils.toCalendar(now);
+		// 将小时至0
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		// 将分钟至0
+		calendar.set(Calendar.MINUTE, 0);
+		// 将秒至0
+		calendar.set(Calendar.SECOND, 0);
+		Date startTime = calendar.getTime();
+
+		// 将小时至23
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		// 将分钟至59
+		calendar.set(Calendar.MINUTE, 59);
+		// 将秒至59
+		calendar.set(Calendar.SECOND, 59);
+		Date endTime = calendar.getTime();
+
+		/* 获取店铺当天销售额 */
+		FindOrderPage findOrderPage = new FindOrderPage();
+		OrderDto paramOrderDto = new OrderDto();
+		paramOrderDto.setShopCode("LJ_0e0a461585fa493794cc1368b87ec324");
+		paramOrderDto.setStartTime(DateUtils.formatDate(startTime, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
+		paramOrderDto.setEndTime(DateUtils.formatDate(endTime, DateUtils.PATTERN_yyyy_MM_dd_HH_mm_ss));
+//		paramOrderDto.setStartTime("2017-09-11 00:00:00");
+//		paramOrderDto.setEndTime("2017-09-12 00:00:00");
+		findOrderPage.setParam(paramOrderDto);
+
+		CatalogSummaryDto data = orderService.findTopProductCatalog(findOrderPage);
+
+		System.out.println("销售冠军：" + data);
+	}
+
 }

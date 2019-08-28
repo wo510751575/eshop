@@ -1,12 +1,11 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eshop.eis.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import com.lj.eshop.eis.utils.JsonUtils;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author lhy
  *   
  * CreateDate: 2017年9月22日
@@ -84,7 +83,6 @@ public class SysController extends BaseController{
 	
 	/**
 	 * 方法说明：关于我们
-	 * todo《先做模拟的》
 	 * @return
 	 *
 	 * @author lhy  2017年9月22日
@@ -93,10 +91,8 @@ public class SysController extends BaseController{
 	@RequestMapping(value="/about")
 	@ResponseBody
 	public ResponseDto about(){
-		Map<String, String> map=new HashMap<String, String>();
-		map.put("officWeb", "www.ljkeji.com/ljkj/index.html");
-		map.put("agreementUrl", "https://www.baidu.com/");
-		map.put("tsPhone", "0755-88888888");//technical support
-		return ResponseDto.successResp(map);
+		Map<String, String> aboutUs = localCacheSystemParams.getSystemParamGroup(Constans.CC_EIS_SYSTEMALIASNAME,Constans.CC_EC_ABOUT_US_GROUP);
+		logger.debug("aboutUs:"+aboutUs);
+		return ResponseDto.successResp(aboutUs);
 	}
 }

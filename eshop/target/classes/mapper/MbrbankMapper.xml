@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IMbrbankDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Mbrbank">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="branch_bank" jdbcType="VARCHAR" property="branchBank" />
+    <result column="bank_acc_no" jdbcType="VARCHAR" property="bankAccNo" />
+    <result column="acc_name" jdbcType="VARCHAR" property="accName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+     <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.code, t.mbr_code, t.bank_name, t.branch_bank, t.bank_acc_no, t.acc_name, t.create_time, t.bank_code,t.phone
+  </sql>
+	<resultMap id="FindResultMap" type="com.lj.eshop.dto.MbrbankDto"
+		extends="BaseResultMap">
+		 <result column="bank_icon" jdbcType="VARCHAR" property="bankIcon" />
+		 <result column="bg_icon" jdbcType="VARCHAR" property="bgIcon" />
+	</resultMap>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and t.code =#{param.code}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and t.mbr_code =#{param.mbrCode}]]>
+				</if>
+				<if test="param.bankAccNo != null and param.bankAccNo !='' ">
+					<![CDATA[and t.bank_acc_no =#{param.bankAccNo}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMbrbanks" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMbrbankPage">
+		SELECT
+		<include refid="Base_Column_List" />,b.bank_icon,b.bg_icon
+		FROM t_mbr_bank t 
+		join t_bank_info b on t.bank_code=b.code
+		<include refid="findPage_condition" />
+
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMbrbankPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMbrbankPage">
+		SELECT
+		<include refid="Base_Column_List" />,b.bank_icon,b.bg_icon
+		FROM t_mbr_bank t
+		join t_bank_info b on t.bank_code=b.code
+		<include refid="findPage_condition" />
+
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMbrbankPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMbrbankPage">
+		select count(*)
+		FROM t_mbr_bank t
+		join t_bank_info b on t.bank_code=b.code
+		<include refid="findPage_condition" />
+	</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mbr_bank t
+    where t.code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Mbrbank">
+    insert into t_mbr_bank
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="branchBank != null">
+        branch_bank,
+      </if>
+      <if test="bankAccNo != null">
+        bank_acc_no,
+      </if>
+      <if test="accName != null">
+        acc_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+       <if test="bankCode != null">
+        bank_code,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBank != null">
+        #{branchBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccNo != null">
+        #{bankAccNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accName != null">
+        #{accName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="bankCode != null">
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Mbrbank">
+    update t_mbr_bank
+    <set>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBank != null">
+        branch_bank = #{branchBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccNo != null">
+        bank_acc_no = #{bankAccNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accName != null">
+        acc_name = #{accName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="bankCode != null">
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

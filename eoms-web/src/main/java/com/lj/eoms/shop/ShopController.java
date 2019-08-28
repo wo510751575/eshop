@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 package com.lj.eoms.shop;
@@ -9,6 +9,7 @@ package com.lj.eoms.shop;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,13 @@ import com.ape.common.web.BaseController;
 import com.google.common.collect.Lists;
 import com.lj.base.core.pagination.Page;
 import com.lj.base.core.pagination.PageSortType;
+import com.lj.base.exception.TsfaServiceException;
+import com.lj.business.member.constant.ErrorCode;
+import com.lj.business.member.dto.FindGuidMember;
+import com.lj.business.member.dto.FindGuidMemberReturn;
+import com.lj.business.member.service.IGuidMemberService;
 import com.lj.eoms.entity.sys.Area;
+import com.lj.eoms.service.impl.MbrGuidMemberService;
 import com.lj.eoms.service.sys.AreaService;
 import com.lj.eoms.utils.UserUtils;
 import com.lj.eshop.dto.FindShopBgImgPage;
@@ -49,7 +56,7 @@ import com.lj.eshop.service.IShopStyleService;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 段志鹏
  *   
  * CreateDate: 2017年8月25日
@@ -73,8 +80,12 @@ public class ShopController extends BaseController {
 	private IShopStyleService shopStyleService;
 	@Autowired
 	private IMemberService memberService;
+	@Autowired
+	private IGuidMemberService guidMemberService;//导购信息
 	
 	
+	@Autowired 
+	private MbrGuidMemberService mbrGuidMemberService;
 	/** 列表 */
 	@RequiresPermissions("shop:shop:view")
 	@RequestMapping(value = {"list"}, method ={RequestMethod.GET,RequestMethod.POST})
@@ -142,7 +153,16 @@ public class ShopController extends BaseController {
 			param1.setStatus(Status.USE.getValue());
 			FindShopBgImgPage findShopBgImgPage = new FindShopBgImgPage();
 			findShopBgImgPage.setParam(param1);
-			model.addAttribute("shopBgImgs", shopBgImgService.findShopBgImgs(findShopBgImgPage));
+			List<ShopBgImgDto> list = shopBgImgService.findShopBgImgs(findShopBgImgPage);
+			model.addAttribute("shopBgImgs", list);
+			for(ShopBgImgDto bg:list) {
+				if(StringUtils.equals(bg.getCode(), rtDto.getShopBgImgCode())) {
+					rtDto.setBgUrl(bg.getSpe());
+					break;
+				}
+			}
+			
+			model.addAttribute("shopBgImgs", list);
 
 			/*风格下拉列表*/
 			ShopStyleDto param2 = new ShopStyleDto();
@@ -194,6 +214,7 @@ public class ShopController extends BaseController {
 	public String status(ShopDto shopDto, RedirectAttributes redirectAttributes) {
 		shopDto.setOpenTime(new Date());
 		shopService.updateShop(shopDto);
+		//审核通过则注册导购
 		//审核通过
 		if(ShopStatus.NORMAL.getValue().equals(shopDto.getStatus())){
 			shopDto.setOpenTime(new Date());
@@ -207,10 +228,25 @@ public class ShopController extends BaseController {
 				memberService.updateMember(rltMemberDto);
 			}
 			
+			FindGuidMember findGuidMember = new FindGuidMember();
+			findGuidMember.setMemberNo(rltShopDto.getMbrCode());
+			FindGuidMemberReturn gMemberReturn =null;
+			try{
+				gMemberReturn = guidMemberService.findGuidMember(findGuidMember);
+			}catch(TsfaServiceException e){
+				//未找到导购不抛出异常，只是不同步
+				if(!ErrorCode.GUID_MEMBER_NOT_EXIST_ERROR.equals(ErrorCode.GUID_MEMBER_NOT_EXIST_ERROR)){
+					throw e;
+				} 
+			}
+			if(null==gMemberReturn) {
+				mbrGuidMemberService.addGuidMember(shopDto,"开店审核通过注册");
+			}
 		}
-		addMessage(redirectAttributes, "操作"+shopDto.getShopName()+"成功");
+		addMessage(redirectAttributes, "操作成功");
 		return "redirect:" + adminPath + "/shop/list";
 	}
+	
 	
 	/**
 	 * 绑定设备

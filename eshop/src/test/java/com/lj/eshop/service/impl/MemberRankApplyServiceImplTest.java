@@ -1,11 +1,11 @@
-package com.lj.eshop.service.impl;
+/*package com.lj.eshop.service.impl;
 
-/**
+*//**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
- */
+ *//*
 import javax.annotation.Resource;
 
 import org.junit.Assert;
@@ -25,7 +25,7 @@ import com.lj.eshop.emus.MemberRankApplyStatus;
 import com.lj.eshop.dto.FindMemberRankApplyPage;
 import com.lj.eshop.service.IMemberRankApplyService;
 
-/**
+*//**
  * 类说明：测试类
  * 
  * 
@@ -36,7 +36,7 @@ import com.lj.eshop.service.IMemberRankApplyService;
  * 
  * 
  * CreateDate: 2017-08-31
- */
+ *//*
 public class MemberRankApplyServiceImplTest extends SpringTestCase{
 
 	@Resource
@@ -44,7 +44,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 
 
 
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：添加特权申请信息
@@ -53,7 +53,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void addMemberRankApply() throws TsfaServiceException{
 		MemberRankApplyDto memberRankApplyDto = new MemberRankApplyDto();
@@ -71,7 +71,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		
 	}
 	
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：修改特权申请信息
@@ -80,7 +80,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void updateMemberRankApply() throws TsfaServiceException{
 		MemberRankApplyDto memberRankApplyDto = new MemberRankApplyDto();
@@ -99,7 +99,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		
 	}
 	
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：查找特权申请信息
@@ -108,7 +108,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void findMemberRankApply() throws TsfaServiceException{
 		MemberRankApplyDto findMemberRankApply = new MemberRankApplyDto();
@@ -117,7 +117,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		System.out.println(rDto);
 	}
 	
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：查找特权申请信息
@@ -126,7 +126,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void findMemberRankApplyPage() throws TsfaServiceException{
 		FindMemberRankApplyPage findMemberRankApplyPage = new FindMemberRankApplyPage();
@@ -135,7 +135,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		System.out.println(page);
 	}
 	
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：查找特权申请信息
@@ -144,7 +144,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void findMemberRankApplys() throws TsfaServiceException{
 		FindMemberRankApplyPage findMemberRankApplyPage = new FindMemberRankApplyPage();
@@ -159,7 +159,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		System.out.println(page);
 	}
 	
-	/**
+	*//**
 	 * 
 	 *
 	 * 方法说明：审核状态变更，更新商店特权code,商店特权到期时间
@@ -168,7 +168,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权 CreateDate: 2017-08-31
 	 *
-	 */
+	 *//*
 	@Test
 	public void updateByPkAndStatus() throws TsfaServiceException{
 		MemberRankApplyDto dto = new MemberRankApplyDto();
@@ -178,7 +178,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 		memberRankApplyService.updateByPkAndStatus(dto);
 	}
 	
-	/**
+	*//**
 	 * 申请特权
 	 * 方法说明：
 	 *
@@ -188,7 +188,7 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	 *
 	 * @author 林进权
 	 *         CreateDate: 2017年9月5日
-	 */
+	 *//*
 	@Test
 	public void apply() throws TsfaServiceException{
 		MemberRankApplyDto dto = new MemberRankApplyDto();
@@ -224,3 +224,4 @@ public class MemberRankApplyServiceImplTest extends SpringTestCase{
 	
 	
 }
+*/

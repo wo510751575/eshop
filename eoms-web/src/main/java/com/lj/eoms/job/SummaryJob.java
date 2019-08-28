@@ -1,5 +1,7 @@
 package com.lj.eoms.job;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
@@ -11,6 +13,8 @@ import com.lj.eshop.service.ISummaryService;
 @Component("summaryJob")
 @Lazy(false)
 public class SummaryJob {
+	/** Logger for this class. */
+	private static final Logger logger = LoggerFactory.getLogger(SummaryJob.class);
 	@Autowired
 	private ISummaryService summaryService;
 	@Autowired
@@ -54,6 +58,7 @@ public class SummaryJob {
 				}
 			});
 		} catch (Exception localException) {
+			logger.error("统计异常",localException);
 			localException.printStackTrace();
 		}
 	}

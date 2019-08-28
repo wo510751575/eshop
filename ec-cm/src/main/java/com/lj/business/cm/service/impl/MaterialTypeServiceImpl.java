@@ -3,7 +3,7 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.util.Date;
@@ -104,7 +104,7 @@ public class MaterialTypeServiceImpl implements IMaterialTypeService {
 			materialType.setTypeCount(0);
 			materialType.setImgAddr(addMaterialType.getImgAddr());
 			materialType.setCustomerAttentionRate(addMaterialType.getCustomerAttentionRate());
-			
+			materialType.setMaterialDimension(addMaterialType.getMaterialDimension());
 			materialTypeDao.insertSelective(materialType);
 			AddMaterialTypeReturn addMaterialTypeReturn = new AddMaterialTypeReturn();
 			addMaterialTypeReturn.setCode(materialType.getCode());
@@ -175,6 +175,7 @@ public class MaterialTypeServiceImpl implements IMaterialTypeService {
 			materialType.setCreateId(updateMaterialType.getCreateId());
 			materialType.setRemark(updateMaterialType.getRemark());
 			materialType.setCreateDate(updateMaterialType.getCreateDate());
+			materialType.setMaterialDimension(updateMaterialType.getMaterialDimension());
 			AssertUtils.notUpdateMoreThanOne(materialTypeDao.updateByPrimaryKeySelective(materialType));
 			UpdateMaterialTypeReturn updateMaterialTypeReturn = new UpdateMaterialTypeReturn();
 
@@ -218,7 +219,7 @@ public class MaterialTypeServiceImpl implements IMaterialTypeService {
 			findMaterialTypeReturn.setTypeName(materialType.getTypeName());
 			findMaterialTypeReturn.setRemark(materialType.getRemark());
 			findMaterialTypeReturn.setCreateId(materialType.getCreateId());
-
+			findMaterialTypeReturn.setMaterialDimension(materialType.getMaterialDimension());
 			// findMaterialTypeReturn.setCreateDate(materialType.getCreateDate());
 
 			logger.debug("findMaterialType(FindMaterialType) - end - return value={}", findMaterialTypeReturn); //$NON-NLS-1$
@@ -358,6 +359,30 @@ public class MaterialTypeServiceImpl implements IMaterialTypeService {
 		logger.debug("findMaterialTypeForMemberPage(findMaterialTypeForMemberPage) - end - return value={}", returnPage);
 		return returnPage;
 	}
+	
 
+	@Override
+	public List<FindMaterialTypesAppReturn> findMaterialTypesAppEc(FindMaterialTypesApp findMaterialTypesApp) {
+		logger.debug("findMaterialTypesApp(FindMaterialTypesApp findMaterialTypesApp={}) - start", findMaterialTypesApp); //$NON-NLS-1$
+
+		AssertUtils.notNull(findMaterialTypesApp);
+		AssertUtils.notNullAndEmpty(findMaterialTypesApp.getMerchantNo(), "商户编号不能为空");
+		AssertUtils.notNullAndEmpty(findMaterialTypesApp.getMemberNoGm(), "导购编号不能为空");
+		try {
+			List<FindMaterialTypesAppReturn> list = materialTypeDao.findMaterialTypesAppEc(findMaterialTypesApp);
+			for (FindMaterialTypesAppReturn findMaterialTypesAppReturn : list) {
+				findMaterialTypesAppReturn.setAttention("90%");
+				findMaterialTypesAppReturn.setMaterialType("CHAN_PIN_PING_PAI");
+			}
+			logger.debug("findMaterialTypesApp(FindMaterialTypesApp) - end - return value={}", list); //$NON-NLS-1$
+			return list;
+		} catch (TsfaServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		} catch (Exception e) {
+			logger.error("查找素材类型表信息错误！", e);
+			throw new TsfaServiceException(ErrorCode.MATERIAL_TYPE_FIND_ERROR, "查找素材类型表信息错误！", e);
+		}
+	}
 
 }

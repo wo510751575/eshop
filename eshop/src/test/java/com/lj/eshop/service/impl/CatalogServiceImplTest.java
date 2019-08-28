@@ -1,23 +1,24 @@
 package com.lj.eshop.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.lj.base.core.pagination.Page;
 import com.lj.base.exception.TsfaServiceException;
 import com.lj.base.mvc.web.test.SpringTestCase;
-
-import java.util.Date;
-import java.util.List;
-
 import com.lj.eshop.dto.CatalogDto;
 import com.lj.eshop.dto.FindCatalogPage;
 import com.lj.eshop.emus.DelFlag;
@@ -210,5 +211,43 @@ public class CatalogServiceImplTest extends SpringTestCase{
 		Assert.assertNotNull(page);
 		
 	}
+	
+
+	/**
+	 * 通过父分类，查找该分类所有商品
+	 * 方法说明：
+	 *
+	 * @param @throws TsfaServiceException    设定文件 
+	 * @return void    返回类型 
+	 * @throws Exception
+	 *
+	 * @author 林进权
+	 *         CreateDate: 2017年10月12日
+	 */
+	@Test
+	public void findCatalogByPcode() throws Exception{
+		//查找一级商品分类
+		FindCatalogPage findCatalogPage = new FindCatalogPage();
+		List<CatalogDto> catalogDtos = catalogService.findCatalogs(findCatalogPage);
+		List<String> cateLogStrs = new ArrayList<>();
+		String pcode= "LJ_6c546a23a0b4421bb2a833670355eb03";
+		findCatalogChildByPCode(catalogDtos, cateLogStrs, pcode);
+		cateLogStrs.add(pcode);
+		System.out.println(cateLogStrs.size() + "\r\n" + cateLogStrs);
+	}
+
+
+
+	private void findCatalogChildByPCode(List<CatalogDto> catalogDtos, List<String> cateLogStrs, String pcode) {
+		for (CatalogDto catalogDto : catalogDtos) {
+			if(StringUtils.equals(catalogDto.getParentCatalogCode(), pcode)) {
+				cateLogStrs.add(catalogDto.getCode());
+				findCatalogChildByPCode(catalogDtos, cateLogStrs, catalogDto.getCode());
+			}
+		}
+	}
+	
+	
+	
 	
 }

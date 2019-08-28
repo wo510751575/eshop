@@ -48,7 +48,7 @@
 				<div class="controls">
 			      <div id="image_btn" style="border: 1px solid #e0e6eb;width:120px;height:120px;line-height:100px;text-align:center">
 				       <c:if test="${!empty data.spe}">
-				       		<img width="120px" height="120px" src="${fns:getDictValue('上传路径前缀', 'uploadUrl', 'http://192.168.6.60/')}${data.spe}"/>
+				       		<img width="120px" height="120px" src="${fns:getUploadUrl()}${data.spe}"/>
 				       </c:if>
 				       <c:if test="${empty data.spe}">
 				                                  选择图片

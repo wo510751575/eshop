@@ -3,11 +3,13 @@ package com.lj.eshop.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -193,8 +195,13 @@ public class ProductServiceImplTest extends SpringTestCase{
 	public void findProducts() throws TsfaServiceException{
 		FindProductPage findProductPage = new FindProductPage();
 		ProductDto dto = new ProductDto();
-		dto.setCode("LJ_434786d95fbe42969a94831ac7cfc426");
-		findProductPage.setParam(dto);
+//		dto.setCode("LJ_434786d95fbe42969a94831ac7cfc426");
+//		findProductPage.setParam(dto);
+		List<String> catalogTypeCodes = new LinkedList<String>();
+		catalogTypeCodes.add("LJ_9ef79470664842e9b6ac322893cea35f");
+		catalogTypeCodes.add("LJ_da91f03e59734055a09cd2f9d4adc516");
+		findProductPage.setCatalogTypeCodes(catalogTypeCodes);
+		
 		List<ProductDto> page = productService.findProducts(findProductPage);
 		System.out.println(page);
 		Assert.assertNotNull(page);

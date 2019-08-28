@@ -14,7 +14,7 @@ import com.lj.base.mvc.web.test.SpringTestCase;
  * <p>
  * 详细描述：
  *   
- * @Company: 领居科技有限公司
+ * @Company: 深圳扬恩科技有限公司
  * @author 杨杰
  *   
  * CreateDate: 2017年9月7日

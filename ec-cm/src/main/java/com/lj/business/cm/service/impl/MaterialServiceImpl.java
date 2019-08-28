@@ -3,7 +3,7 @@ package com.lj.business.cm.service.impl;
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 
@@ -454,6 +454,22 @@ public class MaterialServiceImpl implements IMaterialService {
 			logger.error("新增素材中心表信息错误！", e);
 			throw new TsfaServiceException(ErrorCode.MATERIAL_ADD_ERROR, "新增素材中心表信息错误！", e);
 		}
+	}
+
+	@Override
+	public List<FindMaterialPageReturn> findMaterials(FindMaterialPage findMaterialPage) throws TsfaServiceException {
+		logger.debug("findMaterialPage(FindMaterialPage findMaterialPage={}) - start", findMaterialPage); //$NON-NLS-1$
+
+		AssertUtils.notNull(findMaterialPage);
+		List<FindMaterialPageReturn> returnList;
+		try {
+			returnList = materialDao.findMaterials(findMaterialPage);
+		}  catch (Exception e) {
+			logger.error("素材中心表信息不存在错误",e);
+			throw new TsfaServiceException(ErrorCode.MATERIAL_FIND_PAGE_ERROR,"素材中心表信息不存在错误.！",e);
+		}
+		logger.debug("findMaterialPage(FindMaterialPage) - end - return value={}", returnList); //$NON-NLS-1$
+		return  returnList;
 	}
 }
 

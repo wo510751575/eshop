@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.ICodeCheckDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.CodeCheck">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="send_code" jdbcType="VARCHAR" property="sendCode" />
+    <result column="biz_type" jdbcType="VARCHAR" property="bizType" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="revicer_phone" jdbcType="VARCHAR" property="revicerPhone" />
+  </resultMap>
+  
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.CodeCheckDto" extends="BaseResultMap">
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    code, send_code, biz_type, send_time, revicer_phone
+  </sql>
+	<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.bizType != null and param.bizType !='' ">
+					<![CDATA[and biz_type =#{param.bizType}]]>
+				</if>
+				<if test="param.revicerPhone != null and param.revicerPhone !='' ">
+					<![CDATA[and revicer_phone =#{param.revicerPhone}]]>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findCodeChecks" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindCodeCheckPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_code_check
+		<include refid="findPage_condition" />
+		order by send_time desc 
+	</select>
+	<!-- 分页查询 -->
+	<select id="findCodeCheckPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindCodeCheckPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_code_check
+		<include refid="findPage_condition" />
+		order by send_time desc 
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findCodeCheckPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindCodeCheckPage">
+		select count(*)
+		FROM t_code_check
+		<include refid="findPage_condition" />
+	</select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_code_check
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.CodeCheck">
+    insert into t_code_check
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="sendCode != null">
+        send_code,
+      </if>
+      <if test="bizType != null">
+        biz_type,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="revicerPhone != null">
+        revicer_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCode != null">
+        #{sendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null">
+        #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="revicerPhone != null">
+        #{revicerPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.CodeCheck">
+    update t_code_check
+    <set>
+      <if test="sendCode != null">
+        send_code = #{sendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null">
+        biz_type = #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="revicerPhone != null">
+        revicer_phone = #{revicerPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

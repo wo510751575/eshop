@@ -16,7 +16,7 @@ $(document).ready(function(){
 	  if ( typeof(page_name) == "undefined" && top.document.getElementById("mainFrame")!=null && top.document.getElementById("jbox-iframe")==null) {
 		  var h=(document.body.clientHeight+310);
 		  if(h<900){
-			  h=900;
+			  h=1110;
 		  }
 		  top.document.getElementById("mainFrame").style.height = h+"px";
 	  }

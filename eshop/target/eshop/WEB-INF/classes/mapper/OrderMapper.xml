@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lj.eshop.dao.IOrderDao">
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.Order">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
+    <result column="mbr_name" jdbcType="VARCHAR" property="mbrName" />
+    <result column="mbr_phone" jdbcType="VARCHAR" property="mbrPhone" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="is_invoice" jdbcType="CHAR" property="isInvoice" />
+    <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
+    <result column="invoice_info" jdbcType="VARCHAR" property="invoiceInfo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="pay_type" jdbcType="CHAR" property="payType" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="shipping_time" jdbcType="TIMESTAMP" property="shippingTime" />
+    <result column="revicer_name" jdbcType="VARCHAR" property="revicerName" />
+    <result column="revice_phone" jdbcType="VARCHAR" property="revicePhone" />
+    <result column="addr_info" jdbcType="VARCHAR" property="addrInfo" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="reciver_zip" jdbcType="VARCHAR" property="reciverZip" />
+  </resultMap>
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.OrderDto" extends="BaseResultMap">
+  		<result column="shopLogo" jdbcType="VARCHAR" property="shopLogo" />
+		<collection property="detailDtos"  ofType="com.lj.eshop.dto.OrderDetailDto"   resultMap="OrderDetailMap"/>
+	</resultMap>
+	
+	<resultMap id="OrderDetailMap" type="com.lj.eshop.dto.OrderDetailDto">
+<!-- 		<id column="detail_code" jdbcType="VARCHAR" property="code" /> -->
+	    <result column="detail_product_code" jdbcType="VARCHAR" property="productCode" />
+	    <result column="detail_product_name" jdbcType="VARCHAR" property="productName" />
+	    <result column="detail_cnt" jdbcType="INTEGER" property="cnt" />
+	    <result column="detail_amt" jdbcType="DECIMAL" property="amt" />
+	    <result column="detail_sale_price" jdbcType="DECIMAL" property="salePrice" />
+	    <result column="detail_sku_code" jdbcType="VARCHAR" property="skuNo" />
+	    <result column="detail_gap_price" jdbcType="DECIMAL" property="gapPrice" />
+	</resultMap>
+	
+  <sql id="Base_Column_List">
+    code, amt, mbr_code, mbr_name, mbr_phone,  
+    status, remarks, is_invoice, invoice_title, invoice_info, create_time, update_time, 
+    order_no, shop_code,express_no,express_name,pay_type,merchant_code,shop_name,pay_time,shipping_time,
+    revicer_name, revice_phone,addr_info,area_name,reciver_zip
+  </sql>
+  <sql id="join_Column_List">
+    ,(SELECT s.img from t_shop s WHERE shop_code =s.`code`) shopLogo
+  </sql>
+  
+  
+<sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.merchantCode != null and param.merchantCode !='' ">
+					<![CDATA[and merchant_code =#{param.merchantCode}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and mbr_code =#{param.mbrCode}]]>
+				</if>
+				<if test="param.mbrPhone != null and param.mbrPhone !='' ">
+					<![CDATA[and mbr_phone =#{param.mbrPhone}]]>
+				</if>
+				<if test="param.likeOrderNo != null and param.likeOrderNo !='' ">
+					and order_no like CONCAT('%',#{param.likeOrderNo},'%' )
+				</if>
+				<if test="param.orderNo != null and param.orderNo !='' ">
+					<![CDATA[and order_no =#{param.orderNo}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and shop_code =#{param.shopCode}]]>
+				</if>
+				<if test="param.shopName != null and param.shopName !='' ">
+					and shop_name like CONCAT('%',#{param.shopName},'%' )
+		  		</if>
+		  		<if test="param.mbrName != null and param.mbrName !='' ">
+					and mbr_name like CONCAT('%',#{param.mbrName},'%' )
+		  		</if>
+		  		<if test="param.startTime != null and param.startTime !='' ">
+					<![CDATA[AND create_time>= #{param.startTime}]]>
+				</if>
+				<if test="param.endTime != null and param.endTime !='' ">
+					<![CDATA[AND create_time<= #{param.endTime}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+			</if>
+			
+			<if test="inStatuss != null and inStatuss.size > 0">
+				and status IN 
+				<foreach item="item" index="index" collection="inStatuss" open="(" separator="," close=")">  
+				  	#{item}  
+				 </foreach>  
+		  	</if>
+		</where>
+	</sql>
+	
+	<sql id="findOrderEisPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.mbrCode != null and param.mbrCode !='' ">
+					<![CDATA[and o.mbr_code =#{param.mbrCode}]]>
+				</if>
+				<if test="param.orderNo != null and param.orderNo !='' ">
+					<![CDATA[and o.order_no =#{param.orderNo}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and o.shop_code =#{param.shopCode}]]>
+				</if>
+				
+			</if>
+		</where>
+	</sql>
+	
+	
+	<!-- 订单接口查询 -->
+	<select id="findOrderEisPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindProductPage">
+		<![CDATA[
+			SELECT o.`code`,o.order_no,o.`status`,
+			d.product_code detail_product_code,d.product_name detail_product_name,d.cnt detail_cnt,d.amt detail_amt,
+			d.sale_price detail_sale_price,d.sku_code detail_sku_code,d.gap_price  detail_gap_price
+			FROM t_order o
+			JOIN t_order_detail d ON d.order_no = o.order_no
+ 		]]>
+		 <include refid="findOrderEisPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY o.update_time desc,o.create_time desc,o.`code`
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, o.update_time  desc,o.`code`
+		</if>		
+		limit ${start} , ${limit}
+	</select>
+	 <!-- 订单接口查询总数 -->
+	<select id="findOrderEisPageCount" resultType="int" parameterType="com.lj.eshop.dto.FindProductPage">
+		select count(*)
+		<![CDATA[
+			FROM t_order o
+			JOIN t_order_detail d ON d.order_no = o.order_no
+ 		]]>
+ 		<include refid="findOrderEisPage_condition" />
+	</select>
+	
+	
+	<!-- 不分页查询 -->
+	<select id="findOrders" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindOrderPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="join_Column_List" />
+		FROM t_order
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY update_time desc,create_time  desc,code
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, update_time  desc,code
+		</if>	
+	</select>
+	<!-- 分页查询 -->
+	<select id="findOrderPage" resultMap="FindResultMap" parameterType="com.lj.eshop.dto.FindOrderPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		<include refid="join_Column_List" />
+		FROM t_order
+		<include refid="findPage_condition" />
+		<if test="sortBy==null or sortBy=='' ">
+			ORDER BY update_time desc,create_time desc,code
+		</if>
+		<if test="sortBy!=null and sortBy !=''">
+			ORDER BY ${sortBy} ${sortDir}, update_time  desc,code
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findOrderPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindOrderPage">
+		select count(*)
+		FROM t_order
+		<include refid="findPage_condition" />
+	</select>
+	<!-- 累加金额 -->
+	<select id="findAmtSum" resultType="double" parameterType="com.lj.eshop.dto.FindOrderPage">
+		SELECT IFNULL(SUM(amt),0) FROM t_order
+		<include refid="findPage_condition" />
+	</select>
+	<!-- 获取店铺销售排名 -->
+	<select id="findAmtRank" resultType="Integer" parameterType="com.lj.eshop.dto.FindOrderPage">
+		SELECT n.rownum from 
+		(SELECT (@rownum := @rownum + 1)-1 AS rownum,obj.shop_code ,obj.sum FROM (SELECT shop_code,SUM(amt) sum FROM t_order 	
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.startTime != null and param.startTime !='' ">
+					<![CDATA[AND create_time>= #{param.startTime}]]>
+				</if>
+				<if test="param.endTime != null and param.endTime !='' ">
+					<![CDATA[AND create_time<= #{param.endTime}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status =#{param.status}]]>
+				</if>
+				
+			</if>
+		</where> GROUP BY shop_code ORDER BY sum asc ) obj,(SELECT @rownum := 0) r ) n 
+		WHERE n.shop_code=#{param.shopCode}
+	</select>
+	
+	<!-- 商品分类 -->
+	<select id="findProductCatalog" resultType="com.lj.eshop.dto.CatalogSummaryDto">
+		SELECT
+	      		t2.code detail_code,
+				t2.order_no,
+				sum(t2.cnt) cnt,
+				t2.product_code,
+				t2.product_name,
+				t4.parent_cataLog_name,
+				t3.catalog_type_code AS catalogCode,
+				t4.parent_cataLog_code AS parentCataLogCode
+			FROM
+				(
+					SELECT order_no FROM t_order  WHERE shop_code=#{param.shopCode} 
+					AND create_time BETWEEN #{param.startTime} and #{param.endTime} 
+					AND `status`=6
+				) t1, 
+				t_order_detail t2,
+				t_product t3, 
+				t_catalog t4
+			WHERE
+				t1.order_no = t2.order_no
+				and t2.product_code=t3.`code`
+				and t3.catalog_type_code=t4.`code`
+			GROUP BY catalog_type_code
+	</select>
+	
+	<!-- 销量最好的商品分类 -->
+	<select id="findTopProductCatalog" resultType="com.lj.eshop.dto.CatalogSummaryDto">
+		SELECT * from (
+			SELECT 
+				sum(t2.cnt) cnt,t4.parent_cataLog_name  as parentCataLogCode
+			FROM
+				(
+					SELECT order_no FROM t_order  WHERE shop_code=#{param.shopCode} 
+		   			AND create_time BETWEEN #{param.startTime} and #{param.endTime}
+					AND `status`=6
+				) t1, 
+				t_order_detail t2,
+				t_product t3, 
+				t_catalog t4
+			WHERE
+				t1.order_no = t2.order_no
+				and t2.product_code=t3.`code`
+				and t3.catalog_type_code=t4.`code`
+			GROUP BY t4.parent_cataLog_code
+		) n ORDER BY n.cnt desc LIMIT 0,1 
+	</select>
+	
+	<select id="findOrderGroupStatus" resultType="map" parameterType="com.lj.eshop.dto.FindOrderPage">
+		select count(*) count,status
+		from t_order 
+		<include refid="findPage_condition" />
+		GROUP BY  status
+	</select>
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.Order">
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="mbrCode != null">
+        mbr_code,
+      </if>
+      <if test="mbrName != null">
+        mbr_name,
+      </if>
+      <if test="mbrPhone != null">
+        mbr_phone,
+      </if>
+      <if test="revicerName != null">
+        revicer_name,
+      </if>
+      <if test="revicePhone != null">
+        revice_phone,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="isInvoice != null">
+        is_invoice,
+      </if>
+      <if test="invoiceTitle != null">
+        invoice_title,
+      </if>
+      <if test="invoiceInfo != null">
+        invoice_info,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="expressNo != null">
+        express_no,
+      </if>
+      <if test="expressName != null">
+        express_name,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="merchantCode != null">
+        merchant_code,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="shippingTime != null">
+        shipping_time,
+      </if>
+      <if test="addrInfo != null">
+        addr_info,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="reciverZip != null">
+        reciver_zip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="mbrCode != null">
+        #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrName != null">
+        #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrPhone != null">
+        #{mbrPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="revicerName != null">
+        #{revicerName,jdbcType=VARCHAR},
+      </if>
+      <if test="revicePhone != null">
+        #{revicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isInvoice != null">
+        #{isInvoice,jdbcType=CHAR},
+      </if>
+      <if test="invoiceTitle != null">
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceInfo != null">
+        #{invoiceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNo != null">
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+       <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shippingTime != null">
+        #{shippingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addrInfo != null">
+        #{addrInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverZip != null">
+        #{reciverZip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.Order">
+    update t_order
+    <set>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="mbrCode != null">
+        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrName != null">
+        mbr_name = #{mbrName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrPhone != null">
+        mbr_phone = #{mbrPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="revicerName != null">
+        revicer_name = #{revicerName,jdbcType=VARCHAR},
+      </if>
+      <if test="revicePhone != null">
+        revice_phone = #{revicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isInvoice != null">
+        is_invoice = #{isInvoice,jdbcType=CHAR},
+      </if>
+      <if test="invoiceTitle != null">
+        invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceInfo != null">
+        invoice_info = #{invoiceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNo != null">
+      	express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null">
+      	express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shippingTime != null">
+        shipping_time = #{shippingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addrInfo != null">
+        addr_info = #{addrInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverZip != null">
+        reciver_zip = #{reciverZip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

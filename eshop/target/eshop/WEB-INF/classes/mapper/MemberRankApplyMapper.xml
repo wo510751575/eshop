@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.eshop.dao.IMemberRankApplyDao" >
+  <resultMap id="BaseResultMap" type="com.lj.eshop.domain.MemberRankApply" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="member_rank_code" property="memberRankCode" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="member_rank_name" property="memberRankName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="FindResultMap" type="com.lj.eshop.dto.MemberRankApplyDto"
+		extends="BaseResultMap"></resultMap>
+		
+  <sql id="Base_Column_List" >
+    code, shop_code, member_rank_code, apply_time, approve_time, status, del_flag, shop_name, member_rank_name
+  </sql>
+  
+  <sql id="findPage_condition">
+		<where>
+			<if test="param!=null">
+				<!-- 查询条件根据业务需求自由添加 -->
+				<if test="param.code != null and param.code !='' ">
+					<![CDATA[and code =#{param.code}]]>
+				</if>
+				<if test="param.delFlag != null and param.delFlag !='' ">
+					<![CDATA[and del_flag=#{param.delFlag}]]>
+				</if>
+				<if test="param.shopCode != null and param.shopCode !='' ">
+					<![CDATA[and shop_code=#{param.shopCode}]]>
+				</if>
+				<if test="param.memberRankCode != null and param.memberRankCode !='' ">
+					<![CDATA[and member_rank_code=#{param.memberRankCode}]]>
+				</if>
+				<if test="param.status != null and param.status !='' ">
+					<![CDATA[and status=#{param.status}]]>
+				</if>
+				<if test="param.shopName != null and param.shopName !='' ">
+					<![CDATA[and shop_name like CONCAT('%',#{param.shopName},'%' )]]>
+				</if>
+				<if test="param.memberRankName != null and param.memberRankName !='' ">
+					<![CDATA[and member_rank_name=#{param.memberRankName}]]>
+				</if>
+			</if>
+			
+			<if test="neStatus != null and neStatus !='' ">
+					<![CDATA[and status<>#{neStatus}]]>
+			</if>
+		</where>
+	</sql>
+	<!-- 不分页查询 -->
+	<select id="findMemberRankApplys" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMemberRankApplyPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_member_rank_apply
+		<include refid="findPage_condition" />
+		ORDER BY apply_time DESC
+		
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMemberRankApplyPage" resultMap="FindResultMap"
+		parameterType="com.lj.eshop.dto.FindMemberRankApplyPage">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_member_rank_apply
+		<include refid="findPage_condition" />
+		ORDER BY apply_time DESC
+		limit ${start} , ${limit}
+	</select>
+	<!-- 查询总数 -->
+	<select id="findMemberRankApplyPageCount" resultType="int"
+		parameterType="com.lj.eshop.dto.FindMemberRankApplyPage">
+		select count(*)
+		FROM t_member_rank_apply
+		<include refid="findPage_condition" />
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_member_rank_apply
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_member_rank_apply
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.eshop.domain.MemberRankApply" >
+    insert into t_member_rank_apply (code, shop_code, member_rank_code, 
+      apply_time, approve_time, status, 
+      del_flag, shop_name, member_rank_name)
+    values (#{code,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{memberRankCode,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{approveTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, 
+      #{delFlag,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, #{memberRankName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.eshop.domain.MemberRankApply" >
+    insert into t_member_rank_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="memberRankCode != null" >
+        member_rank_code,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="approveTime != null" >
+        approve_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="memberRankName != null" >
+        member_rank_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberRankCode != null" >
+        #{memberRankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveTime != null" >
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberRankName != null" >
+        #{memberRankName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.eshop.domain.MemberRankApply" >
+    update t_member_rank_apply
+    <set >
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberRankCode != null" >
+        member_rank_code = #{memberRankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveTime != null" >
+        approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberRankName != null" >
+        member_rank_name = #{memberRankName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.eshop.domain.MemberRankApply" >
+    update t_member_rank_apply
+    set shop_code = #{shopCode,jdbcType=VARCHAR},
+      member_rank_code = #{memberRankCode,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR},
+      del_flag = #{delFlag,jdbcType=CHAR}
+      shop_name = #{shopName,jdbcType=VARCHAR}
+      member_rank_name = #{memberRankName,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPkAndStatus" parameterType="com.lj.eshop.domain.MemberRankApply" >
+    update t_member_rank_apply
+    set 
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR}
+    where code = #{code,jdbcType=VARCHAR} AND (status=0 or status is null )
+  </update>
+</mapper>

@@ -1,9 +1,12 @@
 package com.lj.eshop.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Copyright &copy; 2017-2020  All rights reserved.
  *
- * Licensed under the 深圳市领居科技 License, Version 1.0 (the "License");
+ * Licensed under the 深圳市深圳扬恩科技 License, Version 1.0 (the "License");
  * 
  */
 import javax.annotation.Resource;
@@ -15,13 +18,8 @@ import com.lj.base.core.pagination.Page;
 import com.lj.base.core.util.StringUtils;
 import com.lj.base.exception.TsfaServiceException;
 import com.lj.base.mvc.web.test.SpringTestCase;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import com.lj.eshop.dto.MemberDto;
 import com.lj.eshop.dto.FindMemberPage;
+import com.lj.eshop.dto.MemberDto;
 import com.lj.eshop.emus.MemberGrade;
 import com.lj.eshop.emus.MemberSex;
 import com.lj.eshop.emus.MemberSourceFrom;
@@ -39,14 +37,12 @@ import com.lj.eshop.service.IMemberService;
  * @author lhy
  * 
  * 
- * CreateDate: 2017-08-22
+ *         CreateDate: 2017-08-22
  */
-public class MemberServiceImplTest extends SpringTestCase{
+public class MemberServiceImplTest extends SpringTestCase {
 
 	@Resource
 	IMemberService memberService;
-
-
 
 	/**
 	 * 
@@ -59,15 +55,15 @@ public class MemberServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void addMember() throws TsfaServiceException{
+	public void addMember() throws TsfaServiceException {
 		MemberDto memberDto = new MemberDto();
-		//add数据录入
-		//memberDto.setCode(UUID);
+		// add数据录入
+		// memberDto.setCode(UUID);
 		memberDto.setName("Name");
 		memberDto.setPhone("15361668962");
 		memberDto.setWxNo("WxNo");
 		memberDto.setStatus(MemberStatus.NORMAL.getValue());
-		memberDto.setType(MemberType.SHOP_AND_CLIENT.getValue());
+		memberDto.setType(MemberType.SHOP.getValue());
 		memberDto.setAvotor("Avotor");
 		memberDto.setProvince("Province");
 		memberDto.setCity("City");
@@ -82,7 +78,7 @@ public class MemberServiceImplTest extends SpringTestCase{
 		memberDto.setMerchantCode("merchant1");
 		memberService.addMember(memberDto);
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -94,9 +90,9 @@ public class MemberServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void updateMember() throws TsfaServiceException{
+	public void updateMember() throws TsfaServiceException {
 		MemberDto memberDto = new MemberDto();
-		//update数据录入
+		// update数据录入
 		memberDto.setCode("LJ_d7c076c4b7234820b9c4e42d755aac39");
 		memberDto.setName("Name");
 		memberDto.setPhone("Phone");
@@ -116,9 +112,9 @@ public class MemberServiceImplTest extends SpringTestCase{
 		memberDto.setSourceFrom(MemberSourceFrom.SCAN.getValue());
 
 		memberService.updateMember(memberDto);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -130,12 +126,12 @@ public class MemberServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findMember() throws TsfaServiceException{
+	public void findMember() throws TsfaServiceException {
 		MemberDto findMember = new MemberDto();
 		findMember.setCode("LJ_d7c076c4b7234820b9c4e42d755aac39");
 		memberService.findMember(findMember);
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -147,16 +143,16 @@ public class MemberServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findMemberPage() throws TsfaServiceException{
+	public void findMemberPage() throws TsfaServiceException {
 		FindMemberPage findMemberPage = new FindMemberPage();
-		MemberDto param=new MemberDto();
+		MemberDto param = new MemberDto();
 		param.setCode("LJ_d7c076c4b7234820b9c4e42d755aac39");
 		findMemberPage.setParam(param);
 		Page<MemberDto> page = memberService.findMemberPage(findMemberPage);
 		Assert.assertNotNull(page);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -168,19 +164,26 @@ public class MemberServiceImplTest extends SpringTestCase{
 	 *
 	 */
 	@Test
-	public void findMembers() throws TsfaServiceException{
-		
+	public void findMembers() throws TsfaServiceException {
+
 		FindMemberPage findMemberPage = new FindMemberPage();
 		MemberDto findM = new MemberDto();
 		findM.setPhone("13888888101");
 		findMemberPage.setParam(findM);
 		List<MemberDto> page = memberService.findMembers(findMemberPage);
-		//如果code不一致，电话已被其它人使用
-		if(!StringUtils.equal(page.get(0).getCode(), "LJ_9b8190c131e045ecbe9a8a5fbb595425")) {
+		// 如果code不一致，电话已被其它人使用
+		if (!StringUtils.equal(page.get(0).getCode(), "LJ_9b8190c131e045ecbe9a8a5fbb595425")) {
 			System.out.println(111);
 		}
 		Assert.assertNotNull(page);
-		
+
 	}
-	
+
+	@Test
+	public void findMemberCodesByInvite() throws TsfaServiceException {
+
+		List<String> list = memberService.findMemberCodesByInvite("YE_c0fddb358e8f4ef08792ee7c2675ec54");
+		Assert.assertNotNull(list);
+		System.out.println(list);
+	}
 }

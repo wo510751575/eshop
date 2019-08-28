@@ -126,15 +126,12 @@
 		<![CDATA[
 			SELECT m.product_code,m.mbr_code,p.code,p.product_icon,p.`name`,p.unit,p.merchant_code,s.sale_price sku_sale_price,
 			(((s.sale_price)*(CAST(y.discount_off as SIGNED)/100) )
-			)  sku_gap_price, s.sku_desc sku_sku_desc ,s.`code` sku_code, s.price sku_price ,p.product_key,
-			sh.code,sh.rank_code,
-			(CASE WHEN (SELECT sp.`status` FROM t_shop_product sp WHERE m.product_code = sp.product_code AND sp.shop_code=sh.`code` ) IS NULL THEN 0 ELSE 1 END)  isMarketable
+			)  sku_gap_price, s.sku_desc sku_sku_desc ,s.`code` sku_code, s.price sku_price ,p.product_key
 			from t_my_coll m
 			JOIN t_product p ON p.`code` = m.product_code
 			JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
 			JOIN t_supply y on p.supply_code=y.`code`   
 			JOIN t_catalog c on p.catalog_type_code=c.`code`
-			JOIN t_shop sh on sh.mbr_code = m.mbr_code
  		]]>
  		
  		<where>
@@ -167,7 +164,6 @@
 			JOIN t_product_sku s on p.`code`=s.product_code and s.is_default='0' and s.del_flag='0'
 			JOIN t_supply y on p.supply_code=y.`code`   
 			JOIN t_catalog c on p.catalog_type_code=c.`code`
-			JOIN t_shop sh on sh.mbr_code = m.mbr_code
  		]]>
  		<where>
 			<if test="param!=null">
